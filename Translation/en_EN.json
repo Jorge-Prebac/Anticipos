@@ -1,0 +1,20 @@
+{
+    "advance_payment": "Advance Payment",
+	"advance_payments": "Advance Payments",
+	"advance_payments": "Advance Payments_Cus",
+	"customer-risk-total-amount": "Customer Risk Total Amount",
+	"delivery-note-total-amount": "Delivery Note Total Amount",
+	"delivery-note-total-amount-project": "Total Amount of Project Delivery Notes",
+	"documents": "Documents",
+	"estimation": "Estimation",
+	"estimation-total-amount": "Estimation Total Amount",
+	"estimation-total-amount-project": "Total Amount of Project Estimations",
+	"invoice-total-amount": "Invoice Total Amount",
+	"invoice-total-amount-project": "Total Amount of Project Invoices",
+	"note": "Note",
+	"order-total-amount": "Order Total Amount",
+	"order-total-amount-project": "Total Amount of Project Orders",
+    "phase": "Phase",
+    "project": "Project",
+	"project-total-amount": "Project Total Amount"
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+		<group name="basic" numcolumns="12">
+			<column name="date" display="right" order="110">
+				<widget type="date" fieldname="fecha"/>
+			</column>
+			<column name="note" display="left" columns = "2" order="120">
+				<widget type="text" fieldname="nota"/>
+			</column>
+			<column name="phase" title="phase" order="130">
+				<widget type="select" fieldname="fase" translate="true">
+					<values title="user">Usuario</values>
+					<values title="customer">Cliente</values>
+					<values title="project">Proyecto</values>
+					<values title="estimation">Presupuesto</values>
+					<values title="order">Pedido</values>
+					<values title="delivery-note">Albaran</values>
+					<values title="invoice">Factura</values>
+				</widget>
+			</column>
+			<column name="customer" order="140">
+				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
+					<values source="clientes" fieldcode="codcliente" fieldtitle="nombre"></values>
+				</widget>
+			</column>
+			<column name="user" order="150">
+				<widget type="text" fieldname="user"/>
+			</column>
+			<column name="amount" display="right" order="160">
+				<widget type="money" fieldname="importe"/>
+			</column>
+		</group>
+    </columns>
+</view>

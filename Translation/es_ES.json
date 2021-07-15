@@ -1,0 +1,20 @@
+{
+    "advance_payment": "Anticipo",
+	"advance_payments": "Anticipos",
+	"advance_payments_customer": "Anticipos_Cli",
+	"customer-risk-total-amount": "Riesgo Total del Cliente",
+	"delivery-note-total-amount": "Total del Albarán",
+	"delivery-note-total-amount-project": "Total de Albaranes en Proyecto",
+	"documents": "Documentos",
+	"estimation": "Presupuesto",
+	"estimation-total-amount": "Total del Presupuesto",
+	"estimation-total-amount-project": "Total de Presupuestos en Proyecto",
+	"invoice-total-amount": "Total de la Factura",
+	"invoice-total-amount-project": "Total de Facturas en Proyecto",
+	"note": "Nota",
+	"order-total-amount": "Total del Pedido",
+	"order-total-amount-project": "Total de Pedidos en Proyecto",
+    "phase": "Fase",
+    "project": "Proyecto",
+	"project-total-amount": "Total del Proyecto"
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : anticipos.xml
+    Author     : Jorge-Prebac <info@prebac.com>
+    Description: Structure for the anticipos table.
+-->
+<table>
+    <column>
+        <name>codcliente</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>coddivisa</name>
+        <type>character varying(3)</type>
+        <null>YES</null>
+    </column>
+	<column>
+        <name>codpago</name>
+        <type>character varying(10)</type>
+    </column>
+    <column>
+        <name>fase</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>fecha</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>id</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idalbaran</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idfactura</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idpedido</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idpresupuesto</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idproyecto</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>idrecibo</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>importe</name>
+        <type>double precision</type>
+    </column>
+    <column>
+        <name>nota</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>user</name>
+        <type>character varying(50)</type>
+    </column>
+    <constraint>
+        <name>anticipos_pkey</name>
+        <type>PRIMARY KEY (id)</type>
+    </constraint>
+</table>

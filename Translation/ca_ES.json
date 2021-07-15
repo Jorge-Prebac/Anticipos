@@ -1,0 +1,20 @@
+{
+    "advance_payment": "Bestrete",
+	"advance_payments": "Bestretes",
+	"advance_payments_customer": "Bestretes_Cli",
+	"customer-risk-total-amount": "Risc Total del Client",
+	"delivery-note-total-amount": "Total del Albarà",
+	"delivery-note-total-amount-project": "Total d'Albarans en Projecte",
+	"documents": "Documents",
+	"estimation": "Pressupost",
+	"estimation-total-amount": "Total del Pressupost",
+	"estimation-total-amount-project": "Total d'Pressupostos en Projecte",
+	"invoice-total-amount": "Total de la Factura",
+	"invoice-total-amount-project": "Total d'Factures en Projecte",
+	"note": "Nota",
+	"order-total-amount": "Total de la Comanda",
+	"order-total-amount-project": "Total d'Comandes en Projecte",
+    "phase": "Fase",
+    "project": "Projecte",
+	"project-total-amount": "Total del Projecte"
+}
