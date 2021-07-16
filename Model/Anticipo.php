@@ -28,6 +28,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * Description of Anticipo
  *
  * @author Jorge-Prebac <info@prebac.com>
+ * @autor Athos Online <info@athosonline.com>
  */
 class Anticipo extends Base\ModelClass
 {
