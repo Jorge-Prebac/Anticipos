@@ -51,9 +51,11 @@ class EditProyecto
                 $where = [new DataBaseWhere('idproyecto', $codigo)];
                 $view->loadData('', $where);
 
-				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$where = [new DataBaseWhere('codcliente', $codcliente)];
-                $view->loadData('', $where);
+				if (empty ($this->views[$viewName]->model->codcliente)) {
+                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+					$where = [new DataBaseWhere('codcliente', $codcliente)];
+					$view->loadData('', $where);
+                }
 			}
 		};
     }

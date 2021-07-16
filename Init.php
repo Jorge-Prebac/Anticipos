@@ -43,6 +43,10 @@ class Init extends InitClass
 		$this->loadExtension(new Extension\Controller\EditPedidoCliente());
 		$this->loadExtension(new Extension\Controller\EditAlbaranCliente());
 		$this->loadExtension(new Extension\Controller\EditFacturaCliente());
+		$this->loadExtension(new Extension\Model\PresupuestoCliente());
+		$this->loadExtension(new Extension\Model\PedidoCliente());
+		$this->loadExtension(new Extension\Model\AlbaranCliente());
+		$this->loadExtension(new Extension\Model\FacturaCliente());
 
 		$fileName = getcwd() . DIRECTORY_SEPARATOR . 'Dinamic'
 							 . DIRECTORY_SEPARATOR . 'Controller'

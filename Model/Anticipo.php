@@ -20,6 +20,9 @@ namespace FacturaScripts\Plugins\Anticipos\Model;
 
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Model\TotalModel;
+use FacturaScripts\Core\Model\ReciboCliente;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
  * Description of Anticipo
@@ -138,5 +141,39 @@ class Anticipo extends Base\ModelClass
     public static function tableName(): string
 	{
         return 'anticipos';
+    }
+
+    public function save()
+    {
+        if ($this->idfactura) {
+            $where = [new DataBaseWhere('idfactura', $this->idfactura)];
+            $oldReciboModel = new ReciboCliente();
+            $oldRecibos = $oldReciboModel->all($where);
+            
+            $oldRecibo = new ReciboCliente();
+            $oldRecibo->loadFromCode('', $where);
+
+            $anticipo = new Anticipo();
+            $anticipo->loadFromCode($this->id);
+            
+            $newRecibo = new ReciboCliente();
+            $newRecibo->codcliente = $oldRecibos[0]->codcliente;
+            $newRecibo->coddivisa = $anticipo->coddivisa;
+            $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
+            $newRecibo->codpago = $anticipo->codpago;
+            $newRecibo->fecha = \date(self::DATE_STYLE);
+            $newRecibo->idempresa = $oldRecibos[0]->idempresa;
+            $newRecibo->idfactura = $this->idfactura;
+            $newRecibo->importe = $anticipo->importe;
+            $newRecibo->nick = $oldRecibos[0]->nick;
+            $newRecibo->numero = count($oldRecibos) + 1;
+            $newRecibo->pagado = 1;
+            $newRecibo->save();
+        
+            $oldRecibo->importe = $oldRecibo->importe - $anticipo->importe;
+            $oldRecibo->save();
+        }
+
+        return parent::save();
     }
  }

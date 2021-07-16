@@ -24,6 +24,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * Description of EditFacturaCliente
  *
  * @author Jorge-Prebac <info@prebac.com>
+ * @author Athos Online <info@athosonline.com>
  */
  
 class EditFacturaCliente
@@ -51,9 +52,12 @@ class EditFacturaCliente
                 $where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
-				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$where = [new DataBaseWhere('codcliente', $codcliente)];
-                $view->loadData('', $where);
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+					$this->setSettings('ListAnticipo', 'btnDelete', false);
+					$this->setSettings('ListAnticipo', 'btnNew', false);
+					$this->setSettings('ListAnticipo', 'checkBoxes', false);
+					$this->setSettings('ListAnticipo', 'clickable', false);
+				}
 			}
 		};
     }

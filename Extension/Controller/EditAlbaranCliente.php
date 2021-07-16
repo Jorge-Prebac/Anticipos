@@ -24,6 +24,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * Description of EditAlbaranCliente
  *
  * @author Jorge-Prebac <info@prebac.com>
+ * @author Athos Online <info@athosonline.com>
  */
  
 class EditAlbaranCliente
@@ -39,7 +40,7 @@ class EditAlbaranCliente
 			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
 		};
 	}
-
+	
     public function loadData()
 	{
         return function($viewName, $view)
@@ -50,10 +51,19 @@ class EditAlbaranCliente
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
                 $where = [new DataBaseWhere('idalbaran', $codigo)];
                 $view->loadData('', $where);
+				
+				if (empty ($this->views[$viewName]->model->codcliente)) {
+                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+					$where = [new DataBaseWhere('codcliente', $codcliente)];
+					$view->loadData('', $where);
+                }
 
-				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$where = [new DataBaseWhere('codcliente', $codcliente)];
-                $view->loadData('', $where);
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+					$this->setSettings('ListAnticipo', 'btnDelete', false);
+					$this->setSettings('ListAnticipo', 'btnNew', false);
+					$this->setSettings('ListAnticipo', 'checkBoxes', false);
+					$this->setSettings('ListAnticipo', 'clickable', false);
+				}
 			}
 		};
     }

@@ -24,6 +24,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * Description of EditPedidoCliente
  *
  * @author Jorge-Prebac <info@prebac.com>
+ * @author Athos Online <info@athosonline.com>
  */
  
 class EditPedidoCliente
@@ -50,10 +51,19 @@ class EditPedidoCliente
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
                 $where = [new DataBaseWhere('idpedido', $codigo)];
                 $view->loadData('', $where);
+				
+				if (empty ($this->views[$viewName]->model->codcliente)) {
+                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+					$where = [new DataBaseWhere('codcliente', $codcliente)];
+					$view->loadData('', $where);
+                }
 
-				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$where = [new DataBaseWhere('codcliente', $codcliente)];
-                $view->loadData('', $where);
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+					$this->setSettings('ListAnticipo', 'btnDelete', false);
+					$this->setSettings('ListAnticipo', 'btnNew', false);
+					$this->setSettings('ListAnticipo', 'checkBoxes', false);
+					$this->setSettings('ListAnticipo', 'clickable', false);
+				}
 			}
 		};
     }
