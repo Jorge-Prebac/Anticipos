@@ -71,7 +71,7 @@
 			</column>
 			<column name="project-total-amount" display="right" order="110">
 				<widget type="autocomplete" fieldname="idproyecto" onclick="EditProyecto" readonly="true">
-					<values source="proyectos" fieldcode="idproyecto" fieldtitle="idproyecto"></values>
+					<values source="proyectos" fieldcode="idproyecto" fieldtitle="totalventas"></values>
 				</widget>
 			</column>
 			<column name="estimation-total-amount" display="right" order="120">
