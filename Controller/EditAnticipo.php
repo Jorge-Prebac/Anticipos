@@ -1,4 +1,4 @@
-<?php
+<?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
  * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
@@ -60,8 +60,7 @@ class EditAnticipo extends EditController
      */
     protected function loadData($viewName, $view)
 	{
-        switch ($viewName) 
-		{
+        switch ($viewName) {
 			
 			case 'EditAnticipo':
                 parent::loadData($viewName, $view);

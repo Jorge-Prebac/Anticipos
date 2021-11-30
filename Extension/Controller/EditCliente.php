@@ -30,8 +30,7 @@ class EditCliente
 {
     public function createViews()
     {
-        return function()
-		{
+        return function() {
 			$viewName = 'ListAnticipo';
 			$this->addListView($viewName,'Anticipo','advance_payments','fas fa-donate');
 			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2); 
@@ -42,10 +41,8 @@ class EditCliente
 
     public function loadData()
 	{
-        return function($viewName, $view)
-		{
-            if ($viewName === 'ListAnticipo')
-			{
+        return function($viewName, $view) {
+            if ($viewName === 'ListAnticipo') {
 				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
                 $where = [new DataBaseWhere('codcliente', $codcliente)];
                 $view->loadData('', $where);

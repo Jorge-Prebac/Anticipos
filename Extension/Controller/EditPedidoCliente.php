@@ -43,11 +43,9 @@ class EditPedidoCliente
 	
     public function loadData()
 	{
-        return function($viewName, $view)
-		{
+        return function($viewName, $view) {
    
-            if ($viewName === 'ListAnticipo')
-			{
+            if ($viewName === 'ListAnticipo') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
                 $where = [new DataBaseWhere('idpedido', $codigo)];
                 $view->loadData('', $where);
