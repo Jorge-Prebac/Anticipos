@@ -162,12 +162,16 @@ class Anticipo extends Base\ModelClass
             $newRecibo->coddivisa = $anticipo->coddivisa;
             $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
             $newRecibo->codpago = $anticipo->codpago;
-            $newRecibo->fecha = \date(self::DATE_STYLE);
+			$newRecibo->fecha = $anticipo->fecha;
+			if (true == $this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos')) {
+				$newRecibo->fechapago = $anticipo->fecha;	
+			}
             $newRecibo->idempresa = $oldRecibos[0]->idempresa;
             $newRecibo->idfactura = $this->idfactura;
             $newRecibo->importe = $anticipo->importe;
             $newRecibo->nick = $oldRecibos[0]->nick;
             $newRecibo->numero = count($oldRecibos) + 1;
+			$newRecibo->observaciones = $anticipo->nota;
             $newRecibo->pagado = 1;
             $newRecibo->save();
         

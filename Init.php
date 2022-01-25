@@ -63,5 +63,13 @@ class Init extends InitClass
     {
 		;
     }
-
+	
+	private function setupSettings()
+    {
+        $appsettings = $this->toolBox()->appSettings();
+        $pdAnticipos = $appsettings->get('anticipos', 'pdAnticipos');
+		
+        $appsettings->set('anticipos', 'pdAnticipos', $pdAnticipos);
+        $appsettings->save();
+    }
 }
