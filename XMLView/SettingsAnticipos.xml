@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <group name="anticipos" title="Anticipos" icon="fas fa-donate" numcolumns="12" valign="center">
+        <group name="advance_payments" title="advance_payments" icon="fas fa-donate" numcolumns="12" valign="center">
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" />
         	</column>
-			<column name="Usar la fecha del anticipo como fecha de pago en los recibos de las facturas" order="100">
+			<column name="advance_payments_data_to_receipts_payments_data" order="100">
                 <widget type="checkbox" fieldname="pdAnticipos" />
             </column>
         </group>
