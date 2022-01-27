@@ -48,7 +48,7 @@ class EditAnticipo extends EditController
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';
-        $data['title'] = 'advance_payment';
+        $data['title'] = 'advance-payment';
         $data['icon'] = 'fas fa-donate';
         return $data;
     }

@@ -1,8 +1,8 @@
 {
-    "advance_payment": "Anticipo",
-	"advance_payments": "Anticipos",
-	"advance_payments_customer": "Anticipos_Cli",
-	"advance_payments_data_to_receipts_payments_data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
+    "advance-payment": "Anticipo",
+	"advance-payments": "Anticipos",
+	"customer-advance-payments": "Anticipos_Cli",
+	"customer-advance-payments-data-on-receipts-payments-data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
 	"customer-risk-total-amount": "Riesgo Total del Cliente",
 	"delivery-note-total-amount": "Total del Albarán",
 	"delivery-note-total-amount-project": "Total de Albaranes en Proyecto",

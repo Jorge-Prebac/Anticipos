@@ -37,7 +37,7 @@ class ListAnticipo extends ListController
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';
-        $data['title'] = 'advance_payments';
+        $data['title'] = 'advance-payments';
         $data['icon'] = 'fas fa-donate';
         return $data;
     }
@@ -52,7 +52,7 @@ class ListAnticipo extends ListController
      */
     protected function createViewsAnticipos($viewName = 'ListAnticipo')
     {
-        $this->addView($viewName, 'Anticipo', 'advance_payments' ,'fas fa-donate');
+        $this->addView($viewName, 'Anticipo', 'advance-payments' ,'fas fa-donate');
         $this->addSearchFields($viewName, ['id', 'fecha', 'fase', 'nota']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
 		$this->addOrderBy($viewName, ['fase'], 'phase');

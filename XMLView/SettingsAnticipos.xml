@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <view>
     <columns>
-        <group name="advance_payments" title="advance_payments" icon="fas fa-donate" numcolumns="12" valign="center">
+        <group name="anticipos" title="customer-advance-payments" icon="fas fa-donate" numcolumns="12" valign="center">
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true" />
         	</column>
-			<column name="advance_payments_data_to_receipts_payments_data" order="100">
+			<column name="customer-advance-payments-data-on-receipts-payments-data" order="100">
                 <widget type="checkbox" fieldname="pdAnticipos" />
             </column>
         </group>

@@ -1,8 +1,8 @@
 {
-    "advance_payment": "Advance Payment",
-	"advance_payments": "Advance Payments",
-	"advance_payments_customer": "Advance Payments_Cus",
-	"advance_payments_data_to_receipts_payments_data": "Use the advance date as the payment date on invoice receipts",
+    "advance-payment": "Advance Payment",
+	"advance-payments": "Advance Payments",
+	"customer-advance-payments": "Customer Advance Payments",
+	"customer-advance-payments-data-on-receipts-payments-data": "Use the advance date as the payment date on invoice receipts",
 	"customer-risk-total-amount": "Customer Risk Total Amount",
 	"delivery-note-total-amount": "Delivery Note Total Amount",
 	"delivery-note-total-amount-project": "Total Amount of Project Delivery Notes",

@@ -1,8 +1,8 @@
 {
-    "advance_payment": "Bestrete",
-	"advance_payments": "Bestretes",
-	"advance_payments_customer": "Bestretes_Cli",
-	"advance_payments_data_to_receipts_payments_data": "Fer servir la data de la bestreta com a data de pagament als rebuts de les factures",
+    "advance-payment": "Bestrete",
+	"advance-payments": "Bestretes",
+	"customer-advance-payments": "Bestretes_Cli",
+	"customer-advance-payments-data-on-receipts-payments-data": "Fer servir la data de la bestreta com a data de pagament als rebuts de les factures",
 	"customer-risk-total-amount": "Risc Total del Client",
 	"delivery-note-total-amount": "Total del Albarà",
 	"delivery-note-total-amount-project": "Total d'Albarans en Projecte",

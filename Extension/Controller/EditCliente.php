@@ -32,7 +32,7 @@ class EditCliente
     {
         return function() {
 			$viewName = 'ListAnticipo';
-			$this->addListView($viewName,'Anticipo','advance_payments','fas fa-donate');
+			$this->addListView($viewName,'Anticipo','advance-payments','fas fa-donate');
 			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2); 
 			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
 			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
