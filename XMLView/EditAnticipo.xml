@@ -5,8 +5,13 @@
 			<column name="amount" numcolumns="2" order="120">
 				<widget type="money" fieldname="importe" />
 			</column>
-			<column name="note" display="right" order="130">
+			<column name="note" display="right" numcolumns="8" order="130">
 				<widget type="text" fieldname="nota"/>
+			</column>
+			<column name="customer-risk-total-amount" display="none" order="140">
+				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
+					<values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"></values>
+				</widget>
 			</column>
 		</group>
 		<group name="basic" numcolumns="12">
@@ -35,11 +40,6 @@
 			<column name="customer" order="150">
 				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
 					<values source="clientes" fieldcode="codcliente" fieldtitle="nombre"></values>
-				</widget>
-			</column>
-			<column name="customer-risk-total-amount" display="none" order="160">
-				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
-					<values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"></values>
 				</widget>
 			</column>
 		</group>
