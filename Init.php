@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2020-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\Anticipos;
 
 /**
@@ -39,36 +40,31 @@ class Init extends InitClass
     public function init()
     {
         $this->loadExtension(new Extension\Controller\EditCliente());
-		$this->loadExtension(new Extension\Controller\EditPresupuestoCliente());
-		$this->loadExtension(new Extension\Controller\EditPedidoCliente());
-		$this->loadExtension(new Extension\Controller\EditAlbaranCliente());
-		$this->loadExtension(new Extension\Controller\EditFacturaCliente());
-		$this->loadExtension(new Extension\Model\PresupuestoCliente());
-		$this->loadExtension(new Extension\Model\PedidoCliente());
-		$this->loadExtension(new Extension\Model\AlbaranCliente());
-		$this->loadExtension(new Extension\Model\FacturaCliente());
+        $this->loadExtension(new Extension\Controller\EditPresupuestoCliente());
+        $this->loadExtension(new Extension\Controller\EditPedidoCliente());
+        $this->loadExtension(new Extension\Controller\EditAlbaranCliente());
+        $this->loadExtension(new Extension\Controller\EditFacturaCliente());
+        $this->loadExtension(new Extension\Model\PresupuestoCliente());
+        $this->loadExtension(new Extension\Model\PedidoCliente());
+        $this->loadExtension(new Extension\Model\AlbaranCliente());
+        $this->loadExtension(new Extension\Model\FacturaCliente());
 
-		$fileName = getcwd() . DIRECTORY_SEPARATOR . 'Dinamic'
-							 . DIRECTORY_SEPARATOR . 'Controller'
-							 . DIRECTORY_SEPARATOR . 'EditProyecto.php';
-
-		if (file_exists ($fileName))
-		{
-			$this->loadExtension(new Extension\Controller\EditProyecto());
-		}
+        if (class_exists('\\FacturaScripts\\Dinamic\\Controller\\EditProyecto')) {
+            $this->loadExtension(new Extension\Controller\EditProyecto());
+        }
 
     }
-	
-	public function update()
+
+    public function update()
     {
-		;
+        ;
     }
-	
-	private function setupSettings()
+
+    private function setupSettings()
     {
         $appsettings = $this->toolBox()->appSettings();
         $pdAnticipos = $appsettings->get('anticipos', 'pdAnticipos');
-		
+
         $appsettings->set('anticipos', 'pdAnticipos', $pdAnticipos);
         $appsettings->save();
     }
