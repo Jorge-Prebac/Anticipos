@@ -14,7 +14,7 @@
         <type>character varying(3)</type>
         <null>YES</null>
     </column>
-	<column>
+    <column>
         <name>codpago</name>
         <type>character varying(10)</type>
     </column>
@@ -99,11 +99,9 @@
     </constraint>
     <constraint>
         <name>ca_anticipos_presupuestoscli</name>
-        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestoscli (idpresupuesto) ON DELETE SET NULL ON UPDATE CASCADE</type>
-    </constraint>
-    <constraint>
-        <name>ca_anticipos_proyectos</name>
-        <type>FOREIGN KEY (idproyecto) REFERENCES proyectos (idproyecto) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestoscli (idpresupuesto) ON DELETE SET NULL ON UPDATE
+            CASCADE
+        </type>
     </constraint>
     <constraint>
         <name>ca_anticipos_recibospagoscli</name>
