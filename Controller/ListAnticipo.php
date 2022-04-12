@@ -27,7 +27,7 @@ use FacturaScripts\Core\Lib\ExtendedController\ListController;
  */
 class ListAnticipo extends ListController
 {
-	
+
 	/**
      * Returns basic page attributes
      *
@@ -41,11 +41,12 @@ class ListAnticipo extends ListController
         $data['icon'] = 'fas fa-donate';
         return $data;
     }
+
     protected function createViews()
     {
         $this->createViewsAnticipos();
     }
-	
+
 	/**
      * 
      * @param string $viewName
