@@ -5,8 +5,13 @@
 			<column name="amount" numcolumns="2" order="120">
 				<widget type="money" fieldname="importe" />
 			</column>
-			<column name="note" display="right" numcolumns="8" order="130">
+			<column name="note" display="right" numcolumns="7" order="130">
 				<widget type="text" fieldname="nota"/>
+			</column>
+			<column name="customer" numcolumns="3" order="140">
+				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
+					<values source="clientes" fieldcode="codcliente" fieldtitle="nombre"></values>
+				</widget>
 			</column>
 		</group>
 		<group name="basic" numcolumns="12">
@@ -18,7 +23,7 @@
 			<column name="date" numcolumns="2" order="120">
 				<widget type="date" fieldname="fecha"/>
 			</column>
-			<column name="phase" title="phase" order="130">
+			<column name="phase" title="phase" numcolumns="2" order="130">
 				<widget type="select" fieldname="fase" translate="true">
 					<values title="user">Usuario</values>
 					<values title="customer">Cliente</values>
@@ -29,12 +34,12 @@
 					<values title="invoice">Factura</values>
 				</widget>
 			</column>
-			<column name="user" order="140">
+			<column name="user" numcolumns="3" order="140">
 				<widget type="text" fieldname="user" onclick="EditUser" readonly="true"/>
 			</column>
-			<column name="customer" order="150">
-				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
-					<values source="clientes" fieldcode="codcliente" fieldtitle="nombre"></values>
+			<column name="customer-risk-total-amount" display="right" numcolumns="3" order="150">
+				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
+					<values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"></values>
 				</widget>
 			</column>
 		</group>
@@ -49,7 +54,7 @@
 					<values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="codigo"></values>
 				</widget>
 			</column>
-			<column name="order" order="130">
+			<column name="order" numcolumns="2" order="130">
 				<widget type="autocomplete" fieldname="idpedido" onclick="EditPedidoCliente">
 					<values source="pedidoscli" fieldcode="idpedido" fieldtitle="codigo"></values>
 				</widget>
@@ -67,36 +72,19 @@
 		</group>
 		<group name="amounts" numcolumns="12">
 			<column name="project-total-amount" display="right" numcolumns="2" order="110">
-				<widget type="autocomplete" fieldname="idproyecto" readonly="true">
-					<values source="proyectos" fieldcode="idproyecto" fieldtitle="totalventas"></values>
-				</widget>
+				<widget type="money" fieldname="project-total" readonly="true"/>
 			</column>
 			<column name="estimation-total-amount" display="right" numcolumns="2" order="120">
-				<widget type="autocomplete" fieldname="idpresupuesto" readonly="true">
-					<values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="total"></values>
-				</widget>
+				<widget type="money" fieldname="estimation-total" readonly="true"/>
 			</column>
-			<column name="order-total-amount" display="right" order="130">
-				<widget type="autocomplete" fieldname="idpedido" readonly="true">
-					<values source="pedidoscli" fieldcode="idpedido" fieldtitle="total"></values>
-				</widget>
+			<column name="order-total-amount" display="right" numcolumns="2" order="130">
+				<widget type="money" fieldname="order-total" readonly="true"/>
 			</column>
-			<column name="delivery-note-total-amount" display="right" order="140">
-				<widget type="autocomplete" fieldname="idalbaran" readonly="true">
-					<values source="albaranescli" fieldcode="idalbaran" fieldtitle="total"></values>
-				</widget>
+			<column name="delivery-note-total-amount" display="right" numcolumns="3" order="140">
+				<widget type="money" fieldname="delivery-total" readonly="true"/>
 			</column>
 			<column name="invoice-total-amount" display="right" order="150">
-				<widget type="autocomplete" fieldname="idfactura" readonly="true">
-					<values source="facturascli" fieldcode="idfactura" fieldtitle="total"></values>
-				</widget>
-			</column>
-		</group>
-		<group name="customer-risk" numcolumns="12">
-			<column name="customer-risk-total-amount" display="right" numcolumns="2" order="100">
-				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
-					<values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"></values>
-				</widget>
+				<widget type="money" fieldname="invoice-total" readonly="true"/>
 			</column>
 		</group>
     </columns>

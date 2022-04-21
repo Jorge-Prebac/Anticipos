@@ -61,18 +61,14 @@ class EditAnticipo extends EditController
     protected function loadData($viewName, $view)
 	{
         switch ($viewName) {
-			
+
 			case 'EditAnticipo':
                 parent::loadData($viewName, $view);
-				
+
                 if(!$this->views[$viewName]->model->exists()) {
                     $this->views[$viewName]->model->user = $this->user->nick;
                 }
-				
-				$fileName = getcwd() . DIRECTORY_SEPARATOR . 'Dinamic'
-									 . DIRECTORY_SEPARATOR . 'Controller'
-									 . DIRECTORY_SEPARATOR . 'EditProyecto.php';
-				
+
 				if (false == $this->user->admin) {
 					$this->views[$viewName]->disableColumn('customer', false, 'true');
 					$this->views[$viewName]->disableColumn('user', false, 'true');
@@ -81,11 +77,10 @@ class EditAnticipo extends EditController
 					$this->views[$viewName]->disableColumn('order', false, 'true');
 					$this->views[$viewName]->disableColumn('delivery-note', false, 'true');
 					$this->views[$viewName]->disableColumn('invoice', false, 'true');
-						
-				} elseif (false === file_exists ($fileName)) {
+
+				} elseif (false === class_exists('\\FacturaScripts\\Dinamic\\Controller\\EditProyecto')) {
 					$this->views[$viewName]->disableColumn('project', false, 'true');
-				}	
-				
+				}
                 if (!empty ($this->views[$viewName]->model->idfactura)) {
                     $this->views[$viewName]->model->fase = "Factura";
 
@@ -95,19 +90,19 @@ class EditAnticipo extends EditController
 						$this->views[$viewName]->disableColumn('note', false, 'true');
 						$this->views[$viewName]->disableColumn('phase', false, 'true');
 						$this->views[$viewName]->disableColumn('payment', false, 'true');
-					}
+					}
 				} elseif (!empty ($this->views[$viewName]->model->idalbaran)) {
                     $this->views[$viewName]->model->fase = "Albaran";
-					
+
                 } elseif (!empty ($this->views[$viewName]->model->idpedido)) {
                     $this->views[$viewName]->model->fase = "Pedido";
-					
+
                 } elseif (!empty ($this->views[$viewName]->model->idpresupuesto)) {
                     $this->views[$viewName]->model->fase = "Presupuesto";			
-					
+
                 } elseif (!empty ($this->views[$viewName]->model->idproyecto)) {
                     $this->views[$viewName]->model->fase = "Proyecto";
-									
+
                 } elseif (!empty ($this->views[$viewName]->model->codcliente)) {
                     $this->views[$viewName]->model->fase = "Cliente";
 
@@ -116,7 +111,7 @@ class EditAnticipo extends EditController
                 }
 
 				break;
-							           
+
 			default:
                 parent::loadData($viewName, $view);
                 break;
