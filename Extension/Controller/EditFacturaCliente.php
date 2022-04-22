@@ -50,6 +50,12 @@ class EditFacturaCliente
                 $where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
+                if (empty ($this->views[$viewName]->model->codcliente)) {
+                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+                    $where = [new DataBaseWhere('codcliente', $codcliente)];
+                    $view->loadData('', $where);
+                }
+
 				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
 					$this->setSettings('ListAnticipo', 'btnDelete', false);
 					$this->setSettings('ListAnticipo', 'btnNew', false);
