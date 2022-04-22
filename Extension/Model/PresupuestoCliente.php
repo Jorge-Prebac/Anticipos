@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\Anticipos\Extension\Model;
 
+use Closure;
 use FacturaScripts\Plugins\Anticipos\Model\Anticipo;
 use FacturaScripts\Core\Model\EstadoDocumento;
 use FacturaScripts\Core\Model\DocTransformation;
@@ -26,22 +28,22 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 /**
  * Description of PresupuestoCliente
  *
- * @author Athos Online <info@athosonline.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
-
-class PresupuestoCliente {
-    public function saveUpdate()
+class PresupuestoCliente
+{
+    public function saveUpdate(): Closure
     {
-        return function() {
+        return function () {
             $estado = new EstadoDocumento();
             $estado->loadFromCode($this->idestado);
-            
+
             if ($estado->generadoc) {
                 $anticiposModel = new Anticipo();
                 $anticipos = $anticiposModel->all([
                     new DataBaseWhere('idpresupuesto', $this->idpresupuesto)
                 ]);
-                
+
                 if (count($anticipos) > 0) {
                     $newDoc = new DocTransformation();
                     $where = [
@@ -49,7 +51,7 @@ class PresupuestoCliente {
                         new DataBaseWhere('iddoc1', $this->idpresupuesto)
                     ];
                     $newDoc->loadFromCode('', $where);
-                    
+
                     foreach ($anticipos as $a) {
                         $anticipo = new Anticipo();
                         $anticipo->loadFromCode($a->id);

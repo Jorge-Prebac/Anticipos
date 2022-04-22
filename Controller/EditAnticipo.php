@@ -65,7 +65,7 @@ class EditAnticipo extends EditController
             case 'EditAnticipo':
                 parent::loadData($viewName, $view);
                 $model = $this->views[$viewName]->model;
-                
+
                 // si es un anticipo nuevo, se le asigna el usuario que lo creó
                 if (false === $model->exists()) {
                     $model->user = $this->user->nick;
@@ -92,7 +92,7 @@ class EditAnticipo extends EditController
 
                 // rellenamos el select de la fase
                 $column = $this->views[$viewName]->columnForName('phase');
-                if($column && $column->widget->getType() === 'select') {
+                if ($column && $column->widget->getType() === 'select') {
                     $column->widget->setValuesFromArray($customValues, true);
                 }
 
