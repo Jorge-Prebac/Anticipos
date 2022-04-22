@@ -185,37 +185,101 @@ class Anticipo extends Base\ModelClass
 
     public function save()
     {
+        // Comprobar que el cliente del anticipo es el mismo que el cliente de cada documento
+        if (false === $this->checkClients() ) {
+            return false;
+        }
+
         // si el anticipo tiene una factura asignada, entonces creamos tantos recibos como anticipos tenga
-        if ($this->idfactura) {
-            $oldReciboModel = new ReciboCliente();
-            $where = [new DataBaseWhere('idfactura', $this->idfactura)];
-            $oldRecibos = $oldReciboModel->all($where, [], 0, 0);
-
-            $oldRecibo = new ReciboCliente();
-            $oldRecibo->loadFromCode('', $where);
-
-            $newRecibo = new ReciboCliente();
-            $newRecibo->codcliente = $oldRecibos[0]->codcliente;
-            $newRecibo->coddivisa = $this->coddivisa;
-            $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
-            $newRecibo->codpago = $this->codpago;
-            $newRecibo->fecha = $this->fecha;
-            if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-                $newRecibo->fechapago = $this->fecha;
-            }
-            $newRecibo->idempresa = $oldRecibos[0]->idempresa;
-            $newRecibo->idfactura = $this->idfactura;
-            $newRecibo->importe = $this->importe;
-            $newRecibo->nick = $oldRecibos[0]->nick;
-            $newRecibo->numero = count($oldRecibos) + 1;
-            $newRecibo->observaciones = $this->nota;
-            $newRecibo->pagado = 1;
-            $newRecibo->save();
-
-            $oldRecibo->importe = $oldRecibo->importe - $this->importe;
-            $oldRecibo->save();
+        if ($this->idfactura && false === $this->generateReceiptsInvoice()) {
+            return false;
         }
 
         return parent::save();
+    }
+
+    protected function checkClients(): bool
+    {
+        if ($this->codcliente && $this->idpresupuesto) {
+            $estimation = new PresupuestoCliente();
+            $estimation->loadFromCode($this->idpresupuesto);
+            if ($estimation->codcliente != $this->codcliente) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-estimation');
+                return false;
+            }
+        }
+
+        if ($this->codcliente && $this->idpedido) {
+            $order = new PedidoCliente();
+            $order->loadFromCode($this->idpedido);
+            if ($order->codcliente != $this->codcliente) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-order');
+                return false;
+            }
+        }
+
+        if ($this->codcliente && $this->idalbaran) {
+            $deliveryNote = new AlbaranCliente();
+            $deliveryNote->loadFromCode($this->idalbaran);
+            if ($deliveryNote->codcliente != $this->codcliente) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-delivery-note');
+                return false;
+            }
+        }
+
+        if ($this->codcliente && $this->idfactura) {
+            $invoice = new FacturaCliente();
+            $invoice->loadFromCode($this->idfactura);
+            if ($invoice->codcliente != $this->codcliente) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-invoice');
+                return false;
+            }
+        }
+
+        $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
+        if ($this->codcliente && $this->idproyecto && class_exists($projectClass)) {
+            $project = new $projectClass();
+            $project->loadFromCode($this->idproyecto);
+            if ($project->codcliente != $this->codcliente) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-project');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function generateReceiptsInvoice(): bool
+    {
+        $oldReciboModel = new ReciboCliente();
+        $where = [new DataBaseWhere('idfactura', $this->idfactura)];
+        $oldRecibos = $oldReciboModel->all($where, [], 0, 0);
+
+        $oldRecibo = new ReciboCliente();
+        $oldRecibo->loadFromCode('', $where);
+
+        $newRecibo = new ReciboCliente();
+        $newRecibo->codcliente = $oldRecibos[0]->codcliente;
+        $newRecibo->coddivisa = $this->coddivisa;
+        $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
+        $newRecibo->codpago = $this->codpago;
+        $newRecibo->fecha = $this->fecha;
+        if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+            $newRecibo->fechapago = $this->fecha;
+        }
+        $newRecibo->idempresa = $oldRecibos[0]->idempresa;
+        $newRecibo->idfactura = $this->idfactura;
+        $newRecibo->importe = $this->importe;
+        $newRecibo->nick = $oldRecibos[0]->nick;
+        $newRecibo->numero = count($oldRecibos) + 1;
+        $newRecibo->observaciones = $this->nota;
+        $newRecibo->pagado = 1;
+
+        if (false === $newRecibo->save()) {
+            return false;
+        }
+
+        $oldRecibo->importe = $oldRecibo->importe - $this->importe;
+        return $oldRecibo->save();
     }
 }
