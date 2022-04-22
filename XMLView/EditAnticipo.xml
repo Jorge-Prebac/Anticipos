@@ -1,91 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Anticipos plugin for FacturaScripts
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Jorge-Prebac <info@prebac.com>
+-->
 <view>
     <columns>
-		<group name="money" numcolumns="12">
-			<column name="amount" numcolumns="2" order="120">
-				<widget type="money" fieldname="importe" />
-			</column>
-			<column name="note" display="right" numcolumns="7" order="130">
-				<widget type="text" fieldname="nota"/>
-			</column>
-			<column name="customer" numcolumns="3" order="140">
-				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
-					<values source="clientes" fieldcode="codcliente" fieldtitle="nombre"></values>
-				</widget>
-			</column>
-		</group>
-		<group name="basic" numcolumns="12">
-			<column name="payment" title="method-payment" numcolumns="2" order="110">
-                <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
-                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion" />
+        <group name="money" numcolumns="12">
+            <column name="amount" numcolumns="2" order="120">
+                <widget type="money" fieldname="importe"/>
+            </column>
+            <column name="note" display="right" numcolumns="7" order="130">
+                <widget type="text" fieldname="nota"/>
+            </column>
+            <column name="customer" numcolumns="3" order="140">
+                <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
                 </widget>
             </column>
-			<column name="date" numcolumns="2" order="120">
-				<widget type="date" fieldname="fecha"/>
-			</column>
-			<column name="phase" title="phase" numcolumns="2" order="130">
-				<widget type="select" fieldname="fase" translate="true">
-					<values title="user">Usuario</values>
-					<values title="customer">Cliente</values>
-					<values title="project">Proyecto</values>
-					<values title="estimation">Presupuesto</values>
-					<values title="order">Pedido</values>
-					<values title="delivery-note">Albaran</values>
-					<values title="invoice">Factura</values>
-				</widget>
-			</column>
-			<column name="user" numcolumns="3" order="140">
-				<widget type="text" fieldname="user" onclick="EditUser" readonly="true"/>
-			</column>
-			<column name="customer-risk-total-amount" display="right" numcolumns="3" order="150">
-				<widget type="autocomplete" fieldname="codcliente" onclick="EditCliente" readonly="true">
-					<values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"></values>
-				</widget>
-			</column>
-		</group>
-		<group name="documents" numcolumns="12">
-			<column name="project" numcolumns="2" order="110">
-				<widget type="autocomplete" fieldname="idproyecto" onclick="EditProyecto">
-					<values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"></values>
-				</widget>
-			</column>
-			<column name="estimation" numcolumns="2" order="120">
-				<widget type="autocomplete" fieldname="idpresupuesto" onclick="EditPresupuestoCliente">
-					<values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="codigo"></values>
-				</widget>
-			</column>
-			<column name="order" numcolumns="2" order="130">
-				<widget type="autocomplete" fieldname="idpedido" onclick="EditPedidoCliente">
-					<values source="pedidoscli" fieldcode="idpedido" fieldtitle="codigo"></values>
-				</widget>
-			</column>
-			<column name="delivery-note" order="140">
-				<widget type="autocomplete" fieldname="idalbaran" onclick="EditAlbaranCliente">
-					<values source="albaranescli" fieldcode="idalbaran" fieldtitle="codigo"></values>
-				</widget>
-			</column>
-			<column name="invoice" order="150">
-				<widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaCliente">
-					<values source="facturascli" fieldcode="idfactura" fieldtitle="codigo"></values>
-				</widget>
-			</column>
-		</group>
-		<group name="amounts" numcolumns="12">
-			<column name="project-total-amount" display="right" numcolumns="2" order="110">
-				<widget type="money" fieldname="project-total" readonly="true"/>
-			</column>
-			<column name="estimation-total-amount" display="right" numcolumns="2" order="120">
-				<widget type="money" fieldname="estimation-total" readonly="true"/>
-			</column>
-			<column name="order-total-amount" display="right" numcolumns="2" order="130">
-				<widget type="money" fieldname="order-total" readonly="true"/>
-			</column>
-			<column name="delivery-note-total-amount" display="right" numcolumns="3" order="140">
-				<widget type="money" fieldname="delivery-total" readonly="true"/>
-			</column>
-			<column name="invoice-total-amount" display="right" order="150">
-				<widget type="money" fieldname="invoice-total" readonly="true"/>
-			</column>
-		</group>
+        </group>
+        <group name="basic" numcolumns="12">
+            <column name="payment" title="method-payment" numcolumns="2" order="110">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago" required="true">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="date" numcolumns="2" order="120">
+                <widget type="date" fieldname="fecha"/>
+            </column>
+            <column name="phase" title="phase" numcolumns="2" order="130">
+                <widget type="select" fieldname="fase" translate="true">
+                    <values/>
+                </widget>
+            </column>
+            <column name="user" numcolumns="3" order="140">
+                <widget type="text" fieldname="user" onclick="EditUser" readonly="true"/>
+            </column>
+            <column name="customer-risk-total-amount" display="right" numcolumns="3" order="150">
+                <widget type="select" fieldname="codcliente" onclick="EditCliente" readonly="true">
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"/>
+                </widget>
+            </column>
+        </group>
+        <group name="documents" numcolumns="12">
+            <column name="project" order="110">
+                <widget type="autocomplete" fieldname="idproyecto" onclick="EditProyecto">
+                    <values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="estimation" order="120">
+                <widget type="autocomplete" fieldname="idpresupuesto" onclick="EditPresupuestoCliente">
+                    <values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="codigo"/>
+                </widget>
+            </column>
+            <column name="order" order="130">
+                <widget type="autocomplete" fieldname="idpedido" onclick="EditPedidoCliente">
+                    <values source="pedidoscli" fieldcode="idpedido" fieldtitle="codigo"/>
+                </widget>
+            </column>
+            <column name="delivery-note" order="140">
+                <widget type="autocomplete" fieldname="idalbaran" onclick="EditAlbaranCliente">
+                    <values source="albaranescli" fieldcode="idalbaran" fieldtitle="codigo"/>
+                </widget>
+            </column>
+            <column name="invoice" order="150">
+                <widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaCliente">
+                    <values source="facturascli" fieldcode="idfactura" fieldtitle="codigo"/>
+                </widget>
+            </column>
+        </group>
+        <group name="amounts" numcolumns="12">
+            <column name="project-total-amount" display="right" order="110">
+                <widget type="money" fieldname="totalproject" readonly="true"/>
+            </column>
+            <column name="estimation-total-amount" display="right" order="120">
+                <widget type="money" fieldname="totalestimation" readonly="true"/>
+            </column>
+            <column name="order-total-amount" display="right" order="130">
+                <widget type="money" fieldname="totalorder" readonly="true"/>
+            </column>
+            <column name="delivery-note-total-amount" display="right" order="140">
+                <widget type="money" fieldname="totaldelivery" readonly="true"/>
+            </column>
+            <column name="invoice-total-amount" display="right" order="150">
+                <widget type="money" fieldname="totalinvoice" readonly="true"/>
+            </column>
+        </group>
     </columns>
 </view>
