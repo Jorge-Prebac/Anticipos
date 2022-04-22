@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
@@ -28,7 +29,7 @@ use FacturaScripts\Core\Lib\ExtendedController\ListController;
 class ListAnticipo extends ListController
 {
 
-	/**
+    /**
      * Returns basic page attributes
      *
      * @return array
@@ -47,24 +48,23 @@ class ListAnticipo extends ListController
         $this->createViewsAnticipos();
     }
 
-	/**
-     * 
+    /**
+     *
      * @param string $viewName
      */
-    protected function createViewsAnticipos($viewName = 'ListAnticipo')
+    protected function createViewsAnticipos(string $viewName = 'ListAnticipo')
     {
-        $this->addView($viewName, 'Anticipo', 'advance-payments' ,'fas fa-donate');
+        $this->addView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
         $this->addSearchFields($viewName, ['id', 'fecha', 'fase', 'nota']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
-		$this->addOrderBy($viewName, ['fase'], 'phase');
+        $this->addOrderBy($viewName, ['fase'], 'phase');
         $this->addOrderBy($viewName, ['importe'], 'amount');
 
-        ///Filtros
-        $users = $this->codeModel->all('users','nick','nick');
+        // Filtros
+        $users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
         $this->addFilterAutocomplete($viewName, 'codcliente', 'customer', 'codcliente', 'clientes', 'codcliente', 'nombre');
-		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
+        $this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
         $this->addFilterPeriod($viewName, 'fecha', 'date', 'fecha');
-
     }
 }

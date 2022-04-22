@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of Anticipos plugin for FacturaScripts
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author Jorge-Prebac <info@prebac.com>
+-->
 <view>
     <columns>
         <group name="anticipos" title="customer-advance-payments" icon="fas fa-donate" numcolumns="12" valign="center">
             <column name="name" display="none" order="0">
-                <widget type="text" fieldname="name" readonly="true" />
-        	</column>
-			<column name="customer-advance-payments-data-on-receipts-payments-data" order="100">
-                <widget type="checkbox" fieldname="pdAnticipos" />
+                <widget type="text" fieldname="name" readonly="true"/>
+            </column>
+            <column name="customer-advance-payments-data-on-receipts-payments-data" order="100">
+                <widget type="checkbox" fieldname="pdAnticipos"/>
             </column>
         </group>
     </columns>
