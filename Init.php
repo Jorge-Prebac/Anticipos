@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020-2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,18 +19,12 @@
 
 namespace FacturaScripts\Plugins\Anticipos;
 
-/**
- * Description of Init
- *
- * @author Jorge-Prebac <info@prebac.com>
- */
-
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Model\Cliente;
 
 /**
- * Description of Init of Anticipos
+ * Description of Init
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
@@ -49,23 +43,22 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Model\AlbaranCliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
 
-        if (class_exists('\\FacturaScripts\\Dinamic\\Controller\\EditProyecto')) {
+        if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
         }
-
     }
 
     public function update()
     {
-        ;
+        $this->setupSettings();
     }
 
     private function setupSettings()
     {
         $appsettings = $this->toolBox()->appSettings();
-        $pdAnticipos = $appsettings->get('anticipos', 'pdAnticipos');
-
-        $appsettings->set('anticipos', 'pdAnticipos', $pdAnticipos);
+        if (empty($appsettings->get('anticipos', 'pdAnticipos'))) {
+            $appsettings->set('anticipos', 'pdAnticipos', false);
+        }
         $appsettings->save();
     }
 }
