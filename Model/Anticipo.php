@@ -185,36 +185,34 @@ class Anticipo extends Base\ModelClass
 
     public function save()
     {
+        // si el anticipo tiene una factura asignada, entonces creamos tantos recibos como anticipos tenga
         if ($this->idfactura) {
-            $where = [new DataBaseWhere('idfactura', $this->idfactura)];
             $oldReciboModel = new ReciboCliente();
-            $oldRecibos = $oldReciboModel->all($where);
+            $where = [new DataBaseWhere('idfactura', $this->idfactura)];
+            $oldRecibos = $oldReciboModel->all($where, [], 0, 0);
 
             $oldRecibo = new ReciboCliente();
             $oldRecibo->loadFromCode('', $where);
 
-            $anticipo = new Anticipo();
-            $anticipo->loadFromCode($this->id);
-
             $newRecibo = new ReciboCliente();
             $newRecibo->codcliente = $oldRecibos[0]->codcliente;
-            $newRecibo->coddivisa = $anticipo->coddivisa;
+            $newRecibo->coddivisa = $this->coddivisa;
             $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
-            $newRecibo->codpago = $anticipo->codpago;
-            $newRecibo->fecha = $anticipo->fecha;
-            if (true == $this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos')) {
-                $newRecibo->fechapago = $anticipo->fecha;
+            $newRecibo->codpago = $this->codpago;
+            $newRecibo->fecha = $this->fecha;
+            if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+                $newRecibo->fechapago = $this->fecha;
             }
             $newRecibo->idempresa = $oldRecibos[0]->idempresa;
             $newRecibo->idfactura = $this->idfactura;
-            $newRecibo->importe = $anticipo->importe;
+            $newRecibo->importe = $this->importe;
             $newRecibo->nick = $oldRecibos[0]->nick;
             $newRecibo->numero = count($oldRecibos) + 1;
-            $newRecibo->observaciones = $anticipo->nota;
+            $newRecibo->observaciones = $this->nota;
             $newRecibo->pagado = 1;
             $newRecibo->save();
 
-            $oldRecibo->importe = $oldRecibo->importe - $anticipo->importe;
+            $oldRecibo->importe = $oldRecibo->importe - $this->importe;
             $oldRecibo->save();
         }
 

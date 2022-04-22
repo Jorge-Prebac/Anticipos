@@ -57,10 +57,10 @@ class EditFacturaCliente
                 }
 
                 if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-                    $this->setSettings('ListAnticipo', 'btnDelete', false);
-                    $this->setSettings('ListAnticipo', 'btnNew', false);
-                    $this->setSettings('ListAnticipo', 'checkBoxes', false);
-                    $this->setSettings('ListAnticipo', 'clickable', false);
+                    $this->setSettings($viewName, 'btnDelete', false);
+                    $this->setSettings($viewName, 'btnNew', false);
+                    $this->setSettings($viewName, 'checkBoxes', false);
+                    $this->setSettings($viewName, 'clickable', false);
                 }
             }
         };

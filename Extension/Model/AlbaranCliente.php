@@ -38,42 +38,41 @@ class AlbaranCliente
             $estado = new EstadoDocumento();
             $estado->loadFromCode($this->idestado);
 
-            if ($estado->generadoc) {
-                $anticiposModel = new Anticipo();
-                $anticipos = $anticiposModel->all([
-                    new DataBaseWhere('idalbaran', $this->idalbaran)
-                ]);
+            if (empty($estado->generadoc)) {
+                return;
+            }
 
-                if (count($anticipos) > 0) {
-                    $newDoc = new DocTransformation();
-                    $where = [
-                        new DataBaseWhere('model1', 'AlbaranCliente'),
-                        new DataBaseWhere('iddoc1', $this->idalbaran)
-                    ];
-                    $newDoc->loadFromCode('', $where);
+            $anticiposModel = new Anticipo();
+            $where1 = [new DataBaseWhere('idalbaran', $this->idalbaran)];
+            $anticipos = $anticiposModel->all($where1, [], 0, 0);
 
-                    foreach ($anticipos as $a) {
-                        $anticipo = new Anticipo();
-                        $anticipo->loadFromCode($a->id);
+            if (count($anticipos) === 0) {
+                return;
+            }
 
-                        switch ($newDoc->model2) {
-                            case 'PresupuestoCliente':
-                                $anticipo->idpresupuesto = $newDoc->iddoc2;
-                                break;
-                            case 'PedidoCliente':
-                                $anticipo->idpedido = $newDoc->iddoc2;
-                                break;
-                            case 'AlbaranCliente':
-                                $anticipo->idalbaran = $newDoc->iddoc2;
-                                break;
-                            case 'FacturaCliente':
-                                $anticipo->idfactura = $newDoc->iddoc2;
-                                break;
-                        }
+            $newDoc = new DocTransformation();
+            $where2 = [
+                new DataBaseWhere('model1', 'AlbaranCliente'),
+                new DataBaseWhere('iddoc1', $this->idalbaran)
+            ];
+            $newDoc->loadFromCode('', $where2);
 
-                        $anticipo->save();
-                    }
+            foreach ($anticipos as $a) {
+                switch ($newDoc->model2) {
+                    case 'PresupuestoCliente':
+                        $a->idpresupuesto = $newDoc->iddoc2;
+                        break;
+                    case 'PedidoCliente':
+                        $a->idpedido = $newDoc->iddoc2;
+                        break;
+                    case 'AlbaranCliente':
+                        $a->idalbaran = $newDoc->iddoc2;
+                        break;
+                    case 'FacturaCliente':
+                        $a->idfactura = $newDoc->iddoc2;
+                        break;
                 }
+                $a->save();
             }
         };
     }
