@@ -1,5 +1,10 @@
 {
     "advance-payment": "Anticipo",
+    "advance-payment-invalid-client-delivery-note": "El cliente del anticipo no coincide con el cliente del albarán",
+    "advance-payment-invalid-client-estimation": "El cliente del anticipo no coincide con el cliente del presupuesto",
+    "advance-payment-invalid-client-invoice": "El cliente del anticipo no coincide con el cliente de la factura",
+    "advance-payment-invalid-client-order": "El cliente del anticipo no coincide con el cliente del pedido",
+    "advance-payment-invalid-client-project": "El cliente del anticipo no coincide con el cliente del proyecto",
     "advance-payments": "Anticipos",
     "customer-advance-payments": "Anticipos_Cli",
     "customer-advance-payments-data-on-receipts-payments-data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
