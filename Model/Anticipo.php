@@ -144,7 +144,7 @@ class Anticipo extends Base\ModelClass
                 $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
                 if (class_exists($modelClass)) {
                     $project = new $modelClass();
-                    $project->loadFromCode($this->idalbaran);
+                    $project->loadFromCode($this->idproyecto);
                     return $project->totalventas;
                 }
                 return 0;
