@@ -50,18 +50,10 @@ class EditFacturaCliente
                 $where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
-                    $view->loadData('', $where);
-                }
-
-                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-                    $this->setSettings($viewName, 'btnDelete', false);
-                    $this->setSettings($viewName, 'btnNew', false);
-                    $this->setSettings($viewName, 'checkBoxes', false);
-                    $this->setSettings($viewName, 'clickable', false);
-                }
+				// Ocultamos botones de acción para que solo permita visualizar los anticipos, ya que están relacionados con los recibos de la factura.
+				$this->setSettings($viewName, 'btnDelete', false);
+				$this->setSettings($viewName, 'btnNew', false);
+				$this->setSettings($viewName, 'checkBoxes', false);
             }
         };
     }

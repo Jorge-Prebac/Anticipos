@@ -79,7 +79,6 @@ class EditAnticipo extends EditController
                     ['value' => 'Presupuesto', 'title' => 'estimation'],
                     ['value' => 'Pedido', 'title' => 'order'],
                     ['value' => 'Albaran', 'title' => 'delivery-note'],
-                    ['value' => 'Factura', 'title' => 'invoice'],
                 ];
 
                 // si no está instalado el plugin Proyectos ocultamos sus columnas
@@ -95,6 +94,9 @@ class EditAnticipo extends EditController
                 if ($column && $column->widget->getType() === 'select') {
                     $column->widget->setValuesFromArray($customValues, true);
                 }
+				
+				// no se puede editar el campo idfactura
+				$this->views[$viewName]->disableColumn('invoice', false, 'true');
 
                 // si no eres admin, no puedes editar algunas columnas
                 if (false === $this->user->admin) {
@@ -104,11 +106,11 @@ class EditAnticipo extends EditController
                     $this->views[$viewName]->disableColumn('estimation', false, 'true');
                     $this->views[$viewName]->disableColumn('order', false, 'true');
                     $this->views[$viewName]->disableColumn('delivery-note', false, 'true');
-                    $this->views[$viewName]->disableColumn('invoice', false, 'true');
+					$this->views[$viewName]->disableColumn('phase', false, 'true');
                 }
 
-                // si el anticipo es de una facutra y no eres admin no puedes editar estos campos
-                if (false === empty($model->idfactura) && false === $this->user->admin) {
+                // si el anticipo es de una facutra no se pueden editar las siguientes columnas
+                if (false === empty($model->idfactura)) {
                     $this->views[$viewName]->disableColumn('amount', false, 'true');
                     $this->views[$viewName]->disableColumn('date', false, 'true');
                     $this->views[$viewName]->disableColumn('note', false, 'true');
@@ -116,9 +118,11 @@ class EditAnticipo extends EditController
                     $this->views[$viewName]->disableColumn('payment', false, 'true');
                 }
 
-                if (false === empty($model->idfactura) && false === $model->exists()) {
+                /*if (false === empty($model->idfactura) && false === $model->exists()) {
                     $model->fase = "Factura";
-                } elseif (false === empty($model->idalbaran) && false === $model->exists()) {
+                } else */
+				// se aplica la fase correspondiente al origen del anticipo
+				if (false === empty($model->idalbaran) && false === $model->exists()) {
                     $model->fase = "Albaran";
                 } elseif (false === empty($model->idpedido) && false === $model->exists()) {
                     $model->fase = "Pedido";
