@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -18,18 +18,19 @@
  */
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
+use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
  * Description of EditPedidoCliente
  *
  * @author Jorge-Prebac <info@prebac.com>
- * @author Athos Online <info@athosonline.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
  
 class EditPedidoCliente
 {
-    public function createViews()
+    public function createViews(): Closure
 	{
         return function()
 		{
@@ -41,7 +42,7 @@ class EditPedidoCliente
 		};
 	}
 	
-    public function loadData()
+    public function loadData(): Closure
 	{
         return function($viewName, $view) {
    
@@ -57,10 +58,10 @@ class EditPedidoCliente
                 }
 
 				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-					$this->setSettings('ListAnticipo', 'btnDelete', false);
-					$this->setSettings('ListAnticipo', 'btnNew', false);
-					$this->setSettings('ListAnticipo', 'checkBoxes', false);
-					$this->setSettings('ListAnticipo', 'clickable', false);
+					$this->setSettings($viewName, 'btnDelete', false);
+					$this->setSettings($viewName, 'btnNew', false);
+					$this->setSettings($viewName, 'checkBoxes', false);
+					$this->setSettings($viewName, 'clickable', false);
 				}
 			}
 		};

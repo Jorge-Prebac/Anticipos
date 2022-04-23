@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,53 +16,54 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
+use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
  * Description of EditPresupuestoCliente
  *
  * @author Jorge-Prebac <info@prebac.com>
- * @author Athos Online <info@athosonline.com>
+ * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
- 
 class EditPresupuestoCliente
 {
 
-	public function createViews()
-	{
-        return function() {
-			$viewName = 'ListAnticipo';
-			$this->addListView($viewName,'Anticipo','advance-payments','fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2); 
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
-		};
-	}
-	
-    public function loadData()
-	{
-        return function($viewName, $view) {
-   
-            if ($viewName === 'ListAnticipo'){
-				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
+    public function createViews(): Closure
+    {
+        return function () {
+            $viewName = 'ListAnticipo';
+            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
+            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
+        };
+    }
+
+    public function loadData(): Closure
+    {
+        return function ($viewName, $view) {
+
+            if ($viewName === 'ListAnticipo') {
+                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
                 $where = [new DataBaseWhere('idpresupuesto', $codigo)];
                 $view->loadData('', $where);
-				
-				if (empty ($this->views[$viewName]->model->codcliente)) {
+
+                if (empty ($this->views[$viewName]->model->codcliente)) {
                     $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-					$where = [new DataBaseWhere('codcliente', $codcliente)];
-					$view->loadData('', $where);
+                    $where = [new DataBaseWhere('codcliente', $codcliente)];
+                    $view->loadData('', $where);
                 }
 
-				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-					$this->setSettings('ListAnticipo', 'btnDelete', false);
-					$this->setSettings('ListAnticipo', 'btnNew', false);
-					$this->setSettings('ListAnticipo', 'checkBoxes', false);
-					$this->setSettings('ListAnticipo', 'clickable', false);
-				}
-			}
-		};
+                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+                    $this->setSettings($viewName, 'btnDelete', false);
+                    $this->setSettings($viewName, 'btnNew', false);
+                    $this->setSettings($viewName, 'checkBoxes', false);
+                    $this->setSettings($viewName, 'clickable', false);
+                }
+            }
+        };
     }
 }
