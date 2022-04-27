@@ -73,12 +73,11 @@ class EditAnticipo extends EditController
 
                 // valores para el select de la fase
                 $customValues = [
-                    ['value' => 'Usuario', 'title' => 'user'],
+					['value' => 'Albaran', 'title' => 'delivery-note'],
                     ['value' => 'Cliente', 'title' => 'customer'],
-                    ['value' => 'Proyecto', 'title' => 'project'],
+					['value' => 'Pedido', 'title' => 'order'],
                     ['value' => 'Presupuesto', 'title' => 'estimation'],
-                    ['value' => 'Pedido', 'title' => 'order'],
-                    ['value' => 'Albaran', 'title' => 'delivery-note'],
+					['value' => 'Usuario', 'title' => 'user'],
                 ];
 
                 // si no está instalado el plugin Proyectos ocultamos sus columnas
@@ -101,12 +100,12 @@ class EditAnticipo extends EditController
                 // si no eres admin, no puedes editar algunas columnas
                 if (false === $this->user->admin) {
                     $this->views[$viewName]->disableColumn('customer', false, 'true');
-                    $this->views[$viewName]->disableColumn('user', false, 'true');
-                    $this->views[$viewName]->disableColumn('project', false, 'true');
+					$this->views[$viewName]->disableColumn('delivery-note', false, 'true');
                     $this->views[$viewName]->disableColumn('estimation', false, 'true');
-                    $this->views[$viewName]->disableColumn('order', false, 'true');
-                    $this->views[$viewName]->disableColumn('delivery-note', false, 'true');
+					$this->views[$viewName]->disableColumn('order', false, 'true');
 					$this->views[$viewName]->disableColumn('phase', false, 'true');
+					$this->views[$viewName]->disableColumn('project', false, 'true');
+					$this->views[$viewName]->disableColumn('user', false, 'true');
                 }
 
                 // si el anticipo es de una facutra no se pueden editar las siguientes columnas
@@ -114,8 +113,8 @@ class EditAnticipo extends EditController
                     $this->views[$viewName]->disableColumn('amount', false, 'true');
                     $this->views[$viewName]->disableColumn('date', false, 'true');
                     $this->views[$viewName]->disableColumn('note', false, 'true');
-                    $this->views[$viewName]->disableColumn('phase', false, 'true');
                     $this->views[$viewName]->disableColumn('payment', false, 'true');
+					$this->views[$viewName]->disableColumn('phase', false, 'true');
                 }
 
                 /*if (false === empty($model->idfactura) && false === $model->exists()) {
@@ -124,14 +123,14 @@ class EditAnticipo extends EditController
 				// se aplica la fase correspondiente al origen del anticipo
 				if (false === empty($model->idalbaran) && false === $model->exists()) {
                     $model->fase = "Albaran";
+				} elseif (false === empty($model->codcliente) && false === $model->exists()) {
+                    $model->fase = "Cliente";
                 } elseif (false === empty($model->idpedido) && false === $model->exists()) {
                     $model->fase = "Pedido";
                 } elseif (false === empty($model->idpresupuesto) && false === $model->exists()) {
                     $model->fase = "Presupuesto";
                 } elseif (false === empty($model->idproyecto) && false === $model->exists()) {
                     $model->fase = "Proyecto";
-                } elseif (false === empty($model->codcliente) && false === $model->exists()) {
-                    $model->fase = "Cliente";
                 } elseif (false === empty($model->user) && false === $model->exists()) {
                     $model->fase = "Usuario";
                 }
