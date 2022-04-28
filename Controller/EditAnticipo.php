@@ -117,9 +117,6 @@ class EditAnticipo extends EditController
 					$this->views[$viewName]->disableColumn('phase', false, 'true');
                 }
 
-                /*if (false === empty($model->idfactura) && false === $model->exists()) {
-                    $model->fase = "Factura";
-                } else */
 				// se aplica la fase correspondiente al origen del anticipo
 				if (false === empty($model->idalbaran) && false === $model->exists()) {
                     $model->fase = "Albaran";
