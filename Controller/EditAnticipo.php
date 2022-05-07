@@ -79,21 +79,26 @@ class EditAnticipo extends EditController
                     ['value' => 'Presupuesto', 'title' => 'estimation'],
 					['value' => 'Usuario', 'title' => 'user'],
                 ];
+				
+				// si está instalado el plugin Proyectos añadimos el valor para el select de la fase
+				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+					$customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
+				}
+				
+				// rellenamos el select de la fase
+                $column = $this->views[$viewName]->columnForName('phase');
+                if ($column && $column->widget->getType() === 'select') {
+                    $column->widget->setValuesFromArray($customValues, true);
+                }
 
                 // si no está instalado el plugin Proyectos ocultamos sus columnas
                 if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
                     $this->views[$viewName]->disableColumn('project');
                     $this->views[$viewName]->disableColumn('project-total-amount');
-                } else {
-                    $customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
+				} elseif (false === $this->user->admin) {
+					$this->views[$viewName]->disableColumn('project', false, 'true');
                 }
 
-                // rellenamos el select de la fase
-                $column = $this->views[$viewName]->columnForName('phase');
-                if ($column && $column->widget->getType() === 'select') {
-                    $column->widget->setValuesFromArray($customValues, true);
-                }
-				
 				// no se puede editar el campo idfactura
 				$this->views[$viewName]->disableColumn('invoice', false, 'true');
 
@@ -103,8 +108,7 @@ class EditAnticipo extends EditController
 					$this->views[$viewName]->disableColumn('delivery-note', false, 'true');
                     $this->views[$viewName]->disableColumn('estimation', false, 'true');
 					$this->views[$viewName]->disableColumn('order', false, 'true');
-					$this->views[$viewName]->disableColumn('phase', false, 'true');
-					$this->views[$viewName]->disableColumn('project', false, 'true');
+					$this->views[$viewName]->disableColumn('phase', false, 'true');												
 					$this->views[$viewName]->disableColumn('user', false, 'true');
                 }
 
