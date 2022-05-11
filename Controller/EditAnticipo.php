@@ -124,14 +124,14 @@ class EditAnticipo extends EditController
 				// se aplica la fase correspondiente al origen del anticipo
 				if (false === empty($model->idalbaran) && false === $model->exists()) {
                     $model->fase = "Albaran";
-				} elseif (false === empty($model->codcliente) && false === $model->exists()) {
-                    $model->fase = "Cliente";
-                } elseif (false === empty($model->idpedido) && false === $model->exists()) {
+				} elseif (false === empty($model->idpedido) && false === $model->exists()) {
                     $model->fase = "Pedido";
                 } elseif (false === empty($model->idpresupuesto) && false === $model->exists()) {
                     $model->fase = "Presupuesto";
                 } elseif (false === empty($model->idproyecto) && false === $model->exists()) {
                     $model->fase = "Proyecto";
+                } elseif (false === empty($model->codcliente) && false === $model->exists()) {
+                    $model->fase = "Cliente";
                 } elseif (false === empty($model->user) && false === $model->exists()) {
                     $model->fase = "Usuario";
                 }
