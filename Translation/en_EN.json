@@ -16,7 +16,9 @@
     "estimation-total-amount-project": "Total Amount of Project Estimations",
     "invoice-total-amount": "Invoice Total Amount",
     "invoice-total-amount-project": "Total Amount of Project Invoices",
+	"level-not-configured": "Level not configured. The system administrator can configure it from the Admin menu, Control Panel, anticipos",
     "order-total-amount": "Order Total Amount",
     "order-total-amount-project": "Total Amount of Project Orders",
-    "project-total-amount": "Project total amount"
+    "project-total-amount": "Project total amount",
+	"user-level-edit": "Minimum user level to be able to modify advanced payments"
 }

@@ -102,17 +102,7 @@ class EditAnticipo extends EditController
 				// no se puede editar el campo idfactura
 				$this->views[$viewName]->disableColumn('invoice', false, 'true');
 
-                // si no eres admin, no puedes editar algunas columnas
-                if (false === $this->user->admin) {
-                    $this->views[$viewName]->disableColumn('customer', false, 'true');
-					$this->views[$viewName]->disableColumn('delivery-note', false, 'true');
-                    $this->views[$viewName]->disableColumn('estimation', false, 'true');
-					$this->views[$viewName]->disableColumn('order', false, 'true');
-					$this->views[$viewName]->disableColumn('phase', false, 'true');												
-					$this->views[$viewName]->disableColumn('user', false, 'true');
-                }
-
-                // si el anticipo es de una facutra no se pueden editar las siguientes columnas
+                // si el anticipo es de una factura no se pueden editar las siguientes columnas
                 if (false === empty($model->idfactura)) {
                     $this->views[$viewName]->disableColumn('amount', false, 'true');
                     $this->views[$viewName]->disableColumn('date', false, 'true');
@@ -120,6 +110,14 @@ class EditAnticipo extends EditController
                     $this->views[$viewName]->disableColumn('payment', false, 'true');
 					$this->views[$viewName]->disableColumn('phase', false, 'true');
                 }
+
+				// si el usuario tiene un nivel de seguridad menor del configurado, no podrá modificar los datos de los anticipos
+				if (true === empty($this->toolBox()->appSettings()->get('anticipos', 'level'))) {
+					$this->toolBox()->i18nLog()->warning('level-not-configured');
+					$this->views[$viewName]->setReadOnly(true);
+				}elseif (false === empty($model->importe) && ($this->user->level < ($this->toolBox()->appSettings()->get('anticipos', 'level')))) {
+					$this->views[$viewName]->setReadOnly(true);
+				}
 
 				// se aplica la fase correspondiente al origen del anticipo
 				if (false === empty($model->idalbaran) && false === $model->exists()) {

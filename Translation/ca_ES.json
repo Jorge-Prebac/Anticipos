@@ -16,7 +16,9 @@
     "estimation-total-amount-project": "Total d'Pressupostos en Projecte",
     "invoice-total-amount": "Total de la Factura",
     "invoice-total-amount-project": "Total d'Factures en Projecte",
+	"level-not-configured": "Nivell no configurat. L'administrador del sistema el pot configurar des del menú Administrador, Panell de control, anticipos",
     "order-total-amount": "Total de la Comanda",
     "order-total-amount-project": "Total d'Comandes en Projecte",
-    "project-total-amount": "Total del Projecte"
+    "project-total-amount": "Total del Projecte",
+	"user-level-edit": "Nivell d'usuari mínim per poder modificar bestretes"
 }
