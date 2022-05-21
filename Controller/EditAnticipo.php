@@ -34,7 +34,7 @@ class EditAnticipo extends EditController
      *
      * @return string
      */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'Anticipo';
     }
@@ -44,7 +44,7 @@ class EditAnticipo extends EditController
      *
      * @return array
      */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';

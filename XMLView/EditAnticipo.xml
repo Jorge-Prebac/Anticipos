@@ -53,9 +53,7 @@
                 </widget>
             </column>
             <column name="customer-risk-total-amount" display="right" order="110" numcolumns="12">
-                <widget type="select" fieldname="codcliente" readonly="true">
-                    <values source="clientes" fieldcode="codcliente" fieldtitle="riesgoalcanzado"/>
-                </widget>
+                <widget type="money" fieldname="totalrisk" readonly="true"/>
             </column>
         </group>
         <group name="estimation" numcolumns="2">
