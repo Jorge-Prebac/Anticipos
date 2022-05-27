@@ -257,13 +257,31 @@ class Anticipo extends Base\ModelClass
 
     protected function generateReceiptsInvoice(): bool
     {
+        // obtenemos todos los recibos que tenga ya la factura
         $oldReciboModel = new ReciboCliente();
         $where = [new DataBaseWhere('idfactura', $this->idfactura)];
         $oldRecibos = $oldReciboModel->all($where, [], 0, 0);
 
+        // este es el recibo que se crea por defecto al crear la factura
         $oldRecibo = new ReciboCliente();
         $oldRecibo->loadFromCode('', $where);
 
+        // comprobamos si el resto del total del recibo viejo menos el total del anticipo es 0
+        // lo redondeamos según tengamos la configuración en el panel de control
+        // si el resto es igual a 0 entonces no creamos nuevo recibo con base a este anticipo
+        $resto = $oldRecibo->importe - $this->importe;
+        if (empty(round($resto, FS_NF0))) {
+
+            // el recibo viejo es igual al anticipo actual entonces marcamos como pagado el recibo viejo
+            if ($oldRecibo->importe === $this->importe) {
+                $oldRecibo->pagado = 1;
+                $oldRecibo->save();
+            }
+
+            return true;
+        }
+
+        // creamos el nuevo recibo
         $newRecibo = new ReciboCliente();
         $newRecibo->codcliente = $oldRecibos[0]->codcliente;
         $newRecibo->coddivisa = $this->coddivisa;
@@ -285,7 +303,8 @@ class Anticipo extends Base\ModelClass
             return false;
         }
 
-        $oldRecibo->importe = $oldRecibo->importe - $this->importe;
+        // actualizamos el recibo viejo con la diferencia del recibo viejo menos el importe del anticipo actual
+        $oldRecibo->importe = $resto;
         return $oldRecibo->save();
     }
 }
