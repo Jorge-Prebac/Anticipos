@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
+use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Core\Model\ReciboCliente;
@@ -144,7 +145,7 @@ class Anticipo extends Base\ModelClass
                 $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
                 if (class_exists($modelClass)) {
                     $project = new $modelClass();
-                    $project->loadFromCode($this->idalbaran);
+                    $project->loadFromCode($this->idproyecto);
                     return $project->totalventas;
                 }
                 return 0;
@@ -153,7 +154,12 @@ class Anticipo extends Base\ModelClass
                 $order = new PedidoCliente();
                 $order->loadFromCode($this->idpedido);
                 return $order->total;
-        }
+
+			case 'totalrisk':
+                $cliente = new Cliente();
+                $cliente->loadFromCode($this->codcliente);
+                return $cliente->riesgoalcanzado;
+		}
         return null;
     }
 
@@ -183,7 +189,7 @@ class Anticipo extends Base\ModelClass
         return 'anticipos';
     }
 
-    public function save()
+    public function save(): bool
     {
         // Comprobar que el cliente del anticipo es el mismo que el cliente de cada documento
         if (false === $this->checkClients() ) {

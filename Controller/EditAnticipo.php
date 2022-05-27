@@ -34,7 +34,7 @@ class EditAnticipo extends EditController
      *
      * @return string
      */
-    public function getModelClassName()
+    public function getModelClassName(): string
     {
         return 'Anticipo';
     }
@@ -44,7 +44,7 @@ class EditAnticipo extends EditController
      *
      * @return array
      */
-    public function getPageData()
+    public function getPageData(): array
     {
         $data = parent::getPageData();
         $data['menu'] = 'sales';
@@ -73,54 +73,56 @@ class EditAnticipo extends EditController
 
                 // valores para el select de la fase
                 $customValues = [
-                    ['value' => 'Usuario', 'title' => 'user'],
+					['value' => 'Albaran', 'title' => 'delivery-note'],
                     ['value' => 'Cliente', 'title' => 'customer'],
-                    ['value' => 'Proyecto', 'title' => 'project'],
+					['value' => 'Pedido', 'title' => 'order'],
                     ['value' => 'Presupuesto', 'title' => 'estimation'],
-                    ['value' => 'Pedido', 'title' => 'order'],
-                    ['value' => 'Albaran', 'title' => 'delivery-note'],
-                    ['value' => 'Factura', 'title' => 'invoice'],
+					['value' => 'Usuario', 'title' => 'user'],
                 ];
-
-                // si no está instalado el plugin Proyectos ocultamos sus columnas
-                if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-                    $this->views[$viewName]->disableColumn('project');
-                    $this->views[$viewName]->disableColumn('project-total-amount');
-                } else {
-                    $customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
-                }
-
-                // rellenamos el select de la fase
+				
+				// si está instalado el plugin Proyectos añadimos el valor para el select de la fase
+				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+					$customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
+				}
+				
+				// rellenamos el select de la fase
                 $column = $this->views[$viewName]->columnForName('phase');
                 if ($column && $column->widget->getType() === 'select') {
                     $column->widget->setValuesFromArray($customValues, true);
                 }
 
-                // si no eres admin, no puedes editar algunas columnas
-                if (false === $this->user->admin) {
-                    $this->views[$viewName]->disableColumn('customer', false, 'true');
-                    $this->views[$viewName]->disableColumn('user', false, 'true');
-                    $this->views[$viewName]->disableColumn('project', false, 'true');
-                    $this->views[$viewName]->disableColumn('estimation', false, 'true');
-                    $this->views[$viewName]->disableColumn('order', false, 'true');
-                    $this->views[$viewName]->disableColumn('delivery-note', false, 'true');
-                    $this->views[$viewName]->disableColumn('invoice', false, 'true');
+                // si no está instalado el plugin Proyectos ocultamos sus columnas
+                if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+                    $this->views[$viewName]->disableColumn('project');
+                    $this->views[$viewName]->disableColumn('project-total-amount');
+				} elseif (false === $this->user->admin) {
+					$this->views[$viewName]->disableColumn('project', false, 'true');
                 }
 
-                // si el anticipo es de una facutra y no eres admin no puedes editar estos campos
-                if (false === empty($model->idfactura) && false === $this->user->admin) {
+				// no se puede editar el campo idfactura
+				$this->views[$viewName]->disableColumn('invoice', false, 'true');
+
+                // si el anticipo es de una factura no se pueden editar las siguientes columnas
+                if (false === empty($model->idfactura)) {
                     $this->views[$viewName]->disableColumn('amount', false, 'true');
                     $this->views[$viewName]->disableColumn('date', false, 'true');
                     $this->views[$viewName]->disableColumn('note', false, 'true');
-                    $this->views[$viewName]->disableColumn('phase', false, 'true');
                     $this->views[$viewName]->disableColumn('payment', false, 'true');
+					$this->views[$viewName]->disableColumn('phase', false, 'true');
                 }
 
-                if (false === empty($model->idfactura) && false === $model->exists()) {
-                    $model->fase = "Factura";
-                } elseif (false === empty($model->idalbaran) && false === $model->exists()) {
+				// si el usuario tiene un nivel de seguridad menor del configurado, no podrá modificar los datos de los anticipos
+				if (true === empty($this->toolBox()->appSettings()->get('anticipos', 'level'))) {
+					$this->toolBox()->i18nLog()->warning('level-not-configured');
+					$this->views[$viewName]->setReadOnly(true);
+				}elseif (false === empty($model->importe) && ($this->user->level < ($this->toolBox()->appSettings()->get('anticipos', 'level')))) {
+					$this->views[$viewName]->setReadOnly(true);
+				}
+
+				// se aplica la fase correspondiente al origen del anticipo
+				if (false === empty($model->idalbaran) && false === $model->exists()) {
                     $model->fase = "Albaran";
-                } elseif (false === empty($model->idpedido) && false === $model->exists()) {
+				} elseif (false === empty($model->idpedido) && false === $model->exists()) {
                     $model->fase = "Pedido";
                 } elseif (false === empty($model->idpresupuesto) && false === $model->exists()) {
                     $model->fase = "Presupuesto";

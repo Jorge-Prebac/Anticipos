@@ -1,4 +1,5 @@
 {
+	"advance-linked-to": "Anticipo vinculado a",
     "advance-payment": "Anticipo",
     "advance-payment-invalid-client-delivery-note": "El cliente del anticipo no coincide con el cliente del albarán",
     "advance-payment-invalid-client-estimation": "El cliente del anticipo no coincide con el cliente del presupuesto",
@@ -16,7 +17,9 @@
     "estimation-total-amount-project": "Total de Presupuestos en Proyecto",
     "invoice-total-amount": "Total de la Factura",
     "invoice-total-amount-project": "Total de Facturas en Proyecto",
+	"level-not-configured": "Nivel no configurado. El administrador del sistema puede configurarlo desde el menú Administrador, Panel de control, anticipos",
     "order-total-amount": "Total del Pedido",
     "order-total-amount-project": "Total de Pedidos en Proyecto",
-    "project-total-amount": "Total del Proyecto"
+    "project-total-amount": "Total del Proyecto",
+	"user-level-edit": "Nivel mínimo del usuario para poder modificar anticipos"
 }
