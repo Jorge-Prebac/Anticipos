@@ -58,6 +58,8 @@ class Init extends InitClass
         $appsettings = $this->toolBox()->appSettings();
         if (empty($appsettings->get('anticipos', 'pdAnticipos'))) {
             $appsettings->set('anticipos', 'pdAnticipos', false);
+        }
+        if (empty($appsettings->get('anticipos', 'level'))) {
             $appsettings->set('anticipos', 'level', 20);
         }
         $appsettings->save();
