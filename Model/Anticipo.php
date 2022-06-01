@@ -267,44 +267,59 @@ class Anticipo extends Base\ModelClass
         $oldRecibo->loadFromCode('', $where);
 
         // comprobamos si el resto del total del recibo viejo menos el total del anticipo es 0
-        // lo redondeamos según tengamos la configuración en el panel de control
-        // si el resto es igual a 0 entonces no creamos nuevo recibo con base a este anticipo
         $resto = $oldRecibo->importe - $this->importe;
-        if (empty(round($resto, FS_NF0))) {
+        
+		// si el resto es igual a 0 modificamos el recibo viejo con los datos del anticipo
+		if ($resto == 0) {
 
-            // el recibo viejo es igual al anticipo actual entonces marcamos como pagado el recibo viejo
-            if ($oldRecibo->importe === $this->importe) {
-                $oldRecibo->pagado = 1;
-                $oldRecibo->save();
-            }
+            // marcamos el recibo viejo como pagado
+            $oldRecibo->pagado = 1;
+			
+			// actualizamos las columnas del recibo viejo con las del anticipo
+			$oldRecibo->codpago = $this->codpago;
+			$oldRecibo->vencimiento = $this->fecha;
+			
+			if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+				$oldRecibo->fecha = $this->fecha;
+				$oldRecibo->fechapago = $this->fecha;
+			}
+
+			$oldRecibo->observaciones = $this->nota;
+            $oldRecibo->save();
 
             return true;
         }
+		
+		// si el resto es distinto a 0 creamos nuevos recibos con base a los anticipos
+		if ($resto !== 0) {
 
-        // creamos el nuevo recibo
-        $newRecibo = new ReciboCliente();
-        $newRecibo->codcliente = $oldRecibos[0]->codcliente;
-        $newRecibo->coddivisa = $this->coddivisa;
-        $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
-        $newRecibo->codpago = $this->codpago;
-        $newRecibo->fecha = $this->fecha;
-        if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-            $newRecibo->fechapago = $this->fecha;
-        }
-        $newRecibo->idempresa = $oldRecibos[0]->idempresa;
-        $newRecibo->idfactura = $this->idfactura;
-        $newRecibo->importe = $this->importe;
-        $newRecibo->nick = $oldRecibos[0]->nick;
-        $newRecibo->numero = count($oldRecibos) + 1;
-        $newRecibo->observaciones = $this->nota;
-        $newRecibo->pagado = 1;
+			// creamos los nuevos recibos
+			$newRecibo = new ReciboCliente();
+			$newRecibo->codcliente = $oldRecibos[0]->codcliente;
+			$newRecibo->coddivisa = $this->coddivisa;
+			$newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
+			$newRecibo->codpago = $this->codpago;
+			$newRecibo->fecha = $this->fecha;
+			$newRecibo->vencimiento = $this->fecha;
+			if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+				$newRecibo->fechapago = $this->fecha;
+			}
+			$newRecibo->idempresa = $oldRecibos[0]->idempresa;
+			$newRecibo->idfactura = $this->idfactura;
+			$newRecibo->importe = $this->importe;
+			$newRecibo->nick = $oldRecibos[0]->nick;
+			$newRecibo->numero = count($oldRecibos);
+			$newRecibo->observaciones = $this->nota;
+			$newRecibo->pagado = 1;
 
-        if (false === $newRecibo->save()) {
-            return false;
-        }
+			if (false === $newRecibo->save()) {
+				return false;
+			}
 
-        // actualizamos el recibo viejo con la diferencia del recibo viejo menos el importe del anticipo actual
-        $oldRecibo->importe = $resto;
-        return $oldRecibo->save();
+			// actualizamos el recibo viejo con la diferencia del recibo viejo menos el importe del anticipo actual
+			$oldRecibo->importe = $resto;
+			$oldRecibo->numero = count($oldRecibos) + 1;
+			return $oldRecibo->save();
+		}
     }
 }

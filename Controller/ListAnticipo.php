@@ -65,6 +65,6 @@ class ListAnticipo extends ListController
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
         $this->addFilterAutocomplete($viewName, 'codcliente', 'customer', 'codcliente', 'clientes', 'codcliente', 'nombre');
         $this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
-        $this->addFilterPeriod($viewName, 'fecha', 'date', 'fecha');
+        $this->addFilterPeriod($viewName, 'fecha', 'period', 'fecha');
     }
 }
