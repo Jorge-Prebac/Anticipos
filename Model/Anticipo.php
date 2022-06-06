@@ -267,9 +267,8 @@ class Anticipo extends Base\ModelClass
         $oldRecibo->loadFromCode('', $where);
 
         // comprobamos si el resto del total del recibo viejo menos el total del anticipo es 0
-        $resto = $oldRecibo->importe - $this->importe;
-        
 		// si el resto es igual a 0 modificamos el recibo viejo con los datos del anticipo
+        $resto = $oldRecibo->importe - $this->importe;
 		if ($resto == 0) {
 
             // marcamos el recibo viejo como pagado
@@ -292,8 +291,6 @@ class Anticipo extends Base\ModelClass
 		
 		// si el resto es distinto a 0 creamos nuevos recibos con base a los anticipos
 		if ($resto !== 0) {
-
-			// creamos los nuevos recibos
 			$newRecibo = new ReciboCliente();
 			$newRecibo->codcliente = $oldRecibos[0]->codcliente;
 			$newRecibo->coddivisa = $this->coddivisa;

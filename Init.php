@@ -22,6 +22,7 @@ namespace FacturaScripts\Plugins\Anticipos;
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Lib\ExportManager;
 
 /**
  * Description of Init
@@ -46,6 +47,9 @@ class Init extends InitClass
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
         }
+		
+		// export manager			
+		ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'Anticipo');
     }
 
     public function update()
