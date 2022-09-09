@@ -56,6 +56,15 @@ class EditPedidoCliente
 					$where = [new DataBaseWhere('codcliente', $codcliente)];
 					$view->loadData('', $where);
                 }
+				
+				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
+				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+					if (empty ($this->views[$viewName]->model->idproyecto)) {
+						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
+						$where = [new DataBaseWhere('idproyecto', $idproyecto)];
+						$view->loadData('', $where);
+					}
+				}
 
 				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
 					$this->setSettings($viewName, 'btnDelete', false);

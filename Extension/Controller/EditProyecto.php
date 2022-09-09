@@ -29,14 +29,32 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  */
 class EditProyecto
 {
-    public function createViews(): Closure
+
+	protected function createViews(): Closure
     {
-        return function () {
-            $viewName = 'ListAnticipo';
+        return function() {
+            $this->createViewsAnticiposCli();
+            $this->createViewsAnticiposProv();
+        };
+    }
+
+    protected function createViewsAnticiposCli(): Closure
+    {
+        return function($viewName = 'ListAnticipo') {
             $this->addListView($viewName, 'Anticipo', 'customer-advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+        };
+    }
+
+    protected function createViewsAnticiposProv(): Closure
+    {
+        return function($viewName = 'ListAnticipoP') {
+            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
         };
     }
 
@@ -54,7 +72,11 @@ class EditProyecto
                     $where = [new DataBaseWhere('codcliente', $codcliente)];
                     $view->loadData('', $where);
                 }
-            }
+            }elseif ($viewName === 'ListAnticipoP') {
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
+                $where = [new DataBaseWhere('idproyecto', $codigo)];
+                $view->loadData('', $where);
+			}
         };
     }
 }

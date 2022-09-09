@@ -22,6 +22,7 @@ namespace FacturaScripts\Plugins\Anticipos;
 use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 
 /**
@@ -43,6 +44,16 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Model\PedidoCliente());
         $this->loadExtension(new Extension\Model\AlbaranCliente());
         $this->loadExtension(new Extension\Model\FacturaCliente());
+		
+		$this->loadExtension(new Extension\Controller\EditProveedor());
+        $this->loadExtension(new Extension\Controller\EditPresupuestoProveedor());
+        $this->loadExtension(new Extension\Controller\EditPedidoProveedor());
+        $this->loadExtension(new Extension\Controller\EditAlbaranProveedor());
+        $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
+        $this->loadExtension(new Extension\Model\PresupuestoProveedor());
+        $this->loadExtension(new Extension\Model\PedidoProveedor());
+        $this->loadExtension(new Extension\Model\AlbaranProveedor());
+        $this->loadExtension(new Extension\Model\FacturaProveedor());
 
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());

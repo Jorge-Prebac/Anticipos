@@ -2,7 +2,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
-use FacturaScripts\Core\Model\Anticipo;
+//use FacturaScripts\Core\Model\Anticipo;
 
 class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 {

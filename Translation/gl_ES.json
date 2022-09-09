@@ -1,11 +1,20 @@
 {
+    "advance-linked-to": "Anticipo vinculado a",
     "advance-payment": "Andianto",
+    "advance-payment-c": "Anticipo Cli",
     "advance-payment-invalid-client-delivery-note": "O cliente do anticipo non coincide co cliente do albará",
     "advance-payment-invalid-client-estimation": "O cliente do anticipo non coincide co cliente do orzamento",
     "advance-payment-invalid-client-invoice": "O cliente do anticipo non coincide co cliente da factura",
     "advance-payment-invalid-client-order": "O cliente do anticipo non coincide co cliente do pedido",
     "advance-payment-invalid-client-project": "O cliente do anticipo non coincide co cliente do proxecto",
+    "advance-payment-invalid-supplier-delivery-note": "El proveedor del anticipo no coincide con el proveedor del albarán",
+    "advance-payment-invalid-supplier-estimation": "El proveedor del anticipo no coincide con el proveedor del presupuesto",
+    "advance-payment-invalid-supplier-invoice": "El proveedor del anticipo no coincide con el proveedor de la factura",
+    "advance-payment-invalid-supplier-order": "El proveedor del anticipo no coincide con el proveedor del pedido",
+    "advance-payment-p": "Anticipo Prov",
     "advance-payments": "Adiantos",
+    "advance-payments-c": "Anticipos Cli",
+    "advance-payments-p": "Anticipos Prov",
     "customer-advance-payments": "Anticipos_Cli",
     "customer-advance-payments-data-on-receipts-payments-data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
     "customer-risk-total-amount": "Risco Total do Cliente",
@@ -16,7 +25,11 @@
     "estimation-total-amount-project": "Total de Orzamentos en Proxecto",
     "invoice-total-amount": "Total da Factura",
     "invoice-total-amount-project": "Total de Facturas en Proxecto",
+    "level-not-configured": "Nivel non configurado. O administrador do sistema pode configuralo dende o menú Administrador, Panel de control, anticipos",
     "order-total-amount": "Total do Pedido",
     "order-total-amount-project": "Total de Pedidos en Proxecto",
-    "project-total-amount": "Total do Proxecto"
+    "project-total-amount": "Total do Proxecto",
+    "supplier-advance-payments": "Anticipos_Prov",
+    "supplier-risk-total-amount": "Riesgo Total del Proveedor",
+    "user-level-edit": "Nivel mínimo do usuario para poder modificar un anticipo"
 }

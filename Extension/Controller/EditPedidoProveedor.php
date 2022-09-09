@@ -16,44 +16,45 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of EditAlbaranCliente
+ * Description of EditPedidoProveedor
  *
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
-class EditAlbaranCliente
+ 
+class EditPedidoProveedor
 {
     public function createViews(): Closure
-    {
-        return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
-        };
-    }
-
+	{
+        return function()
+		{
+			$viewName = 'ListAnticipoP';
+			$this->addListView($viewName,'AnticipoP','advance-payments','fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2); 
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+		};
+	}
+	
     public function loadData(): Closure
-    {
-        return function ($viewName, $view) {
-
-            if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
-                $where = [new DataBaseWhere('idalbaran', $codigo)];
+	{
+        return function($viewName, $view) {
+   
+            if ($viewName === 'ListAnticipoP') {
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
+                $where = [new DataBaseWhere('idpedido', $codigo)];
                 $view->loadData('', $where);
-
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
-                    $view->loadData('', $where);
+				
+				if (empty ($this->views[$viewName]->model->codproveedor)) {
+                    $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
+					$where = [new DataBaseWhere('codproveedor', $codproveedor)];
+					$view->loadData('', $where);
                 }
 				
 				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
@@ -65,13 +66,13 @@ class EditAlbaranCliente
 					}
 				}
 
-                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-                    $this->setSettings($viewName, 'btnDelete', false);
-                    $this->setSettings($viewName, 'btnNew', false);
-                    $this->setSettings($viewName, 'checkBoxes', false);
-                    $this->setSettings($viewName, 'clickable', false);
-                }
-            }
-        };
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+					$this->setSettings($viewName, 'btnDelete', false);
+					$this->setSettings($viewName, 'btnNew', false);
+					$this->setSettings($viewName, 'checkBoxes', false);
+					$this->setSettings($viewName, 'clickable', false);
+				}
+			}
+		};
     }
 }

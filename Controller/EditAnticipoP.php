@@ -23,11 +23,11 @@ use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 
 /**
- * Description of EditAnticipo
+ * Description of EditAnticipoP
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
-class EditAnticipo extends EditController
+class EditAnticipoP extends EditController
 {
 
     /**
@@ -36,7 +36,7 @@ class EditAnticipo extends EditController
      */
     public function getModelClassName(): string
     {
-        return 'Anticipo';
+        return 'AnticipoP';
     }
 
     /**
@@ -47,8 +47,8 @@ class EditAnticipo extends EditController
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['menu'] = 'sales';
-        $data['title'] = 'advance-payment-c';
+        $data['menu'] = 'purchases';
+        $data['title'] = 'advance-payment-p';
         $data['icon'] = 'fas fa-donate';
         return $data;
     }
@@ -62,7 +62,7 @@ class EditAnticipo extends EditController
     {
         switch ($viewName) {
 
-            case 'EditAnticipo':
+            case 'EditAnticipoP':
                 parent::loadData($viewName, $view);
                 $model = $this->views[$viewName]->model;
 
@@ -74,7 +74,7 @@ class EditAnticipo extends EditController
                 // valores para el select de la fase
                 $customValues = [
 					['value' => 'Albaran', 'title' => 'delivery-note'],
-                    ['value' => 'Cliente', 'title' => 'customer'],
+                    ['value' => 'Proveedor', 'title' => 'supplier'],
 					['value' => 'Pedido', 'title' => 'order'],
                     ['value' => 'Presupuesto', 'title' => 'estimation'],
 					['value' => 'Usuario', 'title' => 'user'],
@@ -130,8 +130,8 @@ class EditAnticipo extends EditController
                     $model->fase = "Presupuesto";
 				} elseif (false === empty($model->idproyecto) && false === $model->exists()) {
                     $model->fase = "Proyecto";
-				} elseif (false === empty($model->codcliente) && false === $model->exists()) {
-                    $model->fase = "Cliente";
+				} elseif (false === empty($model->codproveedor) && false === $model->exists()) {
+                    $model->fase = "Proveedor";
                 } elseif (false === empty($model->user) && false === $model->exists()) {
                     $model->fase = "Usuario";
                 }

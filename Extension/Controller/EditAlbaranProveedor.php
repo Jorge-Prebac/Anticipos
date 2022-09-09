@@ -23,18 +23,18 @@ use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of EditAlbaranCliente
+ * Description of EditAlbaranProveedor
  *
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
-class EditAlbaranCliente
+class EditAlbaranProveedor
 {
     public function createViews(): Closure
     {
         return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+            $viewName = 'ListAnticipoP';
+            $this->addListView($viewName, 'AnticipoP', 'advance-payments', 'fas fa-donate');
             $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
             $this->views[$viewName]->addOrderBy(['fase'], 'phase');
             $this->views[$viewName]->addOrderBy(['importe'], 'amount');
@@ -45,14 +45,14 @@ class EditAlbaranCliente
     {
         return function ($viewName, $view) {
 
-            if ($viewName === 'ListAnticipo') {
+            if ($viewName === 'ListAnticipoP') {
                 $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
                 $where = [new DataBaseWhere('idalbaran', $codigo)];
                 $view->loadData('', $where);
 
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
+                if (empty ($this->views[$viewName]->model->codproveedor)) {
+                    $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
+                    $where = [new DataBaseWhere('codproveedor', $codproveedor)];
                     $view->loadData('', $where);
                 }
 				

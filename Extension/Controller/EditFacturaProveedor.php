@@ -23,18 +23,18 @@ use Closure;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of EditAlbaranCliente
+ * Description of EditFacturaProveedor
  *
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
-class EditAlbaranCliente
+class EditFacturaProveedor
 {
     public function createViews(): Closure
     {
         return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+            $viewName = 'ListAnticipoP';
+            $this->addListView($viewName, 'AnticipoP', 'advance-payments', 'fas fa-donate');
             $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
             $this->views[$viewName]->addOrderBy(['fase'], 'phase');
             $this->views[$viewName]->addOrderBy(['importe'], 'amount');
@@ -45,32 +45,15 @@ class EditAlbaranCliente
     {
         return function ($viewName, $view) {
 
-            if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
-                $where = [new DataBaseWhere('idalbaran', $codigo)];
+            if ($viewName === 'ListAnticipoP') {
+                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
+                $where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
-                    $view->loadData('', $where);
-                }
-				
-				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
-				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-					if (empty ($this->views[$viewName]->model->idproyecto)) {
-						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-						$where = [new DataBaseWhere('idproyecto', $idproyecto)];
-						$view->loadData('', $where);
-					}
-				}
-
-                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-                    $this->setSettings($viewName, 'btnDelete', false);
-                    $this->setSettings($viewName, 'btnNew', false);
-                    $this->setSettings($viewName, 'checkBoxes', false);
-                    $this->setSettings($viewName, 'clickable', false);
-                }
+				// Ocultamos botones de acción para que solo permita visualizar los anticipos, ya que están relacionados con los recibos de la factura.
+				$this->setSettings($viewName, 'btnDelete', false);
+				$this->setSettings($viewName, 'btnNew', false);
+				$this->setSettings($viewName, 'checkBoxes', false);
             }
         };
     }
