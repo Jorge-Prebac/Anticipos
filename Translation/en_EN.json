@@ -22,6 +22,7 @@
     "delivery-note-total-amount-project": "Total Amount of Project Delivery Notes",
     "estimation-total-amount": "Estimation Total Amount",
     "estimation-total-amount-project": "Total Amount of Project Estimations",
+	"indicate-minimun-level": "Indicate the minimum level required",
     "invoice-total-amount": "Invoice Total Amount",
     "invoice-total-amount-project": "Total Amount of Project Invoices",
     "level-not-configured": "Level not configured. The system administrator can configure it from the Admin menu, Control Panel, anticipos",
