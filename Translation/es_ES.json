@@ -22,7 +22,7 @@
     "delivery-note-total-amount-project": "Total de Albaranes en Proyecto",
     "estimation-total-amount": "Total del Presupuesto",
     "estimation-total-amount-project": "Total de Presupuestos en Proyecto",
-	"indicate-minimun-level": "Indicar el nivel mínimo necesario",
+    "indicate-minimun-level": "Indicar el nivel mínimo necesario",
     "invoice-total-amount": "Total de la Factura",
     "invoice-total-amount-project": "Total de Facturas en Proyecto",
     "level-not-configured": "Nivel no configurado. El administrador del sistema puede configurarlo desde el menú Administrador, Panel de control, anticipos",

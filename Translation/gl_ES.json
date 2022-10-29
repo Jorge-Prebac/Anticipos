@@ -1,5 +1,5 @@
 {
-    "advance-linked-to": "Andianto vinculado a",
+    "advance-linked-to": "Anticipo vinculado a",
     "advance-payment": "Andianto",
     "advance-payment-c": "Andianto Cli",
     "advance-payment-invalid-client-delivery-note": "O cliente do anticipo non coincide co cliente do albará",
@@ -22,6 +22,7 @@
     "delivery-note-total-amount-project": "Total de Albaráns en Proxecto",
     "estimation-total-amount": "Total do Orzamento",
     "estimation-total-amount-project": "Total de Orzamentos en Proxecto",
+    "indicate-minimun-level": "Indicar o nivel mínimo necesario",
     "invoice-total-amount": "Total da Factura",
     "invoice-total-amount-project": "Total de Facturas en Proxecto",
     "level-not-configured": "Nivel non configurado. O administrador do sistema pode configuralo dende o menú Administrador, Panel de control, anticipos",
