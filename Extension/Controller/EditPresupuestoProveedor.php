@@ -31,16 +31,26 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 class EditPresupuestoProveedor
 {
 
-    public function createViews(): Closure
-    {
-        return function () {
-            $viewName = 'ListAnticipoP';
-            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
-        };
-    }
+	protected function createViews(): Closure
+	{
+		return function() {
+			if ($this->user->can('ListAnticipoP')) {
+				//el usuario tiene acceso
+				$this->createViewsListAnticipoP();
+			}
+		};
+	}
+	
+	protected function createViewsListAnticipoP($viewName = 'ListAnticipoP')
+	{
+		return function() {
+			$viewName = 'ListAnticipoP';
+			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+		};
+	}
 
     public function loadData(): Closure
     {

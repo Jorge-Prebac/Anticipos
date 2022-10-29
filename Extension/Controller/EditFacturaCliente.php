@@ -30,16 +30,27 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  */
 class EditFacturaCliente
 {
-    public function createViews(): Closure
-    {
-        return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
-        };
-    }
+
+	protected function createViews(): Closure
+	{
+		return function() {
+			if ($this->user->can('ListAnticipo')) {
+				//el usuario tiene acceso
+				$this->createViewsListAnticipo();
+			}
+		};
+	}
+	
+	protected function createViewsListAnticipo($viewName = 'ListAnticipo')
+	{
+		return function() {
+			$viewName = 'ListAnticipo';
+			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+		};
+	}
 
     public function loadData(): Closure
     {

@@ -33,8 +33,11 @@ class EditProyecto
 	protected function createViews(): Closure
     {
         return function() {
-            $this->createViewsAnticiposCli();
-            $this->createViewsAnticiposProv();
+			if ($this->user->can('ListAnticipoP')) {
+				//el usuario tiene acceso
+				$this->createViewsAnticiposCli();
+				$this->createViewsAnticiposProv();
+			}
         };
     }
 
