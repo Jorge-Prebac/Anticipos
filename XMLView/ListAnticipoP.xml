@@ -21,6 +21,11 @@
 <view>
     <columns>
         <group name="basic" numcolumns="12">
+			<column name="company" display="left" order="100">
+                <widget type="select" fieldname= "idempresa" onclick="EditEmpresa">
+					<values source="empresas" fieldcode="idempresa" fieldtitle="nombrecorto"/>
+				</widget>
+            </column>
             <column name="date" order="110">
                 <widget type="date" fieldname="fecha"/>
             </column>

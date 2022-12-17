@@ -95,9 +95,7 @@ class EditAnticipo extends EditController
                 if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
                     $this->views[$viewName]->disableColumn('project');
                     $this->views[$viewName]->disableColumn('project-total-amount');
-				} elseif (false === $this->user->admin) {
-					$this->views[$viewName]->disableColumn('project', false, 'true');
-                }
+				}
 
 				// no se puede editar el campo idfactura
 				$this->views[$viewName]->disableColumn('invoice', false, 'true');

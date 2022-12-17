@@ -39,93 +39,64 @@ class AnticipoP extends Base\ModelClass
 {
     use Base\ModelTrait;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $codproveedor;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $coddivisa;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $id;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $fase;
 
-    /**
-     *
-     * @var string
-     */
+	/** @return string */
     public $fecha;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idalbaran;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
+	public $idempresa;
+
+    /** @var integer */
     public $idfactura;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idpedido;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idpresupuesto;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idproyecto;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idrecibo;
 
-    /**
-     *
-     * @var float
-     */
+    /** @var float */
     public $importe;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $nota;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $user;
 
     public function __get(string $name)
     {
         switch ($name) {
+			case 'riesgomax':
+                $proveedor = new Proveedor();
+                $proveedor->loadFromCode($this->proveedor);
+                return $proveedor->riesgomax;
+
+			case 'totalrisk':
+                $proveedor = new Proveedor();
+                $proveedor->loadFromCode($this->codproveedor);
+                return $proveedor->riesgoalcanzado;
+
             case 'totaldelivery':
                 $delivery = new AlbaranProveedor();
                 $delivery->loadFromCode($this->idalbaran);
@@ -141,6 +112,11 @@ class AnticipoP extends Base\ModelClass
                 $invoice->loadFromCode($this->idfactura);
                 return $invoice->total;
 
+            case 'totalorder':
+                $order = new PedidoProveedor();
+                $order->loadFromCode($this->idpedido);
+                return $order->total;
+
             case 'totalproject':
                 $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
                 if (class_exists($modelClass)) {
@@ -149,20 +125,9 @@ class AnticipoP extends Base\ModelClass
                     return $project->totalcompras;
                 }
                 return 0;
-
-            case 'totalorder':
-                $order = new PedidoProveedor();
-                $order->loadFromCode($this->idpedido);
-                return $order->total;
-
-			case 'totalrisk':
-                $proveedor = new Proveedor();
-                $proveedor->loadFromCode($this->codproveedor);
-                return $proveedor->riesgoalcanzado;
 		}
         return null;
     }
-
     public function clear()
     {
         parent::clear();
@@ -191,7 +156,12 @@ class AnticipoP extends Base\ModelClass
 
     public function save(): bool
     {
-        // Comprobar que el cliente del anticipo es el mismo que el cliente de cada documento
+        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
+		if (false === $this->checkCompanies() ) {
+            return false;
+        }
+
+	// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
         if (false === $this->checkProveedores() ) {
             return false;
         }
@@ -203,6 +173,76 @@ class AnticipoP extends Base\ModelClass
 
         return parent::save();
     }
+	
+	protected function checkCompanies(): bool
+	{
+		if ($this->idempresa && $this->idpresupuesto) {
+			$estimation = new PresupuestoProveedor();
+            $estimation->loadFromCode($this->idpresupuesto);
+            if ($estimation->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-estimation');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idpresupuesto) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idpedido) {
+			$order = new PedidoProveedor();
+            $order->loadFromCode($this->idpedido);
+            if ($order->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-order');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idpedido) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idalbaran) {
+			$deliveryNote = new AlbaranProveedor();
+            $deliveryNote->loadFromCode($this->idalbaran);
+            if ($deliveryNote->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-deliveryNote');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idalbaran) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idfactura) {
+			$invoice = new FacturaProveedor();
+            $invoice->loadFromCode($this->idfactura);
+            if ($invoice->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-invoice');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idfactura) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+        $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
+        if ($this->idempresa && $this->idproyecto && class_exists($projectClass)) {
+            $project = new $projectClass();
+            $project->loadFromCode($this->idproyecto);
+            if ($project->idempresa && $project->idempresa != $this->idempresa) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-project');
+                return false;
+            }
+        }elseif(!$this->idempresa && $this->idproyecto && class_exists($projectClass)) {
+            $project = new $projectClass();
+            $project->loadFromCode($this->idproyecto);
+            if ($project->idempresa && $project->idempresa != $this->idempresa) {
+                $this->toolBox()->i18nLog()->warning('missing-company-name');
+                return false;
+			}
+		}
+
+		return true;
+	}
 
     protected function checkProveedores(): bool
     {
@@ -213,16 +253,22 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-estimation');
                 return false;
             }
-        }
+        }elseif(!$this->codproveedor && $this->idpresupuesto) {
+			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
+            return false;
+		}
 
         if ($this->codproveedor && $this->idpedido) {
             $order = new PedidoProveedor();
             $order->loadFromCode($this->idpedido);
             if ($order->codproveedor != $this->codproveedor) {
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-order');
-                return false;
-            }
-        }
+				return false;
+			}
+		}elseif(!$this->codproveedor && $this->idpedido) {
+			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
+            return false;
+		}
 
         if ($this->codproveedor && $this->idalbaran) {
             $deliveryNote = new AlbaranProveedor();
@@ -231,7 +277,10 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-delivery-note');
                 return false;
             }
-        }
+        }elseif(!$this->codproveedor && $this->idalbaran) {
+			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
+            return false;
+		}
 
         if ($this->codproveedor && $this->idfactura) {
             $invoice = new FacturaProveedor();
@@ -240,7 +289,10 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-invoice');
                 return false;
             }
-        }
+        }elseif(!$this->codproveedor && $this->idfactura) {
+			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
+            return false;
+		}
 
         return true;
     }
@@ -281,6 +333,8 @@ class AnticipoP extends Base\ModelClass
 		
 		// si el resto es distinto a 0 creamos nuevos recibos con base a los anticipos
 		if ($resto !== 0) {
+
+			// creamos los nuevos recibos
 			$newRecibo = new ReciboProveedor();
 			$newRecibo->codproveedor = $oldRecibos[0]->codproveedor;
 			$newRecibo->coddivisa = $this->coddivisa;

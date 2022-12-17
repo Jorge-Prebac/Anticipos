@@ -21,10 +21,15 @@
 <view>
     <columns>
         <group name="money" numcolumns="12">
-            <column name="amount" order="100" numcolumns="2">
+			<column name="company" display="right" order="100" numcolumns="2">
+                <widget type="autocomplete" fieldname="idempresa" onclick="EditEmpresa">
+                    <values source="empresas" fieldcode="idempresa" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="amount" order="105" numcolumns="2">
                 <widget type="money" fieldname="importe"/>
             </column>
-            <column name="note" display="right" order="110" numcolumns="10">
+            <column name="note" display="right" order="110" numcolumns="8">
                 <widget type="text" fieldname="nota"/>
             </column>
         </group>
@@ -52,7 +57,10 @@
                     <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
                 </widget>
             </column>
-            <column name="supplier-risk-total-amount" display="right" order="110" numcolumns="12">
+			<column name="max-risk" display="right" order="110" numcolumns="6">
+                <widget type="money" fieldname="riesgomax" readonly="true"/>
+            </column>
+			<column name="current-risk" display="right" order="110" numcolumns="6">
                 <widget type="money" fieldname="totalrisk" readonly="true"/>
             </column>
         </group>
@@ -102,7 +110,7 @@
                     <values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"/>
                 </widget>
             </column>
-            <column name="project-total-amount" display="right" order="110" numcolumns="12">
+			<column name="project-total-amount" display="right" order="110" numcolumns="12">
                 <widget type="money" fieldname="totalproject" readonly="true"/>
             </column>
         </group>

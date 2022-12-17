@@ -32,100 +32,71 @@ use FacturaScripts\Dinamic\Model\PresupuestoCliente;
 /**
  * Description of Anticipo
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @autor Jorge-Prebac <info@prebac.com>
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
  */
 class Anticipo extends Base\ModelClass
 {
     use Base\ModelTrait;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $codcliente;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $coddivisa;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $id;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $fase;
 
-    /**
-     *
-     * @var string
-     */
+	/** @return string */
     public $fecha;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idalbaran;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
+	public $idempresa;
+
+    /** @var integer */
     public $idfactura;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idpedido;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idpresupuesto;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idproyecto;
 
-    /**
-     *
-     * @var integer
-     */
+    /** @var integer */
     public $idrecibo;
 
-    /**
-     *
-     * @var float
-     */
+    /** @var float */
     public $importe;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $nota;
 
-    /**
-     *
-     * @return string
-     */
+    /** @return string */
     public $user;
 
-    public function __get(string $name)
+	public function __get(string $name)
     {
-        switch ($name) {
+		switch ($name) {
+			case 'riesgomax':
+                $cliente = new Cliente();
+                $cliente->loadFromCode($this->codcliente);
+                return $cliente->riesgomax;
+				
+			case 'totalrisk':
+                $cliente = new Cliente();
+                $cliente->loadFromCode($this->codcliente);
+                return $cliente->riesgoalcanzado;
+				
             case 'totaldelivery':
                 $delivery = new AlbaranCliente();
                 $delivery->loadFromCode($this->idalbaran);
@@ -141,27 +112,21 @@ class Anticipo extends Base\ModelClass
                 $invoice->loadFromCode($this->idfactura);
                 return $invoice->total;
 
-            case 'totalproject':
-                $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
-                if (class_exists($modelClass)) {
-                    $project = new $modelClass();
-                    $project->loadFromCode($this->idproyecto);
-                    return $project->totalventas;
-                }
-                return 0;
-
-            case 'totalorder':
+           case 'totalorder':
                 $order = new PedidoCliente();
                 $order->loadFromCode($this->idpedido);
                 return $order->total;
-
-			case 'totalrisk':
-                $cliente = new Cliente();
-                $cliente->loadFromCode($this->codcliente);
-                return $cliente->riesgoalcanzado;
+			case 'totalproject':
+				$modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
+				if (class_exists($modelClass)) {
+					$project = new $modelClass();
+					$project->loadFromCode($this->idproyecto);
+				return $project->totalventas;
+				}
+				return 0;				 
 		}
-        return null;
-    }
+		return null;
+	}
 
     public function clear()
     {
@@ -191,7 +156,12 @@ class Anticipo extends Base\ModelClass
 
     public function save(): bool
     {
-        // Comprobar que el cliente del anticipo es el mismo que el cliente de cada documento
+        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
+		if (false === $this->checkCompanies() ) {
+            return false;
+        }
+
+	// Comprobar que el Cliente del anticipo es el mismo que el Cliente de cada documento
         if (false === $this->checkClients() ) {
             return false;
         }
@@ -203,6 +173,72 @@ class Anticipo extends Base\ModelClass
 
         return parent::save();
     }
+	
+	protected function checkCompanies(): bool
+	{
+		if ($this->idempresa && $this->idpresupuesto) {
+			$estimation = new PresupuestoCliente();
+            $estimation->loadFromCode($this->idpresupuesto);
+            if ($estimation->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-estimation');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idpresupuesto) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idpedido) {
+			$order = new PedidoCliente();
+            $order->loadFromCode($this->idpedido);
+            if ($order->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-order');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idpedido) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idalbaran) {
+			$deliveryNote = new AlbaranCliente();
+            $deliveryNote->loadFromCode($this->idalbaran);
+            if ($deliveryNote->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-deliveryNote');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idalbaran) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+		if ($this->idempresa && $this->idfactura) {
+			$invoice = new FacturaCliente();
+            $invoice->loadFromCode($this->idfactura);
+            if ($invoice->idempresa != $this->idempresa) {
+				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-invoice');
+				return false;
+            }
+        }elseif(!$this->idempresa && $this->idfactura) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
+            return false;
+		}
+		
+        $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
+        if ($this->idempresa && $this->idproyecto && class_exists($projectClass)) {
+            $project = new $projectClass();
+            $project->loadFromCode($this->idproyecto);
+            if ($project->idempresa && $project->idempresa != $this->idempresa) {
+                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-project');
+                return false;
+            }
+        }elseif(!$this->idempresa && $this->idproyecto && class_exists($projectClass)) {
+			$this->toolBox()->i18nLog()->warning('missing-company-name');
+                return false;
+		}
+
+		return true;
+	}
 
     protected function checkClients(): bool
     {
@@ -213,16 +249,22 @@ class Anticipo extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-estimation');
                 return false;
             }
-        }
+        }elseif(!$this->codcliente && $this->idpresupuesto) {
+			$this->toolBox()->i18nLog()->warning('missing-customer-name');
+            return false;
+		}
 
         if ($this->codcliente && $this->idpedido) {
             $order = new PedidoCliente();
             $order->loadFromCode($this->idpedido);
             if ($order->codcliente != $this->codcliente) {
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-order');
-                return false;
-            }
-        }
+				return false;
+			}
+		}elseif(!$this->codcliente && $this->idpedido) {
+			$this->toolBox()->i18nLog()->warning('missing-customer-name');
+            return false;
+		}
 
         if ($this->codcliente && $this->idalbaran) {
             $deliveryNote = new AlbaranCliente();
@@ -231,7 +273,10 @@ class Anticipo extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-delivery-note');
                 return false;
             }
-        }
+        }elseif(!$this->codcliente && $this->idalbaran) {
+			$this->toolBox()->i18nLog()->warning('missing-customer-name');
+            return false;
+		}
 
         if ($this->codcliente && $this->idfactura) {
             $invoice = new FacturaCliente();
@@ -240,18 +285,28 @@ class Anticipo extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-invoice');
                 return false;
             }
-        }
+        }elseif(!$this->codcliente && $this->idfactura) {
+			$this->toolBox()->i18nLog()->warning('missing-customer-name');
+            return false;
+		}
 
         $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
         if ($this->codcliente && $this->idproyecto && class_exists($projectClass)) {
             $project = new $projectClass();
             $project->loadFromCode($this->idproyecto);
-            if ($project->codcliente != $this->codcliente) {
+            if ($project->codcliente && $project->codcliente != $this->codcliente) {
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-project');
                 return false;
             }
-        }
-
+        }elseif(!$this->codcliente && $this->idproyecto && class_exists($projectClass)) {	
+			$project = new $projectClass();
+            $project->loadFromCode($this->idproyecto);
+			if ($project->codcliente){
+				$this->toolBox()->i18nLog()->warning('missing-customer-name');
+				return false;
+			}
+		}
+		
         return true;
     }
 

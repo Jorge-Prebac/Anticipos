@@ -61,10 +61,14 @@ class ListAnticipoP extends ListController
         $this->addOrderBy($viewName, ['importe'], 'amount');
 
         // Filtros
-        $users = $this->codeModel->all('users', 'nick', 'nick');
-        $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
-        $this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
+        $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
         $this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticiposp', 'fase', 'fase');
-        $this->addFilterPeriod($viewName, 'fecha', 'period', 'fecha');
+        $this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
+        
+		$users = $this->codeModel->all('users', 'nick', 'nick');
+        $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
+
+		$companies = $this->codeModel->all('empresas', 'idempresa', 'nombre', true);
+		$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
     }
 }

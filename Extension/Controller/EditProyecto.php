@@ -33,9 +33,12 @@ class EditProyecto
 	protected function createViews(): Closure
     {
         return function() {
-			if ($this->user->can('ListAnticipoP')) {
+			if ($this->user->can('ListAnticipo')) {
 				//el usuario tiene acceso
 				$this->createViewsAnticiposCli();
+			}
+			if ($this->user->can('ListAnticipoP')) {
+				//el usuario tiene acceso
 				$this->createViewsAnticiposProv();
 			}
         };
@@ -72,13 +75,35 @@ class EditProyecto
 
                 if (empty ($this->views[$viewName]->model->codcliente)) {
                     $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
-                    $view->loadData('', $where);
+					$where = [
+						new DataBaseWhere('codcliente', null),
+						new DataBaseWhere('codcliente', $codcliente, '=', 'OR'),
+					];
+					$view->loadData('', $where);
                 }
+
+				if (empty ($this->views[$viewName]->model->idempresa)) {
+                    $idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
+					$where = [
+						new DataBaseWhere('idempresa', null),
+						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
+					];
+					$view->loadData('', $where);
+                }
+				
             }elseif ($viewName === 'ListAnticipoP') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
                 $where = [new DataBaseWhere('idproyecto', $codigo)];
                 $view->loadData('', $where);
+				
+				if (empty ($this->views[$viewName]->model->idempresa)) {
+					$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
+					$where = [
+						new DataBaseWhere('idempresa', null),
+						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
+					];
+					$view->loadData('', $where);
+				}
 			}
         };
     }
