@@ -2,7 +2,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
-class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
+class MAILanticiposExport extends \FacturaScripts\Core\Lib\Export\MAILExport
 {
     public function addModelPage($model, $columns, $title = ''): bool
     {

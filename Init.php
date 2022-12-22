@@ -61,6 +61,7 @@ class Init extends InitClass
 		
 		// export manager			
 		ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'Anticipo');
+		ExportManager::addOptionModel('MAILanticiposExport', 'MAIL', 'Anticipo');
     }
 
     public function update()
