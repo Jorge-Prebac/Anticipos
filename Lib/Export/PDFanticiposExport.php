@@ -32,6 +32,10 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 				continue;
 			}elseif (false !== strpos($colName, 'user')) {
 				continue;
+			}elseif (false !== strpos($colName,'idempresa')) {
+				continue;
+			}elseif (false !== strpos($colName,'riesgomax')) {
+				continue;
 			}elseif (false !== strpos($colName, 'importe')) {
 				$colName = $this->i18n->trans('amount');
 			}elseif (false !== strpos($colName, 'nota')) {
@@ -54,9 +58,6 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 				$colName = $this->i18n->trans('invoice');
 			}elseif (false !== strpos($colName, 'idproyecto')) {
 				$colName = $this->i18n->trans('project');
-			}elseif (false !== strpos($colName,'riesgomax')) {
-				$colName = ('- ');
-				$value = ('-');
 			}
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];
 		}
