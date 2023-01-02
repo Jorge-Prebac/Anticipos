@@ -58,10 +58,7 @@ class EditAlbaranProveedor
             if ($viewName === 'ListAnticipoP') {
                 $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
 				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
-                $where = [
-					new DataBaseWhere('idalbaran', $codigo),
-					new DataBaseWhere('codproveedor', $codproveedor, '=', 'OR'),
-				];
+                $where = [new DataBaseWhere('idalbaran', $codigo)];
                 $view->loadData('', $where);
 
 				if (empty ($this->views[$viewName]->model->idempresa)) {

@@ -60,10 +60,7 @@ class EditPresupuestoCliente
             if ($viewName === 'ListAnticipo') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
 				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                $where = [
-					new DataBaseWhere('idpresupuesto', $codigo),
-					new DataBaseWhere('codcliente', $codcliente, '=', 'OR'),
-				];
+                $where = [new DataBaseWhere('idpresupuesto', $codigo)];
                 $view->loadData('', $where);
 
 				if (empty ($this->views[$viewName]->model->idempresa)) {
