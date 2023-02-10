@@ -24,6 +24,8 @@ use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Lib\ExportManager;
+use FacturaScripts\Core\Base\ToolBox;
+use FacturaScripts\Dinamic\Model\EmailNotification;
 
 /**
  * Description of Init
@@ -67,6 +69,7 @@ class Init extends InitClass
     public function update()
     {
         $this->setupSettings();
+		$this->updateEmailNotifications();
     }
 
     private function setupSettings()
@@ -79,5 +82,25 @@ class Init extends InitClass
             $appsettings->set('anticipos', 'level', 20);
         }
         $appsettings->save();
+    }
+	
+	private function updateEmailNotifications()
+    {
+        $i18n = ToolBox::i18n();
+        $notificationModel = new EmailNotification();
+        $keys = [
+            'sendmail-Anticipo'
+        ];
+        foreach ($keys as $key) {
+            if ($notificationModel->loadFromCode($key)) {
+                continue;
+            }
+
+            $notificationModel->name = $key;
+            $notificationModel->body = $i18n->trans('sendmail-anticipo-body');
+            $notificationModel->subject = $i18n->trans('sendmail-anticipo-subject');
+            $notificationModel->enabled = true;
+            $notificationModel->save();
+        }
     }
 }

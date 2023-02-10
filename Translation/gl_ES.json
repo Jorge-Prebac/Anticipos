@@ -36,6 +36,8 @@
     "order-total-amount": "Total do Pedido",
     "order-total-amount-project": "Total de Pedidos en Proxecto",
     "project-total-amount": "Total do Proxecto",
+    "sendmail-anticipo-body": "Hola, le adjunto su anticipo del día {date}. Gracias. Un saludo.",
+    "sendmail-anticipo-subject": "Su anticipo del {date}",
     "supplier-advance-payments": "Adiantos_Prov",
     "user-level-edit": "Nivel mínimo do usuario para poder modificar un anticipo"
 }

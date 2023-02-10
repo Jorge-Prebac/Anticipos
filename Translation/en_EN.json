@@ -36,6 +36,8 @@
     "order-total-amount": "Order Total Amount",
     "order-total-amount-project": "Total Amount of Project Orders",
     "project-total-amount": "Project total amount",
+    "sendmail-anticipo-body": "Hello, I am attaching your advance for the day {date}. Thank you. Best regards!",
+    "sendmail-anticipo-subject": "Your advance of the {date}",
     "supplier-advance-payments": "Supplier_Advace_Payments",
     "user-level-edit": "Minimum user level to be able to modify advance payments"
 }

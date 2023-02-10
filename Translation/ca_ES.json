@@ -36,6 +36,8 @@
     "order-total-amount": "Total de la Comanda",
     "order-total-amount-project": "Total d'Comandes en Projecte",
     "project-total-amount": "Total del Projecte",
+    "sendmail-anticipo-body": "Hola, us adjunto la vostra bestreta del dia {date}. Gràcies. Una salutació.",
+    "sendmail-anticipo-subject": "La seva bestreta del {date}",
     "supplier-advance-payments": "Bestretes_Prov",
     "user-level-edit": "Nivell d'usuari mínim per poder modificar bestretes"
 }
