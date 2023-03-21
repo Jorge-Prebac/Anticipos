@@ -166,11 +166,6 @@ class Anticipo extends Base\ModelClass
             return false;
         }
 
-        // si el anticipo tiene una factura asignada, entonces creamos tantos recibos como anticipos tenga
-       /* if ($this->idfactura && false === $this->generateReceiptsInvoice()) {
-            return false;
-        }*/
-
         return parent::save();
     }
 
@@ -305,78 +300,6 @@ class Anticipo extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('missing-customer-name');
                 return false;
             }
-        }
-
-        return true;
-    }
-
-    protected function generateReceiptsInvoice(): bool
-    {
-        // obtenemos todos los recibos que tenga ya la factura
-        $where = [new DataBaseWhere('idfactura', $this->idfactura)];
-        $oldRecibos = (new ReciboCliente())->all($where, [], 0, 0);
-
-        // este es el recibo que se crea por defecto al crear la factura
-        $oldRecibo = new ReciboCliente();
-        $oldRecibo->loadFromCode('', $where);
-
-        // comprobamos si el resto del total del recibo viejo menos el total del anticipo es 0
-        // si el resto es igual a 0 modificamos el recibo viejo con los datos del anticipo
-        $resto = $oldRecibo->importe - $this->importe;
-        if ($resto == 0) {
-
-            // marcamos el recibo viejo como pagado
-            $oldRecibo->pagado = 1;
-            $oldRecibo->disableInvoiceUpdate();
-
-            // actualizamos las columnas del recibo viejo con las del anticipo
-            $oldRecibo->codpago = $this->codpago;
-            $oldRecibo->vencimiento = $this->fecha;
-
-            if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-                $oldRecibo->fecha = $this->fecha;
-                $oldRecibo->fechapago = $this->fecha;
-            }
-
-            $oldRecibo->observaciones = $this->nota;
-            $oldRecibo->save();
-
-            return true;
-        }
-
-        // si el resto es distinto a 0 creamos nuevos recibos con base a los anticipos
-        if ($resto !== 0) {
-
-            // creamos los nuevos recibos
-            $newRecibo = new ReciboCliente();
-            $newRecibo->codcliente = $oldRecibos[0]->codcliente;
-            $newRecibo->coddivisa = $this->coddivisa;
-            $newRecibo->codigofactura = $oldRecibos[0]->codigofactura;
-            $newRecibo->codpago = $this->codpago;
-            $newRecibo->fecha = $this->fecha;
-            $newRecibo->vencimiento = $this->fecha;
-            if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-                $newRecibo->fechapago = $this->fecha;
-            }
-            $newRecibo->idempresa = $oldRecibos[0]->idempresa;
-            $newRecibo->idfactura = $this->idfactura;
-            $newRecibo->importe = $this->importe;
-            $newRecibo->nick = $oldRecibos[0]->nick;
-            $newRecibo->numero = count($oldRecibos);
-            $newRecibo->observaciones = $this->nota;
-            $newRecibo->pagado = 1;
-            $newRecibo->disableInvoiceUpdate();
-
-            if (false === $newRecibo->save()) {
-                return false;
-            }
-
-            // actualizamos el recibo viejo con la diferencia del recibo viejo menos el importe del anticipo actual
-            $oldRecibo->importe = $resto;
-            $oldRecibo->numero = count($oldRecibos) + 1;
-            $oldRecibo->save();
-
-            return true;
         }
 
         return true;
