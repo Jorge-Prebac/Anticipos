@@ -86,7 +86,7 @@ class PurchaseDocument
                 foreach ($anticipos as $anticipo) {
                     $recibo = new ReciboProveedor();
 
-                    $recibo->codcliente = $anticipo->codcliente;
+                    $recibo->codproveedor = $anticipo->codproveedor;
                     $recibo->coddivisa = $anticipo->coddivisa;
                     $recibo->idempresa = $anticipo->idempresa;
                     $recibo->idfactura = $anticipo->idfactura;
@@ -94,16 +94,14 @@ class PurchaseDocument
                     $recibo->nick = $anticipo->user;
                     $recibo->numero = $numero++;
                     $recibo->fecha = $anticipo->fecha;
-                    $recibo->codpago = $anticipo->codpago;
-                    $recibo->observaciones = $anticipo->nota;
-                    $recibo->pagado = 1;
-                    $recibo->vencimiento = $factura->fecha;
-
-                    if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-                        $recibo->fechapago = $anticipo->fecha;
-                        $recibo->vencimiento = $anticipo->fecha;
-                    }
-
+					$recibo->codpago = $anticipo->codpago;
+					$recibo->observaciones = $anticipo->nota;
+					$recibo->pagado = 1;
+					$recibo->vencimiento = $factura->fecha;
+					if (true === $this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos')) {
+						$recibo->fechapago = $anticipo->fecha;
+						$recibo->vencimiento = $anticipo->fecha;
+					}
                     $recibo->save();
                 }
 

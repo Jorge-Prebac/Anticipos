@@ -19,12 +19,12 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
-use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Core\App\AppSettings;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Core\Model\ReciboProveedor;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\AlbaranProveedor;
+use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
 use FacturaScripts\Dinamic\Model\PedidoProveedor;
 use FacturaScripts\Dinamic\Model\PresupuestoProveedor;
@@ -161,7 +161,7 @@ class AnticipoP extends Base\ModelClass
             return false;
         }
 
-	// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
+		// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
         if (false === $this->checkProveedores() ) {
             return false;
         }

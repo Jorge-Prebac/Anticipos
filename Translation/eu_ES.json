@@ -36,8 +36,8 @@
     "order-total-amount": "Eskaeraren Totala",
     "order-total-amount-project": "Proiektuaren Eskaeren Totala",
     "project-total-amount": "Proiektuaren Totala",
-    "sendmail-anticipo-body": "Hola, le adjunto su anticipo del día {date}. Gracias. Un saludo.",
-    "sendmail-anticipo-subject": "Su anticipo del {date}",
+    "sendmail-anticipo-body": "Kaixo, {data} eguneko aurrerapena eransten dizut. Eskerrik asko. Agur bat.",
+    "sendmail-anticipo-subject": "Zure {data}-ko aurrerapena",
     "supplier-advance-payments": "Hornitzaile_Aurrerapenak",
     "user-level-edit": "Gutxieneko erabiltzaile-nibela aurrerapen bat aldatu ahal izateko"
 }

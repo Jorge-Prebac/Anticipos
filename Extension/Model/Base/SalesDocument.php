@@ -84,29 +84,27 @@ class SalesDocument
 
                 //Generamos los nuevos recibos en base a los anticipos.
                 $numero = 1;
-                foreach ($anticipos as $anticipo) {
-                    $recibo = new ReciboCliente();
+				foreach ($anticipos as $anticipo) {
+					$recibo = new ReciboCliente();
 
-                    $recibo->codcliente = $anticipo->codcliente;
-                    $recibo->coddivisa = $anticipo->coddivisa;
-                    $recibo->idempresa = $anticipo->idempresa;
-                    $recibo->idfactura = $anticipo->idfactura;
-                    $recibo->importe = $anticipo->importe;
-                    $recibo->nick = $anticipo->user;
-                    $recibo->numero = $numero++;
-                    $recibo->fecha = $anticipo->fecha;
-                    $recibo->codpago = $anticipo->codpago;
-                    $recibo->observaciones = $anticipo->nota;
-                    $recibo->pagado = 1;
-                    $recibo->vencimiento = $factura->fecha;
-
-                    if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
-                        $recibo->fechapago = $anticipo->fecha;
-                        $recibo->vencimiento = $anticipo->fecha;
-                    }
-
-                    $recibo->save();
-                }
+					$recibo->codcliente = $anticipo->codcliente;
+					$recibo->coddivisa = $anticipo->coddivisa;
+					$recibo->idempresa = $anticipo->idempresa;
+					$recibo->idfactura = $anticipo->idfactura;
+					$recibo->importe = $anticipo->importe;
+					$recibo->nick = $anticipo->user;
+					$recibo->numero = $numero++;
+					$recibo->fecha = $anticipo->fecha;
+					$recibo->codpago = $anticipo->codpago;
+					$recibo->observaciones = $anticipo->nota;
+					$recibo->pagado = 1;
+					$recibo->vencimiento = $factura->fecha;
+					if (true === $this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos')) {
+						$recibo->fechapago = $anticipo->fecha;
+						$recibo->vencimiento = $anticipo->fecha;
+					}
+					$recibo->save();
+				}
 
                 //Generamos el recibo por el saldo pendiente si ubiese y actualizamos la factura.
                 $generator = new ReceiptGenerator();
