@@ -167,9 +167,9 @@ class AnticipoP extends Base\ModelClass
         }
 
         // si el anticipo tiene una factura asignada, entonces creamos tantos recibos como anticipos tenga
-        if ($this->idfactura && false === $this->generateReceiptsInvoice()) {
+        /*if ($this->idfactura && false === $this->generateReceiptsInvoice()) {
             return false;
-        }
+        }*/
 
         return parent::save();
     }

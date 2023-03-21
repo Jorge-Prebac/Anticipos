@@ -95,7 +95,16 @@ class SalesDocument
                     $recibo->nick = $anticipo->user;
                     $recibo->numero = $numero++;
                     $recibo->fecha = $anticipo->fecha;
-                    $recibo->setPaymentMethod($anticipo->codpago);
+                    $recibo->codpago = $anticipo->codpago;
+                    $recibo->observaciones = $anticipo->nota;
+                    $recibo->pagado = 1;
+                    $recibo->vencimiento = $factura->fecha;
+
+                    if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+                        $recibo->fechapago = $anticipo->fecha;
+                        $recibo->vencimiento = $anticipo->fecha;
+                    }
+
                     $recibo->save();
                 }
 

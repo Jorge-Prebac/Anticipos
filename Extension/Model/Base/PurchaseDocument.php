@@ -13,7 +13,7 @@ use FacturaScripts\Core\Model\ReciboProveedor;
 use FacturaScripts\Plugins\Anticipos\Model\AnticipoP;
 
 /**
- * Description of SalesDocument
+ * Description of PurchaseDocument
  *
  * @property $idestado
  * @author Juan José Prieto Dzul <juanjoseprieto88@gmail.com>
@@ -69,7 +69,7 @@ class PurchaseDocument
             }
 
             //Si es una Factura generamos los recibos correspondientes.
-            if ('FacturaCliente' === $transformation->model2 && $transformation->iddoc2) {
+            if ('FacturaProveedor' === $transformation->model2 && $transformation->iddoc2) {
                 $factura = new FacturaProveedor();
 
                 if (false === $factura->loadFromCode($transformation->iddoc2)) {
@@ -86,7 +86,7 @@ class PurchaseDocument
                 foreach ($anticipos as $anticipo) {
                     $recibo = new ReciboProveedor();
 
-                    $recibo->codproveedor = $anticipo->codproveedor;
+                    $recibo->codcliente = $anticipo->codcliente;
                     $recibo->coddivisa = $anticipo->coddivisa;
                     $recibo->idempresa = $anticipo->idempresa;
                     $recibo->idfactura = $anticipo->idfactura;
@@ -94,7 +94,16 @@ class PurchaseDocument
                     $recibo->nick = $anticipo->user;
                     $recibo->numero = $numero++;
                     $recibo->fecha = $anticipo->fecha;
-                    $recibo->setPaymentMethod($anticipo->codpago);
+                    $recibo->codpago = $anticipo->codpago;
+                    $recibo->observaciones = $anticipo->nota;
+                    $recibo->pagado = 1;
+                    $recibo->vencimiento = $factura->fecha;
+
+                    if ($this->toolBox()->appSettings()->get('anticipos', 'pdAnticipos', false)) {
+                        $recibo->fechapago = $anticipo->fecha;
+                        $recibo->vencimiento = $anticipo->fecha;
+                    }
+
                     $recibo->save();
                 }
 
