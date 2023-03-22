@@ -166,7 +166,17 @@ class Anticipo extends Base\ModelClass
             return false;
         }
 
-        return parent::save();
+		// add audit log
+        self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [
+            '%model%' => $this->modelClassName(),
+            '%key%' => $this->primaryColumnValue(),
+            '%desc%' => $this->primaryDescription(),
+            'model-class' => $this->modelClassName(),
+            'model-code' => $this->primaryColumnValue(),
+            'model-data' => $this->toArray()
+        ]);
+
+		return parent::save();
     }
 
     protected function checkCompanies(): bool
