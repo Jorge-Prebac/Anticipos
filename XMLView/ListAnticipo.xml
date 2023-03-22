@@ -42,6 +42,11 @@
                     <values title="delivery-note">Albaran</values>
                     <values title="invoice">Factura</values>
                 </widget>
+			</column>
+			<column name="payment" title="method-payment" order="135">
+                <widget type="select" fieldname="codpago" onclick="EditFormaPago">
+                    <values source="formaspago" fieldcode="codpago" fieldtitle="descripcion"/>
+                </widget>
             </column>
             <column name="customer" order="140">
                 <widget type="select" fieldname="codcliente" onclick="EditCliente">

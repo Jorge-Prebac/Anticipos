@@ -61,14 +61,15 @@ class ListAnticipo extends ListController
         $this->addOrderBy($viewName, ['importe'], 'amount');
 
         // Filtros
-        $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
-		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
-		$this->addFilterAutocomplete($viewName, 'codcliente', 'customer', 'codcliente', 'clientes', 'codcliente', 'nombre');
-        
-		$users = $this->codeModel->all('users', 'nick', 'nick');
-        $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
-
 		$companies = $this->codeModel->all('empresas', 'idempresa', 'nombre', true);
 		$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
+
+        $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
+		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
+		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');		
+		$this->addFilterAutocomplete($viewName, 'codcliente', 'customer', 'codcliente', 'clientes', 'codcliente', 'nombre');
+
+		$users = $this->codeModel->all('users', 'nick', 'nick');
+        $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
     }
 }
