@@ -56,7 +56,6 @@ class EditPedidoCliente
     public function loadData(): Closure
 	{
         return function($viewName, $view) {
-
             if ($viewName === 'ListAnticipo') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
 				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');

@@ -28,6 +28,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
+
 class EditAlbaranProveedor
 {
 	protected function createViews(): Closure
@@ -52,11 +53,10 @@ class EditAlbaranProveedor
 	}
 
     public function loadData(): Closure
-    {
-        return function ($viewName, $view) {
-
+	{
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipoP') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
 				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
                 $where = [
 					new DataBaseWhere('idalbaran', $codigo),
@@ -72,7 +72,7 @@ class EditAlbaranProveedor
 					];
 					$view->loadData('', $where);
 				}
-				
+
 				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
 				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 					if (empty ($this->views[$viewName]->model->idproyecto)) {
@@ -85,13 +85,13 @@ class EditAlbaranProveedor
 					}
 				}
 
-                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
 					$this->setSettings($viewName, 'btnDelete', false);
-                    $this->setSettings($viewName, 'btnNew', false);
-                    $this->setSettings($viewName, 'checkBoxes', false);
-                    $this->setSettings($viewName, 'clickable', false);
-                }
-            }
-        };
+					$this->setSettings($viewName, 'btnNew', false);
+					$this->setSettings($viewName, 'checkBoxes', false);
+					$this->setSettings($viewName, 'clickable', false);
+				}
+			}
+		};
     }
 }

@@ -52,12 +52,11 @@ class EditFacturaProveedor
 	}
 
     public function loadData(): Closure
-    {
-        return function ($viewName, $view) {
-
+	{
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipoP') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
-                $where = [new DataBaseWhere('idfactura', $codigo)];
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
+				$where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
 				// Ocultamos botones de acción para que solo permita visualizar los anticipos, ya que están relacionados con los recibos de la factura.

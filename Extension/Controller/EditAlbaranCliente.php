@@ -28,6 +28,7 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
+
 class EditAlbaranCliente
 {
 
@@ -55,9 +56,8 @@ class EditAlbaranCliente
     public function loadData(): Closure
 	{
         return function($viewName, $view) {
-
             if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idalbaran');
 				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
                 $where = [
 					new DataBaseWhere('idalbaran', $codigo),
@@ -73,7 +73,7 @@ class EditAlbaranCliente
 					];
 					$view->loadData('', $where);
 				}
-				
+
 				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
 				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 					if (empty ($this->views[$viewName]->model->idproyecto)) {

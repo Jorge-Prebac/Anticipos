@@ -52,7 +52,7 @@ class EditCliente
 
     public function loadData(): Closure
     {
-        return function ($viewName, $view) {
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipo') {
                 $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
                 $where = [new DataBaseWhere('codcliente', $codcliente)];

@@ -55,7 +55,6 @@ class EditPedidoProveedor
     public function loadData(): Closure
 	{
         return function($viewName, $view) {
-
             if ($viewName === 'ListAnticipoP') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
 				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
@@ -72,7 +71,7 @@ class EditPedidoProveedor
 						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
 					];
 					$view->loadData('', $where);
-                }
+				}
 
 				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
 				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {

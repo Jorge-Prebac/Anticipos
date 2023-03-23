@@ -54,8 +54,7 @@ class EditPresupuestoProveedor
 
     public function loadData(): Closure
 	{
-        return function ($viewName, $view) {
-
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipoP') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
 				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');

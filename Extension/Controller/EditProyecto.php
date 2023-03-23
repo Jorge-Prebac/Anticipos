@@ -66,8 +66,7 @@ class EditProyecto
 
     public function loadData(): Closure
     {
-        return function ($viewName, $view) {
-
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipo') {
                 $codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
                 $where = [new DataBaseWhere('idproyecto', $codigo)];

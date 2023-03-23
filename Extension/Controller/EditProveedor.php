@@ -52,7 +52,7 @@ class EditProveedor
 
     public function loadData(): Closure
     {
-        return function ($viewName, $view) {
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipoP') {
                 $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
                 $where = [new DataBaseWhere('codproveedor', $codproveedor)];
