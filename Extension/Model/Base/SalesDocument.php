@@ -34,7 +34,7 @@ class SalesDocument
                 return;
             }
 
-            $whereAnticipos = [new DataBaseWhere($this->primaryColumn(), $this->primaryColumnValue())];
+			$whereAnticipos = [new DataBaseWhere($this->primaryColumn(), $this->primaryColumnValue())];
             $anticipos = (new Anticipo())->all($whereAnticipos, [], 0, 0);
 
             if (count($anticipos) === 0) {
@@ -49,7 +49,7 @@ class SalesDocument
             ];
 
             $whereTransformation = [
-                new DataBaseWhere('model1', $this->modelClassName()),
+				new DataBaseWhere('model1', $this->modelClassName()),
                 new DataBaseWhere('iddoc1', $this->primaryColumnValue())
             ];
 
@@ -57,7 +57,7 @@ class SalesDocument
             $transformation->loadFromCode('', $whereTransformation);
 
             if (!$transformation->model2 && !$transformation->iddoc2) {
-                return;
+				return;
             }
 
             foreach ($anticipos as $anticipo) {

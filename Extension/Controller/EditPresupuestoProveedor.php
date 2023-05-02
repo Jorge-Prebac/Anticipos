@@ -89,7 +89,6 @@ class EditPresupuestoProveedor
 					$this->setSettings($viewName, 'btnDelete', false);
 					$this->setSettings($viewName, 'btnNew', false);
 					$this->setSettings($viewName, 'checkBoxes', false);
-					$this->setSettings($viewName, 'clickable', false);
 				}
 			}
 		};
