@@ -20,6 +20,8 @@
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\DataSrc\Empresas;
 
 /**
  * Description of ListAnticipo
@@ -60,10 +62,17 @@ class ListAnticipo extends ListController
         $this->addOrderBy($viewName, ['fase'], 'phase');
         $this->addOrderBy($viewName, ['importe'], 'amount');
 
-        // Filtros
-		$companies = $this->codeModel->all('empresas', 'idempresa', 'nombre', true);
-		$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
+		// si solo hay una empresa, ocultamos la columna
+        if (count(Empresas::all()) <= 1) {
+            $this->views[$viewName]->disableColumn('company');
+		}
 
+		// Filtros
+		// Si hay mas de una empresa, activamos su filtro
+		if(count(Empresas::all()) > 1) {
+			$companies = $this->codeModel->all('empresas', 'idempresa', 'nombre', true);
+			$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
+        }
         $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
 		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
 		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');		
@@ -71,5 +80,12 @@ class ListAnticipo extends ListController
 
 		$users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
+		
+		$i18n = $this->toolBox()->i18n();
+		$this->addFilterSelectWhere($viewName, 'status', [
+            ['label' => $i18n->trans('invoiced'), 'where' => []],
+            ['label' => $i18n->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
+            ['label' => $i18n->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
+        ]);
     }
 }

@@ -16,10 +16,11 @@ use FacturaScripts\Plugins\Anticipos\Model\Anticipo;
  * Description of SalesDocument
  *
  * @property $idestado
- * @author Juan José Prieto Dzul <juanjoseprieto88@gmail.com>
  * @method primaryColumnValue()
  * @method primaryColumn()
  * @method modelClassName()
+ * @author Juan José Prieto Dzul <juanjoseprieto88@gmail.com>
+ * @author Jorge-Prebac              <info@prebac.com>
  */
 class SalesDocument
 {
@@ -54,7 +55,7 @@ class SalesDocument
             ];
 
             $transformation = new DocTransformation();
-            $transformation->loadFromCode('', $whereTransformation);
+            $transformation->loadFromCode('', $whereTransformation, ['iddoc2' => 'DESC']);
 
             if (!$transformation->model2 && !$transformation->iddoc2) {
 				return;
@@ -64,7 +65,7 @@ class SalesDocument
                 $anticipo->{$primaryColumns[$transformation->model2]} = $transformation->iddoc2;
 
                 if (false === $anticipo->save()) {
-                    ToolBox::log('Anticipos')->warning("Error al actualizar el anticipo.");
+                    ToolBox::i18nLog('Anticipos Cli')->warning('record-save-error' );
                     return;
                 }
             }

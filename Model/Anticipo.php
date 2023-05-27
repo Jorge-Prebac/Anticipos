@@ -116,6 +116,7 @@ class Anticipo extends Base\ModelClass
                 $order = new PedidoCliente();
                 $order->loadFromCode($this->idpedido);
                 return $order->total;
+
             case 'totalproject':
                 $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
                 if (class_exists($modelClass)) {

@@ -63,4 +63,10 @@
             </column>
         </group>
     </columns>
+	<rows>
+        <row type="status">
+            <option color="success" title="generated-invoice" fieldname="idfactura">notnull:</option>
+			<option color="dark" title="no-invoice" fieldname="idfactura">null:</option>
+        </row>
+    </rows>
 </view>
