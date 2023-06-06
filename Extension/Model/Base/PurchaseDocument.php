@@ -24,6 +24,44 @@ use FacturaScripts\Plugins\Anticipos\Model\AnticipoP;
  */
 class PurchaseDocument
 {
+
+	public $advance;
+
+	public function clear(): Closure
+	{
+		return function () {
+			$this->checkAdvance('advance');
+			return;
+		};
+	}
+
+	public function checkAdvance(): Closure
+	{
+		return function ($field) { 
+			
+			$pCl = $this->primaryColumn();
+			
+			if (false === (empty($this->{$field}))) {
+				return;
+			}
+
+			$anticipoModel = new AnticipoP();
+			$anticipos = $anticipoModel->all([], [], 0, 0);
+
+			if (false === (count($anticipos) != 0)) {
+				return;
+			}
+
+			$sql_select = 'SELECT COUNT(adv.' . $pCl . ') FROM ' . ($this->tableName()) . ' doc LEFT JOIN anticiposp adv ON doc.' . $pCl . ' = adv.' . $pCl
+				. ' WHERE doc.' . $pCl . ' = ' . ($this->tableName()) . '.' . $pCl . ' GROUP BY doc.' . $pCl;
+			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (' . $sql_select . ') WHERE advance <> (' . $sql_select . ')';
+			
+			if (false === (self::$dataBase->exec($sql))) {
+				return ($this->toolBox()->i18nLog()->warning('record-save-error'));
+			}
+		};
+	}
+
     public function saveUpdate(): Closure
     {
         return function () {

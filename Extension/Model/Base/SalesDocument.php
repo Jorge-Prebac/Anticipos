@@ -10,6 +10,7 @@ use FacturaScripts\Core\Model\DocTransformation;
 use FacturaScripts\Core\Model\EstadoDocumento;
 use FacturaScripts\Core\Model\FacturaCliente;
 use FacturaScripts\Core\Model\ReciboCliente;
+use FacturaScripts\Core\Model\PresupuestoCliente;
 use FacturaScripts\Plugins\Anticipos\Model\Anticipo;
 
 /**
@@ -24,6 +25,43 @@ use FacturaScripts\Plugins\Anticipos\Model\Anticipo;
  */
 class SalesDocument
 {
+
+	public $advance;
+
+	public function clear(): Closure
+	{
+		return function () {
+			$this->checkAdvance('advance');
+			return;
+		};
+	}
+
+	public function checkAdvance(): Closure
+	{
+		return function ($field) { 
+			
+			$pCl = $this->primaryColumn();
+			
+			if (false === (empty($this->{$field}))) {
+				return;
+			}
+
+			$anticipoModel = new Anticipo();
+			$anticipos = $anticipoModel->all([], [], 0, 0);
+
+			if (false === (count($anticipos) != 0)) {
+				return;
+			}
+
+			$sql_select = 'SELECT COUNT(adv.' . $pCl . ') FROM ' . ($this->tableName()) . ' doc LEFT JOIN anticipos adv ON doc.' . $pCl . ' = adv.' . $pCl
+				. ' WHERE doc.' . $pCl . ' = ' . ($this->tableName()) . '.' . $pCl . ' GROUP BY doc.' . $pCl;
+			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (' . $sql_select . ') WHERE advance <> (' . $sql_select . ')';
+			
+			if (false === (self::$dataBase->exec($sql))) {
+				return ($this->toolBox()->i18nLog()->warning('record-save-error'));
+			}
+		};
+	}
 
     public function saveUpdate(): Closure
     {
