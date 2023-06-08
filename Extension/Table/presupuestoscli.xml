@@ -2,8 +2,9 @@
 
 <table>
     <column>
-        <name>advance</name>
-        <type>integer</type>
+		<name>advance</name>
+		<type>integer</type>
+		<null>NO</null>
 		<default>0</default>
     </column>
 </table>
