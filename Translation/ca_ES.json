@@ -39,5 +39,7 @@
     "sendmail-anticipo-body": "Hola, us adjunto la vostra bestreta del dia {date}. Gràcies. Una salutació.",
     "sendmail-anticipo-subject": "La seva bestreta del {date}",
     "supplier-advance-payments": "Bestretes_Prov",
-    "user-level-edit": "Nivell d'usuari mínim per poder modificar bestretes"
+    "user-level-edit": "Nivell d'usuari mínim per poder modificar bestretes",
+    "with-advances": "Amb Bestretes",
+    "without-advances": "Sense Bestretes"
 }

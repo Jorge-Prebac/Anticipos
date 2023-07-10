@@ -39,5 +39,7 @@
     "sendmail-anticipo-body": "Ola, adxunto o seu anticipo do día {date}. Grazas. Un saúdo.",
     "sendmail-anticipo-subject": "O seu anticipo do {date}",
     "supplier-advance-payments": "Adiantos_Prov",
-    "user-level-edit": "Nivel mínimo do usuario para poder modificar un anticipo"
+    "user-level-edit": "Nivel mínimo do usuario para poder modificar un anticipo",
+    "with-advances": "Con pagos por adiantado",
+    "without-advances": "Sen pagos por adiantado"
 }

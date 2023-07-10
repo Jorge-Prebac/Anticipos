@@ -39,5 +39,7 @@
     "sendmail-anticipo-body": "Kaixo, {data} eguneko aurrerapena eransten dizut. Eskerrik asko. Agur bat.",
     "sendmail-anticipo-subject": "Zure {data}-ko aurrerapena",
     "supplier-advance-payments": "Hornitzaile_Aurrerapenak",
-    "user-level-edit": "Gutxieneko erabiltzaile-nibela aurrerapen bat aldatu ahal izateko"
+    "user-level-edit": "Gutxieneko erabiltzaile-nibela aurrerapen bat aldatu ahal izateko",
+    "with-advances": "Aurrerapenekin",
+    "without-advances": "Aurrerapenik gabe"
 }

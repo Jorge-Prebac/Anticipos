@@ -39,5 +39,7 @@
     "sendmail-anticipo-body": "Hello, I am attaching your advance for the day {date}. Thank you. Best regards!",
     "sendmail-anticipo-subject": "Your advance of the {date}",
     "supplier-advance-payments": "Supplier_Advace_Payments",
-    "user-level-edit": "Minimum user level to be able to modify advance payments"
+    "user-level-edit": "Minimum user level to be able to modify advance payments",
+    "with-advances": "With Advances",
+    "without-advances": "Without advances"
 }
