@@ -35,7 +35,7 @@ class ListFacturaProveedor
 			$viewName = 'ListFacturaProveedor';
 			
 			$i18n = $this->toolBox()->i18n();
-			$this->addFilterSelectWhere($viewName, 'status', [
+			$this->addFilterSelectWhere($viewName, 'advances-status', [
 				['label' => $i18n->trans('advance-payments'), 'where' => []],
 				['label' => $i18n->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
 				['label' => $i18n->trans('without-advances'), 'where' => [new DataBaseWhere('advance', 0, '=')]],
