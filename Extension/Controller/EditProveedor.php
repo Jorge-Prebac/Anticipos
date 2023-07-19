@@ -20,6 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
@@ -32,7 +33,8 @@ class EditProveedor
 	protected function createViews(): Closure
 	{
 		return function() {
-			if ($this->user->can('ListAnticipoP')) {
+			$user = Session::get('user');
+			if (!false == $user->can('ListAnticipoP')) {
 				//el usuario tiene acceso
 				$this->createViewsListAnticipoP();
 			}
