@@ -154,18 +154,17 @@ class AnticipoP extends Base\ModelClass
     {
         return 'anticiposp';
     }
+	
+							public static function isInstalled(string $pluginName): bool
+							{
+								$plugin = self::get($pluginName);
+								return empty($plugin) ? false : $plugin->installed;
+							}
 
     public function save(): bool
     {
-        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
-		if (false === $this->checkCompanies() ) {
-            return false;
-        }
-
-		// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
-        if (false === $this->checkProveedores() ) {
-            return false;
-        }
+        // Comprobar que la Empresa y el Proveedor del anticipo coinciden con el documento
+		return (false === $this->checkCompanies() ? false : $this->checkProveedores());
 
 		// add audit log
 		self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [

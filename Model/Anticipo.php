@@ -157,15 +157,8 @@ class Anticipo extends Base\ModelClass
 
     public function save(): bool
     {
-        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
-		if (false === $this->checkCompanies()) {
-            return false;
-        }
-
-		// Comprobar que el Cliente del anticipo es el mismo que el Cliente de cada documento
-        if (false === $this->checkClients()) {
-            return false;
-        }
+        // Comprobar que la Empresa y el Cliente del anticipo coinciden con el documento
+		return (false === $this->checkCompanies() ? false : $this->checkClients());
 
 		// add audit log
 		self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [
