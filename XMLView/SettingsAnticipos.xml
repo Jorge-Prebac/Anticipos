@@ -27,7 +27,7 @@
             <column name="customer-advance-payments-data-on-receipts-payments-data" numcolumns="12" order="100">
                 <widget type="checkbox" fieldname="pdAnticipos"/>
             </column>
-			<column name="user-level-edit" numcolumns="4" display="right" order="105">
+			<column name="user-level-edit" description="indicate-minimun-level" numcolumns="4" display="right" order="105">
                 <widget type="number" step="1" min="20" max="99" fieldname="level" required="true"/>
             </column>
         </group>

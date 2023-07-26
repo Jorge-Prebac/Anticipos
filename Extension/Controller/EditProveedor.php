@@ -24,28 +24,28 @@ use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of EditCliente
+ * Description of EditProveedor
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
-class EditCliente
+class EditProveedor
 {
 	protected function createViews(): Closure
 	{
 		return function() {
 			$user = Session::get('user');
-			if (!false == $user->can('ListAnticipo')) {
+			if (!false == $user->can('ListAnticipoP')) {
 				//el usuario tiene acceso
-				$this->createViewsListAnticipo();
+				$this->createViewsListAnticipoP();
 			}
 		};
 	}
 	
-	protected function createViewsListAnticipo($viewName = 'ListAnticipo')
+	protected function createViewsListAnticipoP($viewName = 'ListAnticipoP')
 	{
 		return function() {
-			$viewName = 'ListAnticipo';
-			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+			$viewName = 'ListAnticipoP';
+			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
 			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
 			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
 			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
@@ -55,9 +55,9 @@ class EditCliente
     public function loadData(): Closure
     {
         return function($viewName, $view) {
-            if ($viewName === 'ListAnticipo') {
-                $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                $where = [new DataBaseWhere('codcliente', $codcliente)];
+            if ($viewName === 'ListAnticipoP') {
+                $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
+                $where = [new DataBaseWhere('codproveedor', $codproveedor)];
                 $view->loadData('', $where);
             }
         };

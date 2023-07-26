@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<view>
+    <columns>
+        <column name="advance" title="advance-payments" display="center"  order="285">
+            <widget type="number" fieldname="advance" decimal= "0"/>
+        </column>
+    </columns>
+</view>

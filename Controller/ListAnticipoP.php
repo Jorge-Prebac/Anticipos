@@ -24,11 +24,11 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Empresas;
 
 /**
- * Description of ListAnticipo
+ * Description of ListAnticipoP
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
-class ListAnticipo extends ListController
+class ListAnticipoP extends ListController
 {
 
     /**
@@ -39,24 +39,24 @@ class ListAnticipo extends ListController
     public function getPageData(): array
     {
         $data = parent::getPageData();
-        $data['menu'] = 'sales';
-        $data['title'] = 'advance-payments-c';
+        $data['menu'] = 'purchases';
+        $data['title'] = 'advance-payments-p';
         $data['icon'] = 'fas fa-donate';
         return $data;
     }
 
     protected function createViews()
     {
-        $this->createViewsAnticipos();
+        $this->createViewsAnticiposP();
     }
 
     /**
      *
      * @param string $viewName
      */
-    protected function createViewsAnticipos(string $viewName = 'ListAnticipo')
+    protected function createViewsAnticiposP(string $viewName = 'ListAnticipoP')
     {
-        $this->addView($viewName, 'Anticipo', 'advance-payments-c', 'fas fa-donate');
+        $this->addView($viewName, 'AnticipoP', 'advance-payments-p', 'fas fa-donate');
         $this->addSearchFields($viewName, ['id', 'fecha', 'fase', 'nota']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
         $this->addOrderBy($viewName, ['fase'], 'phase');
@@ -74,10 +74,10 @@ class ListAnticipo extends ListController
 			$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
         }
         $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
-		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticipos', 'fase', 'fase');
-		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');		
-		$this->addFilterAutocomplete($viewName, 'codcliente', 'customer', 'codcliente', 'clientes', 'codcliente', 'nombre');
-
+        $this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticiposp', 'fase', 'fase');
+		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');	
+        $this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
+        
 		$users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
 		

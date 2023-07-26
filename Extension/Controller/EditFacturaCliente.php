@@ -20,6 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
@@ -30,24 +31,34 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  */
 class EditFacturaCliente
 {
-    public function createViews(): Closure
-    {
-        return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
-        };
-    }
+	protected function createViews(): Closure
+	{
+		return function() {
+			$user = Session::get('user');
+			if (!false == $user->can('ListAnticipo')) {
+				//el usuario tiene acceso
+				$this->createViewsListAnticipo();
+			}
+		};
+	}
+	
+	protected function createViewsListAnticipo($viewName = 'ListAnticipo')
+	{
+		return function() {
+			$viewName = 'ListAnticipo';
+			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+		};
+	}
 
     public function loadData(): Closure
-    {
-        return function ($viewName, $view) {
-
+	{
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
-                $where = [new DataBaseWhere('idfactura', $codigo)];
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
+				$where = [new DataBaseWhere('idfactura', $codigo)];
                 $view->loadData('', $where);
 
 				// Ocultamos botones de acción para que solo permita visualizar los anticipos, ya que están relacionados con los recibos de la factura.

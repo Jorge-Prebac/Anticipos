@@ -51,10 +51,10 @@
                 <widget type="text" fieldname="user" onclick="EditUser" readonly="true"/>
             </column>
         </group>
-        <group name="customer" numcolumns="2">
-            <column name="customer" order="100" numcolumns="12">
-                <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
-                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+        <group name="supplier" numcolumns="2">
+            <column name="supplier" order="100" numcolumns="12">
+                <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor">
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
                 </widget>
             </column>
 			<column name="max-risk" display="right" order="110" numcolumns="6">
@@ -66,8 +66,8 @@
         </group>
         <group name="estimation" numcolumns="2">
             <column name="estimation" order="100" numcolumns="12">
-                <widget type="autocomplete" fieldname="idpresupuesto" onclick="EditPresupuestoCliente">
-                    <values source="presupuestoscli" fieldcode="idpresupuesto" fieldtitle="codigo"/>
+                <widget type="autocomplete" fieldname="idpresupuesto" onclick="EditPresupuestoProveedor">
+                    <values source="presupuestosprov" fieldcode="idpresupuesto" fieldtitle="codigo"/>
                 </widget>
             </column>
             <column name="estimation-total-amount" display="right" order="110" numcolumns="12">
@@ -76,8 +76,8 @@
         </group>
         <group name="order" numcolumns="2">
             <column name="order" order="100" numcolumns="12">
-                <widget type="autocomplete" fieldname="idpedido" onclick="EditPedidoCliente">
-                    <values source="pedidoscli" fieldcode="idpedido" fieldtitle="codigo"/>
+                <widget type="autocomplete" fieldname="idpedido" onclick="EditPedidoProveedor">
+                    <values source="pedidosprov" fieldcode="idpedido" fieldtitle="codigo"/>
                 </widget>
             </column>
             <column name="order-total-amount" display="right" order="110" numcolumns="12">
@@ -86,8 +86,8 @@
         </group>
         <group name="delivery-note" numcolumns="2">
             <column name="delivery-note" order="100" numcolumns="12">
-                <widget type="autocomplete" fieldname="idalbaran" onclick="EditAlbaranCliente">
-                    <values source="albaranescli" fieldcode="idalbaran" fieldtitle="codigo"/>
+                <widget type="autocomplete" fieldname="idalbaran" onclick="EditAlbaranProveedor">
+                    <values source="albaranesprov" fieldcode="idalbaran" fieldtitle="codigo"/>
                 </widget>
             </column>
             <column name="delivery-note-total-amount" display="right" order="110" numcolumns="12">
@@ -96,8 +96,8 @@
         </group>
         <group name="invoice" numcolumns="2">
             <column name="invoice" order="100" numcolumns="12">
-                <widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaCliente">
-                    <values source="facturascli" fieldcode="idfactura" fieldtitle="codigo"/>
+                <widget type="autocomplete" fieldname="idfactura" onclick="EditFacturaProveedor">
+                    <values source="facturasprov" fieldcode="idfactura" fieldtitle="codigo"/>
                 </widget>
             </column>
             <column name="invoice-total-amount" display="right" order="110" numcolumns="12">

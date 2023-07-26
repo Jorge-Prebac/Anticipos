@@ -20,6 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
@@ -28,42 +29,71 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  * @author Jorge-Prebac <info@prebac.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
+
 class EditPresupuestoCliente
 {
 
-    public function createViews(): Closure
-    {
-        return function () {
-            $viewName = 'ListAnticipo';
-            $this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
-            $this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-            $this->views[$viewName]->addOrderBy(['fase'], 'phase');
-            $this->views[$viewName]->addOrderBy(['importe'], 'amount');
-        };
-    }
+	protected function createViews(): Closure
+	{
+		return function() {
+			$user = Session::get('user');
+			if (!false == $user->can('ListAnticipo')) {
+				//el usuario tiene acceso
+				$this->createViewsListAnticipo();
+			}
+		};
+	}
+	
+	protected function createViewsListAnticipo($viewName = 'ListAnticipo')
+	{
+		return function() {
+			$viewName = 'ListAnticipo';
+			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
+			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
+			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
+			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+		};
+	}
 
     public function loadData(): Closure
-    {
-        return function ($viewName, $view) {
-
+	{
+        return function($viewName, $view) {
             if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
-                $where = [new DataBaseWhere('idpresupuesto', $codigo)];
+				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpresupuesto');
+				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+                $where = [
+					new DataBaseWhere('idpresupuesto', $codigo),
+					new DataBaseWhere('codcliente', $codcliente, '=', 'AND'),
+				];
                 $view->loadData('', $where);
 
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-                    $where = [new DataBaseWhere('codcliente', $codcliente)];
-                    $view->loadData('', $where);
+				if (empty ($this->views[$viewName]->model->idempresa)) {
+					$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
+					$where = [
+						new DataBaseWhere('idempresa', null),
+						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
+					];
+					$view->loadData('', $where);
                 }
 
-                if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-                    $this->setSettings($viewName, 'btnDelete', false);
-                    $this->setSettings($viewName, 'btnNew', false);
-                    $this->setSettings($viewName, 'checkBoxes', false);
-                    $this->setSettings($viewName, 'clickable', false);
-                }
-            }
-        };
+				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
+				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+					if (empty ($this->views[$viewName]->model->idproyecto)) {
+						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
+						$where = [
+							new DataBaseWhere('idproyecto', null),
+							new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
+						];
+						$view->loadData('', $where);
+					}
+				}
+
+				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
+					$this->setSettings($viewName, 'btnDelete', false);
+					$this->setSettings($viewName, 'btnNew', false);
+					$this->setSettings($viewName, 'checkBoxes', false);
+				}
+			}
+		};
     }
 }

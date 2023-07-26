@@ -19,10 +19,10 @@
 
 namespace FacturaScripts\Plugins\Anticipos;
 
-use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Core\Base\InitClass;
-use FacturaScripts\Dinamic\Model\Cliente;
+use FacturaScripts\Core\Base\ToolBox;
 use FacturaScripts\Dinamic\Lib\ExportManager;
+use FacturaScripts\Dinamic\Model\EmailNotification;
 
 /**
  * Description of Init
@@ -39,22 +39,39 @@ class Init extends InitClass
         $this->loadExtension(new Extension\Controller\EditPedidoCliente());
         $this->loadExtension(new Extension\Controller\EditAlbaranCliente());
         $this->loadExtension(new Extension\Controller\EditFacturaCliente());
-        $this->loadExtension(new Extension\Model\PresupuestoCliente());
-        $this->loadExtension(new Extension\Model\PedidoCliente());
-        $this->loadExtension(new Extension\Model\AlbaranCliente());
-        $this->loadExtension(new Extension\Model\FacturaCliente());
 
+		$this->loadExtension(new Extension\Controller\ListPresupuestoCliente());
+		$this->loadExtension(new Extension\Controller\ListPedidoCliente());
+		$this->loadExtension(new Extension\Controller\ListAlbaranCliente());
+		$this->loadExtension(new Extension\Controller\ListFacturaCliente());
+
+        $this->loadExtension(new Extension\Controller\EditProveedor());
+        $this->loadExtension(new Extension\Controller\EditPresupuestoProveedor());
+        $this->loadExtension(new Extension\Controller\EditPedidoProveedor());
+        $this->loadExtension(new Extension\Controller\EditAlbaranProveedor());
+        $this->loadExtension(new Extension\Controller\EditFacturaProveedor());
+		
+		$this->loadExtension(new Extension\Controller\ListPresupuestoProveedor());
+		$this->loadExtension(new Extension\Controller\ListPedidoProveedor());
+		$this->loadExtension(new Extension\Controller\ListAlbaranProveedor());
+		$this->loadExtension(new Extension\Controller\ListFacturaProveedor());
+
+        $this->loadExtension(new Extension\Model\Base\SalesDocument());
+        $this->loadExtension(new Extension\Model\Base\PurchaseDocument());
+		
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
         }
-		
-		// export manager			
-		ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'Anticipo');
+
+        // export manager
+        ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'Anticipo');
+        ExportManager::addOptionModel('MAILanticiposExport', 'MAIL', 'Anticipo');
     }
 
     public function update()
     {
         $this->setupSettings();
+        $this->updateEmailNotifications();
     }
 
     private function setupSettings()
@@ -67,5 +84,25 @@ class Init extends InitClass
             $appsettings->set('anticipos', 'level', 20);
         }
         $appsettings->save();
+    }
+
+    private function updateEmailNotifications()
+    {
+        $i18n = ToolBox::i18n();
+        $notificationModel = new EmailNotification();
+        $keys = [
+            'sendmail-Anticipo'
+        ];
+        foreach ($keys as $key) {
+            if ($notificationModel->loadFromCode($key)) {
+                continue;
+            }
+
+            $notificationModel->name = $key;
+            $notificationModel->body = $i18n->trans('sendmail-anticipo-body');
+            $notificationModel->subject = $i18n->trans('sendmail-anticipo-subject');
+            $notificationModel->enabled = true;
+            $notificationModel->save();
+        }
     }
 }

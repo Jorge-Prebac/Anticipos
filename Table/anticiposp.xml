@@ -6,7 +6,7 @@
 -->
 <table>
     <column>
-        <name>codcliente</name>
+        <name>codproveedor</name>
         <type>character varying(10)</type>
     </column>
     <column>
@@ -79,39 +79,39 @@
         <type>character varying(50)</type>
     </column>
     <constraint>
-        <name>anticipos_pkey</name>
+        <name>anticiposp_pkey</name>
         <type>PRIMARY KEY (id)</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_clientes</name>
-        <type>FOREIGN KEY (codcliente) REFERENCES clientes (codcliente) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_proveedores</name>
+        <type>FOREIGN KEY (codproveedor) REFERENCES proveedores (codproveedor) ON DELETE RESTRICT ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_divisas</name>
+        <name>ca_anticiposp_divisas</name>
         <type>FOREIGN KEY (coddivisa) REFERENCES divisas (coddivisa) ON DELETE RESTRICT ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_albaranescli</name>
-        <type>FOREIGN KEY (idalbaran) REFERENCES albaranescli (idalbaran) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_albaranesprov</name>
+        <type>FOREIGN KEY (idalbaran) REFERENCES albaranesprov (idalbaran) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_facturascli</name>
-        <type>FOREIGN KEY (idfactura) REFERENCES facturascli (idfactura) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_facturasprov</name>
+        <type>FOREIGN KEY (idfactura) REFERENCES facturasprov (idfactura) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_pedidoscli</name>
-        <type>FOREIGN KEY (idpedido) REFERENCES pedidoscli (idpedido) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_pedidosprov</name>
+        <type>FOREIGN KEY (idpedido) REFERENCES pedidosprov (idpedido) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_presupuestoscli</name>
-        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestoscli (idpresupuesto) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_presupuestosprov</name>
+        <type>FOREIGN KEY (idpresupuesto) REFERENCES presupuestosprov (idpresupuesto) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_recibospagoscli</name>
-        <type>FOREIGN KEY (idrecibo) REFERENCES recibospagoscli (idrecibo) ON DELETE SET NULL ON UPDATE CASCADE</type>
+        <name>ca_anticiposp_recibospagosprov</name>
+        <type>FOREIGN KEY (idrecibo) REFERENCES recibospagosprov (idrecibo) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
     <constraint>
-        <name>ca_anticipos_users</name>
+        <name>ca_anticiposp_users</name>
         <type>FOREIGN KEY (user) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
     </constraint>
 </table>

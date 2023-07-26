@@ -2,10 +2,18 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
-class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
+use FacturaScripts\Core\Lib\Export\PDFExport as MailAnticipos;
+use Symfony\Component\HttpFoundation\Response;
+
+class MAILanticiposExport extends MailAnticipos
 {
+	protected $sendParams = [];
+	
     public function addModelPage($model, $columns, $title = ''): bool
     {
+		$this->sendParams['modelClassName'] = $model->modelClassName();
+        $this->sendParams['modelCode'] = $model->primaryColumnValue();
+		
         $this->newPage();
         $idempresa = $model->idempresa ?? null;
         $this->insertHeader($idempresa);
@@ -69,5 +77,18 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
         $this->insertParallelTable($tableDataAux, '', $tableOptions);
         $this->insertFooter();
         return true;
+    }
+	
+	public function show(Response &$response)
+    {
+        $fileName = $this->getFileName() . '_mail_' . time() . '.pdf';
+        $filePath = \FS_FOLDER . '/MyFiles/' . $fileName;
+        if (false === \file_put_contents($filePath, $this->getDoc())) {
+            $this->toolBox()->i18nLog()->error('folder-not-writable');
+            return;
+        }
+
+        $this->sendParams['fileName'] = $fileName;
+        $response->headers->set('Refresh', '0; SendMail?' . \http_build_query($this->sendParams));
     }
 }
