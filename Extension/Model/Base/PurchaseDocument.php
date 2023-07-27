@@ -24,20 +24,19 @@ use FacturaScripts\Plugins\Anticipos\Model\AnticipoP;
  */
 class PurchaseDocument
 {
-
 	public $advance;
-
+	
 	public function clear(): Closure
 	{
 		return function () {
-			$this->checkAdvance('advance');
+			$this->getAdvance('advance');
 			return;
 		};
 	}
 
-	public function checkAdvance(): Closure
+	public function getAdvance(): Closure
 	{
-		return function ($field) { 
+		return function ($field) {
 			
 			$pCl = $this->primaryColumn();
 			
@@ -52,9 +51,7 @@ class PurchaseDocument
 				return;
 			}
 
-			$sql_select = 'SELECT COUNT(adv.' . $pCl . ') FROM ' . ($this->tableName()) . ' doc LEFT JOIN anticiposp adv ON doc.' . $pCl . ' = adv.' . $pCl
-				. ' WHERE doc.' . $pCl . ' = ' . ($this->tableName()) . '.' . $pCl . ' GROUP BY doc.' . $pCl;
-			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (' . $sql_select . ') WHERE advance <> (' . $sql_select . ')';
+			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (SELECT COUNT(' . $pCl . ') FROM anticiposp WHERE anticiposp.' . $pCl . ' = ' . ($this->tableName()) . '. ' . $pCl . ');';
 			
 			if (false === (self::$dataBase->exec($sql))) {
 				return ($this->toolBox()->i18nLog()->warning('record-save-error'));
@@ -72,7 +69,7 @@ class PurchaseDocument
                 return;
             }
 
-            $whereAnticipos = [new DataBaseWhere($this->primaryColumn(), $this->primaryColumnValue())];
+			$whereAnticipos = [new DataBaseWhere($this->primaryColumn(), $this->primaryColumnValue())];
             $anticipos = (new AnticipoP())->all($whereAnticipos, [], 0, 0);
 
             if (count($anticipos) === 0) {
@@ -87,7 +84,7 @@ class PurchaseDocument
             ];
 
             $whereTransformation = [
-                new DataBaseWhere('model1', $this->modelClassName()),
+				new DataBaseWhere('model1', $this->modelClassName()),
                 new DataBaseWhere('iddoc1', $this->primaryColumnValue())
             ];
 
@@ -95,7 +92,7 @@ class PurchaseDocument
             $transformation->loadFromCode('', $whereTransformation, ['iddoc2' => 'DESC']);
 
             if (!$transformation->model2 && !$transformation->iddoc2) {
-                return;
+				return;
             }
 
             foreach ($anticipos as $anticipo) {
@@ -122,17 +119,17 @@ class PurchaseDocument
 
                 //Generamos los nuevos recibos en base a los anticipos.
                 $numero = 1;
-                foreach ($anticipos as $anticipo) {
-                    $recibo = new ReciboProveedor();
+				foreach ($anticipos as $anticipo) {
+					$recibo = new ReciboProveedor();
 
-                    $recibo->codproveedor = $anticipo->codproveedor;
-                    $recibo->coddivisa = $anticipo->coddivisa;
-                    $recibo->idempresa = $anticipo->idempresa;
-                    $recibo->idfactura = $anticipo->idfactura;
-                    $recibo->importe = $anticipo->importe;
-                    $recibo->nick = $anticipo->user;
-                    $recibo->numero = $numero++;
-                    $recibo->fecha = $anticipo->fecha;
+					$recibo->codproveedor = $anticipo->codproveedor;
+					$recibo->coddivisa = $anticipo->coddivisa;
+					$recibo->idempresa = $anticipo->idempresa;
+					$recibo->idfactura = $anticipo->idfactura;
+					$recibo->importe = $anticipo->importe;
+					$recibo->nick = $anticipo->user;
+					$recibo->numero = $numero++;
+					$recibo->fecha = $anticipo->fecha;
 					$recibo->codpago = $anticipo->codpago;
 					$recibo->observaciones = $anticipo->nota;
 					$recibo->pagado = 1;
@@ -141,8 +138,8 @@ class PurchaseDocument
 						$recibo->fechapago = $anticipo->fecha;
 						$recibo->vencimiento = $anticipo->fecha;
 					}
-                    $recibo->save();
-                }
+					$recibo->save();
+				}
 
                 //Generamos el recibo por el saldo pendiente si ubiese y actualizamos la factura.
                 $generator = new ReceiptGenerator();

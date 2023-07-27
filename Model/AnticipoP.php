@@ -129,7 +129,7 @@ class AnticipoP extends Base\ModelClass
         return null;
     }
 
-	public function clear()
+    public function clear()
     {
         parent::clear();
         $this->coddivisa = AppSettings::get('default', 'coddivisa');
@@ -157,8 +157,15 @@ class AnticipoP extends Base\ModelClass
 
     public function save(): bool
     {
-        // Comprobar que la Empresa y el Proveedor del anticipo coinciden con el documento
-		return (false === $this->checkCompanies() ? false : $this->checkProveedores());
+        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
+		if (false === $this->checkCompanies() ) {
+            return false;
+        }
+
+		// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
+        if (false === $this->checkProveedores() ) {
+            return false;
+        }
 
 		// add audit log
 		self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [
@@ -170,9 +177,9 @@ class AnticipoP extends Base\ModelClass
 			'model-data' => $this->toArray()
 		]);
 
-		return parent::save();
+        return parent::save();
     }
-	
+
 	public function delete(): bool
     {
         if (false === parent::delete()) {
@@ -201,11 +208,11 @@ class AnticipoP extends Base\ModelClass
 				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-estimation');
 				return false;
             }
-        } elseif (!$this->idempresa && $this->idpresupuesto) {
-			$this->toolBox()->i18nLog()->warning('missing-company-name');
+        }elseif(!$this->idempresa && $this->idpresupuesto) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
             return false;
 		}
-
+		
 		if ($this->idempresa && $this->idpedido) {
 			$order = new PedidoProveedor();
             $order->loadFromCode($this->idpedido);
@@ -213,11 +220,11 @@ class AnticipoP extends Base\ModelClass
 				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-order');
 				return false;
             }
-        } elseif (!$this->idempresa && $this->idpedido) {
-			$this->toolBox()->i18nLog()->warning('missing-company-name');
+        }elseif(!$this->idempresa && $this->idpedido) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
             return false;
 		}
-
+		
 		if ($this->idempresa && $this->idalbaran) {
 			$deliveryNote = new AlbaranProveedor();
             $deliveryNote->loadFromCode($this->idalbaran);
@@ -225,11 +232,11 @@ class AnticipoP extends Base\ModelClass
 				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-deliveryNote');
 				return false;
             }
-        } elseif (!$this->idempresa && $this->idalbaran) {
-			$this->toolBox()->i18nLog()->warning('missing-company-name');
+        }elseif(!$this->idempresa && $this->idalbaran) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
             return false;
 		}
-
+		
 		if ($this->idempresa && $this->idfactura) {
 			$invoice = new FacturaProveedor();
             $invoice->loadFromCode($this->idfactura);
@@ -237,11 +244,11 @@ class AnticipoP extends Base\ModelClass
 				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-invoice');
 				return false;
             }
-        } elseif (!$this->idempresa && $this->idfactura) {
-			$this->toolBox()->i18nLog()->warning('missing-company-name');
+        }elseif(!$this->idempresa && $this->idfactura) {
+           $this->toolBox()->i18nLog()->warning('missing-company-name');
             return false;
 		}
-
+		
         $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
         if ($this->idempresa && $this->idproyecto && class_exists($projectClass)) {
             $project = new $projectClass();
@@ -250,12 +257,12 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-project');
                 return false;
             }
-        } elseif (!$this->idempresa && $this->idproyecto && class_exists($projectClass)) {
+        }elseif(!$this->idempresa && $this->idproyecto && class_exists($projectClass)) {
             $project = new $projectClass();
             $project->loadFromCode($this->idproyecto);
             if ($project->idempresa && $project->idempresa != $this->idempresa) {
-				$this->toolBox()->i18nLog()->warning('missing-company-name');
-				return false;
+                $this->toolBox()->i18nLog()->warning('missing-company-name');
+                return false;
 			}
 		}
 
@@ -271,7 +278,7 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-estimation');
                 return false;
             }
-        } elseif (!$this->codproveedor && $this->idpresupuesto) {
+        }elseif(!$this->codproveedor && $this->idpresupuesto) {
 			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
             return false;
 		}
@@ -283,7 +290,7 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-order');
 				return false;
 			}
-		} elseif (!$this->codproveedor && $this->idpedido) {
+		}elseif(!$this->codproveedor && $this->idpedido) {
 			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
             return false;
 		}
@@ -295,7 +302,7 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-delivery-note');
                 return false;
             }
-        } elseif (!$this->codproveedor && $this->idalbaran) {
+        }elseif(!$this->codproveedor && $this->idalbaran) {
 			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
             return false;
 		}
@@ -307,7 +314,7 @@ class AnticipoP extends Base\ModelClass
                 $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-invoice');
                 return false;
             }
-        } elseif (!$this->codproveedor && $this->idfactura) {
+        }elseif(!$this->codproveedor && $this->idfactura) {
 			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
             return false;
 		}
