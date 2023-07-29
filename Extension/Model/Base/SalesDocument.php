@@ -51,7 +51,7 @@ class SalesDocument
 				return;
 			}
 
-			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (SELECT COUNT(' . $pCl . ') FROM anticipos WHERE anticipos.' . $pCl . ' = ' . ($this->tableName()) . '. ' . $pCl . ');';
+			$sql = 'UPDATE ' . ($this->tableName()) . ' SET advance = (SELECT COUNT(' . $pCl . ') FROM anticipos WHERE anticipos.' . $pCl . ' = ' . ($this->tableName()) . '.' . $pCl . ');';
 			
 			if (false === (self::$dataBase->exec($sql))) {
 				return ($this->toolBox()->i18nLog()->warning('record-save-error'));
