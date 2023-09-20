@@ -89,14 +89,10 @@ class Anticipo extends Base\ModelClass
     {
         switch ($name) {
             case 'riesgomax':
-                $cliente = new Cliente();
-                $cliente->loadFromCode($this->codcliente);
-                return $cliente->riesgomax;
+                return $this->getSubject()->riesgomax;
 
             case 'totalrisk':
-                $cliente = new Cliente();
-                $cliente->loadFromCode($this->codcliente);
-                return $cliente->riesgoalcanzado;
+                return $this->getSubject()->riesgoalcanzado;
 
             case 'totaldelivery':
                 $delivery = new AlbaranCliente();
@@ -163,9 +159,14 @@ class Anticipo extends Base\ModelClass
         }
 
         // Save audit log
-        $this->saveAuditMessage();
+        $this->saveAuditMessage('update-model');
 
-        return parent::save();
+        if (false === parent::save()) {
+            return false;
+        }
+
+        $this->saveAnticipoRelation();
+        return true;
     }
 
     public function delete(): bool
@@ -178,6 +179,13 @@ class Anticipo extends Base\ModelClass
         $this->saveAuditMessage('deleted-model');
 
         return true;
+    }
+
+    public function getSubject(): Cliente
+    {
+        $cliente = new Cliente();
+        $cliente->loadFromCode($this->codcliente);
+        return $cliente;
     }
 
     protected function testAnticipoData(): bool
@@ -208,8 +216,7 @@ class Anticipo extends Base\ModelClass
         }
 
         if (class_exists($this->projectClass) && $this->idproyecto) {
-            $projectClass = $this->projectClass;
-            if (false === $this->checkAnticipoRelation(new $projectClass, $this->idproyecto, 'project')) {
+            if (false === $this->checkAnticipoRelation(new $this->projectClass(), $this->idproyecto, 'project')) {
                 return false;
             }
         }
@@ -217,41 +224,36 @@ class Anticipo extends Base\ModelClass
         return true;
     }
 
-    protected function checkAnticipoRelation(Base\SalesDocument $document, string $code, string $title = ''): bool
+    protected function checkAnticipoRelation($model, string $code, string $title = ''): bool
     {
-        $document->loadFromCode($code);
+        $model->loadFromCode($code);
 
-        // Comprobar que la Empresa del anticipo este asignada
+        // Cuando el anticipo no tiene asignado la Empresa, se le asigna la del documento
         if (empty($this->idempresa)) {
-            $this->toolBox()->i18nLog()->warning('missing-company-name');
-
-            return false;
+            $this->idempresa = $model->idempresa;
         }
 
-        // Comprobar que el Cliente del anticipo este asignado
+        // Cuando el anticipo no tiene asignado el Cliente, se le asigna el del documento
         if (empty($this->codcliente)) {
-            $this->toolBox()->i18nLog()->warning('missing-customer-name');
-
-            return false;
+            $this->codcliente = $model->codcliente;
         }
 
         // Comprobar que la Empresa del anticipo es la misma que la empresa del documento
-        if ($document->idempresa != $this->idempresa) {
+        if ($model->idempresa != $this->idempresa) {
             $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-' . $title);
-
             return false;
         }
 
         // Comprobar que el Cliente del anticipo es el mismo que el Cliente del documento
-        if ($document->codcliente != $this->codcliente) {
-            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-customer-' . $title);
+        if (!empty($model->codcliente) && $model->codcliente != $this->codcliente) {
+            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-client-' . $title);
             return false;
         }
 
         return true;
     }
 
-    protected function saveAuditMessage(string $message = 'update-model')
+    protected function saveAuditMessage(string $message)
     {
         self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info($message, [
             '%model%' => $this->modelClassName(),
