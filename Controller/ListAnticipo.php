@@ -87,5 +87,13 @@ class ListAnticipo extends ListController
             ['label' => $i18n->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
             ['label' => $i18n->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
         ]);
+
+		// si no está instalado el plugin Proyectos ocultamos sus columnas, filtros y ordenación
+		if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+			$this->views[$viewName]->disableColumn('project');
+		} else {
+			$this->addFilterCheckbox($viewName, 'project', 'project', 'idproyecto', 'IS NOT', null);
+			$this->addOrderBy($viewName, ['idproyecto'], 'project');
+		}
     }
 }

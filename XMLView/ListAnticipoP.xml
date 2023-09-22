@@ -53,12 +53,17 @@
                     <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
                 </widget>
             </column>
-            <column name="user" order="150">
+            <column name="project" order="150">
+                <widget type="autocomplete" fieldname="idproyecto" onclick="EditProyecto">
+                    <values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"/>
+                </widget>
+            </column>
+            <column name="user" order="160">
                 <widget type="select" fieldname="user" onclick="EditUser">
                     <values source="users" fieldcode="nick" fieldtitle="nick"/>
                 </widget>
             </column>
-            <column name="amount" display="right" order="160">
+            <column name="amount" display="right" order="170">
                 <widget type="money" fieldname="importe"/>
             </column>
         </group>

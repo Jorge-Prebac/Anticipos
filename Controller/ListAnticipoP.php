@@ -74,9 +74,9 @@ class ListAnticipoP extends ListController
 			$this->addFilterSelect($viewName, 'idempresa', 'company', 'idempresa', $companies);
         }
         $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
-        $this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticiposp', 'fase', 'fase');
+		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticiposp', 'fase', 'fase');
 		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');	
-        $this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
+		$this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
         
 		$users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
@@ -87,5 +87,13 @@ class ListAnticipoP extends ListController
             ['label' => $i18n->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
             ['label' => $i18n->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
         ]);
+
+		// si no está instalado el plugin Proyectos ocultamos sus columnas, filtros y ordenación
+		if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+			$this->views[$viewName]->disableColumn('project');
+		} else {
+			$this->addFilterCheckbox($viewName, 'project', 'project', 'idproyecto', 'IS NOT', null);
+			$this->addOrderBy($viewName, ['idproyecto'], 'project');
+		}
     }
 }
