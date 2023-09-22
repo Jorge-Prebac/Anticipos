@@ -56,8 +56,7 @@ class Init extends InitClass
 		$this->loadExtension(new Extension\Controller\ListAlbaranProveedor());
 		$this->loadExtension(new Extension\Controller\ListFacturaProveedor());
 
-        $this->loadExtension(new Extension\Model\Base\SalesDocument());
-        $this->loadExtension(new Extension\Model\Base\PurchaseDocument());
+		$this->loadExtension(new Extension\Lib\BusinessDocumentGenerator());
 		
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
