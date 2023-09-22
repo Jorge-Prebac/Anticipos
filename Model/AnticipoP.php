@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,9 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
 use FacturaScripts\Core\App\AppSettings;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
-use FacturaScripts\Core\Model\ReciboProveedor;
 use FacturaScripts\Dinamic\Model\AlbaranProveedor;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
@@ -32,12 +30,15 @@ use FacturaScripts\Dinamic\Model\PresupuestoProveedor;
 /**
  * Description of AnticipoP
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @autor Jorge-Prebac                         <info@prebac.com>
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
+ * @autor Juan José Prieto Dzul           <juanjoseprieto88@gmail.com>
  */
 class AnticipoP extends Base\ModelClass
 {
     use Base\ModelTrait;
+
+    protected $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
 
     /** @return string */
     public $codproveedor;
@@ -51,14 +52,14 @@ class AnticipoP extends Base\ModelClass
     /** @return string */
     public $fase;
 
-	/** @return string */
+    /** @return string */
     public $fecha;
 
     /** @var integer */
     public $idalbaran;
 
     /** @var integer */
-	public $idempresa;
+    public $idempresa;
 
     /** @var integer */
     public $idfactura;
@@ -87,15 +88,11 @@ class AnticipoP extends Base\ModelClass
     public function __get(string $name)
     {
         switch ($name) {
-			case 'riesgomax':
-                $proveedor = new Proveedor();
-                $proveedor->loadFromCode($this->proveedor);
-                return $proveedor->riesgomax;
+            case 'riesgomax':
+                return $this->getSubject()->riesgomax;
 
-			case 'totalrisk':
-                $proveedor = new Proveedor();
-                $proveedor->loadFromCode($this->codproveedor);
-                return $proveedor->riesgoalcanzado;
+            case 'totalrisk':
+                return $this->getSubject()->riesgoalcanzado;
 
             case 'totaldelivery':
                 $delivery = new AlbaranProveedor();
@@ -118,14 +115,13 @@ class AnticipoP extends Base\ModelClass
                 return $order->total;
 
             case 'totalproject':
-                $modelClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
-                if (class_exists($modelClass)) {
-                    $project = new $modelClass();
+                if (class_exists($this->projectClass)) {
+                    $project = new $this->projectClass();
                     $project->loadFromCode($this->idproyecto);
                     return $project->totalcompras;
                 }
                 return 0;
-		}
+        }
         return null;
     }
 
@@ -133,7 +129,7 @@ class AnticipoP extends Base\ModelClass
     {
         parent::clear();
         $this->coddivisa = AppSettings::get('default', 'coddivisa');
-        $this->fecha = \date(self::DATE_STYLE);
+        $this->fecha = date(self::DATE_STYLE);
         $this->importe = 0;
     }
 
@@ -141,6 +137,11 @@ class AnticipoP extends Base\ModelClass
      *
      * @return string
      */
+    public static function primaryColumn(): string
+    {
+        return 'id';
+    }
+
     public static function primaryColumn(): string
     {
         return 'id';
@@ -157,168 +158,114 @@ class AnticipoP extends Base\ModelClass
 
     public function save(): bool
     {
-        // Comprobar que la empresa del anticipo es la misma que la empresa de cada documento
-		if (false === $this->checkCompanies() ) {
+        // Comprobar que la Empresa y el Proveedor del anticipo son el mismo del documento
+        if (false === $this->testAnticipoData()) {
             return false;
         }
 
-		// Comprobar que el Proveedor del anticipo es el mismo que el Proveedor de cada documento
-        if (false === $this->checkProveedores() ) {
+        // Save audit log
+        $this->saveAuditMessage('update-model');
+
+        if (false === parent::save()) {
             return false;
         }
 
-		// add audit log
-		self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('updated-model', [
-			'%model%' => $this->modelClassName(),
-			'%key%' => $this->primaryColumnValue(),
-			'%desc%' => $this->primaryDescription(),
-			'model-class' => $this->modelClassName(),
-			'model-code' => $this->primaryColumnValue(),
-			'model-data' => $this->toArray()
-		]);
-
-        return parent::save();
+        return true;
     }
 
-	public function delete(): bool
+    public function delete(): bool
     {
         if (false === parent::delete()) {
             return false;
         }
 
-		// add audit log
-		self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info('deleted-model', [
-			'%model%' => $this->modelClassName(),
-			'%key%' => $this->primaryColumnValue(),
-			'%desc%' => $this->primaryDescription(),
-			'model-class' => $this->modelClassName(),
-			'model-code' => $this->primaryColumnValue(),
-			'model-data' => $this->toArray()
-		]);
-
-		return true;
-    }
-
-	protected function checkCompanies(): bool
-	{
-		if ($this->idempresa && $this->idpresupuesto) {
-			$estimation = new PresupuestoProveedor();
-            $estimation->loadFromCode($this->idpresupuesto);
-            if ($estimation->idempresa != $this->idempresa) {
-				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-estimation');
-				return false;
-            }
-        }elseif(!$this->idempresa && $this->idpresupuesto) {
-           $this->toolBox()->i18nLog()->warning('missing-company-name');
-            return false;
-		}
-		
-		if ($this->idempresa && $this->idpedido) {
-			$order = new PedidoProveedor();
-            $order->loadFromCode($this->idpedido);
-            if ($order->idempresa != $this->idempresa) {
-				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-order');
-				return false;
-            }
-        }elseif(!$this->idempresa && $this->idpedido) {
-           $this->toolBox()->i18nLog()->warning('missing-company-name');
-            return false;
-		}
-		
-		if ($this->idempresa && $this->idalbaran) {
-			$deliveryNote = new AlbaranProveedor();
-            $deliveryNote->loadFromCode($this->idalbaran);
-            if ($deliveryNote->idempresa != $this->idempresa) {
-				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-deliveryNote');
-				return false;
-            }
-        }elseif(!$this->idempresa && $this->idalbaran) {
-           $this->toolBox()->i18nLog()->warning('missing-company-name');
-            return false;
-		}
-		
-		if ($this->idempresa && $this->idfactura) {
-			$invoice = new FacturaProveedor();
-            $invoice->loadFromCode($this->idfactura);
-            if ($invoice->idempresa != $this->idempresa) {
-				$this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-invoice');
-				return false;
-            }
-        }elseif(!$this->idempresa && $this->idfactura) {
-           $this->toolBox()->i18nLog()->warning('missing-company-name');
-            return false;
-		}
-		
-        $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
-        if ($this->idempresa && $this->idproyecto && class_exists($projectClass)) {
-            $project = new $projectClass();
-            $project->loadFromCode($this->idproyecto);
-            if ($project->idempresa && $project->idempresa != $this->idempresa) {
-                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-project');
-                return false;
-            }
-        }elseif(!$this->idempresa && $this->idproyecto && class_exists($projectClass)) {
-            $project = new $projectClass();
-            $project->loadFromCode($this->idproyecto);
-            if ($project->idempresa && $project->idempresa != $this->idempresa) {
-                $this->toolBox()->i18nLog()->warning('missing-company-name');
-                return false;
-			}
-		}
-
-		return true;
-	}
-
-    protected function checkProveedores(): bool
-    {
-        if ($this->codproveedor && $this->idpresupuesto) {
-            $estimation = new PresupuestoProveedor();
-            $estimation->loadFromCode($this->idpresupuesto);
-            if ($estimation->codproveedor != $this->codproveedor) {
-                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-estimation');
-                return false;
-            }
-        }elseif(!$this->codproveedor && $this->idpresupuesto) {
-			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
-            return false;
-		}
-
-        if ($this->codproveedor && $this->idpedido) {
-            $order = new PedidoProveedor();
-            $order->loadFromCode($this->idpedido);
-            if ($order->codproveedor != $this->codproveedor) {
-                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-order');
-				return false;
-			}
-		}elseif(!$this->codproveedor && $this->idpedido) {
-			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
-            return false;
-		}
-
-        if ($this->codproveedor && $this->idalbaran) {
-            $deliveryNote = new AlbaranProveedor();
-            $deliveryNote->loadFromCode($this->idalbaran);
-            if ($deliveryNote->codproveedor != $this->codproveedor) {
-                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-delivery-note');
-                return false;
-            }
-        }elseif(!$this->codproveedor && $this->idalbaran) {
-			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
-            return false;
-		}
-
-        if ($this->codproveedor && $this->idfactura) {
-            $invoice = new FacturaProveedor();
-            $invoice->loadFromCode($this->idfactura);
-            if ($invoice->codproveedor != $this->codproveedor) {
-                $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-invoice');
-                return false;
-            }
-        }elseif(!$this->codproveedor && $this->idfactura) {
-			$this->toolBox()->i18nLog()->warning('missing-supplier-name');
-            return false;
-		}
+        // Save audit log
+        $this->saveAuditMessage('deleted-model');
 
         return true;
+    }
+
+    public function getSubject(): Proveedor
+    {
+        $proveedor = new Proveedor();
+        $proveedor->loadFromCode($this->codproveedor);
+        return $proveedor;
+    }
+
+    protected function testAnticipoData(): bool
+    {
+
+        if ($this->idpresupuesto) {
+            if (false === $this->checkAnticipoRelation(new PresupuestoProveedor(), $this->idpresupuesto, 'estimation')) {
+                return false;
+            }
+        }
+
+        if ($this->idpedido) {
+            if (false === $this->checkAnticipoRelation(new PedidoProveedor(), $this->idpedido, 'order')) {
+                return false;
+            }
+        }
+
+        if ($this->idalbaran) {
+            if (false === $this->checkAnticipoRelation(new AlbaranProveedor(), $this->idalbaran, 'delivery-note')) {
+                return false;
+            }
+        }
+
+        if ($this->idfactura) {
+            if (false === $this->checkAnticipoRelation(new FacturaProveedor(), $this->idfactura, 'invoice')) {
+                return false;
+            }
+        }
+
+        if (class_exists($this->projectClass) && $this->idproyecto) {
+            if (false === $this->checkAnticipoRelation(new $this->projectClass(), $this->idproyecto, 'project')) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    protected function checkAnticipoRelation($model, string $code, string $title = ''): bool
+    {
+        $model->loadFromCode($code);
+
+        // Cuando el anticipo no tiene asignado la Empresa, se le asigna la del documento
+        if (empty($this->idempresa)) {
+            $this->idempresa = $model->idempresa;
+        }
+
+        // Cuando el anticipo no tiene asignado el Proveedor, se le asigna el del documento
+        if (empty($this->codproveedor) && $title != "project") {
+            $this->codproveedor = $model->codproveedor;
+        }
+
+        // Comprobar que la Empresa del anticipo es la misma que la empresa del documento
+        if ($model->idempresa != $this->idempresa) {
+            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-' . $title);
+            return false;
+        }
+
+        // Comprobar que el Proveedor del anticipo es el mismo que el Proveedor del documento
+        if (!empty($model->codproveedor) && $model->codproveedor != $this->codproveedor) {
+            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-' . $title);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function saveAuditMessage(string $message)
+    {
+        self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info($message, [
+            '%model%' => $this->modelClassName(),
+            '%key%' => $this->primaryColumnValue(),
+            '%desc%' => $this->primaryDescription(),
+            'model-class' => $this->modelClassName(),
+            'model-code' => $this->primaryColumnValue(),
+            'model-data' => $this->toArray()
+        ]);
     }
 }

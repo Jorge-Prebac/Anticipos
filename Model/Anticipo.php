@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -30,8 +30,9 @@ use FacturaScripts\Dinamic\Model\PresupuestoCliente;
 /**
  * Description of Anticipo
  *
- * @autor Jorge-Prebac <info@prebac.com>
+ * @autor Jorge-Prebac                         <info@prebac.com>
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
+ * @autor Juan José Prieto Dzul           <juanjoseprieto88@gmail.com>
  */
 class Anticipo extends Base\ModelClass
 {
@@ -141,6 +142,11 @@ class Anticipo extends Base\ModelClass
         return 'id';
     }
 
+	public function primaryDescription(): string
+	{
+		return "#" . $this->id;
+	}
+
     /**
      *
      * @return string
@@ -164,7 +170,6 @@ class Anticipo extends Base\ModelClass
             return false;
         }
 
-        $this->saveAnticipoRelation();
         return true;
     }
 
