@@ -142,10 +142,10 @@ class AnticipoP extends Base\ModelClass
         return 'id';
     }
 
-    public static function primaryColumn(): string
-    {
-        return 'id';
-    }
+	public function primaryDescription(): string
+	{
+		return "#" . $this->id;
+	}
 
     /**
      *
