@@ -81,8 +81,9 @@ class EditPresupuestoCliente
 					if (empty ($this->views[$viewName]->model->idproyecto)) {
 						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
 						$where = [
-							new DataBaseWhere('idproyecto', null),
-							new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
+								new DataBaseWhere('idproyecto', null),
+								new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
+								new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
 						];
 						$view->loadData('', $where);
 					}

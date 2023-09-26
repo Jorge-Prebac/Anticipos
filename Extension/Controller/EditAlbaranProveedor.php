@@ -81,6 +81,7 @@ class EditAlbaranProveedor
 						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
 						$where = [
 							new DataBaseWhere('idproyecto', null),
+							new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
 							new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
 						];
 						$view->loadData('', $where);
