@@ -144,7 +144,7 @@ class Anticipo extends Base\ModelClass
 
 	public function primaryDescription(): string
 	{
-		return "#" . $this->id;
+		return '#' . $this->id . ', ' . $this->fecha;
 	}
 
     /**
