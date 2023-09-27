@@ -164,7 +164,7 @@ class AnticipoP extends Base\ModelClass
         }
 
         // Save audit log
-        $this->saveAuditMessage('update-model');
+        $this->saveAuditMessage('updated-model');
 
         if (false === parent::save()) {
             return false;
