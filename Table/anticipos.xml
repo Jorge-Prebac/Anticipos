@@ -112,6 +112,6 @@
     </constraint>
     <constraint>
         <name>ca_anticipos_users</name>
-        <type>FOREIGN KEY (user) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+        <type>FOREIGN KEY (user) REFERENCES users (nick) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
 </table>
