@@ -110,8 +110,4 @@
         <name>ca_anticipos_recibospagoscli</name>
         <type>FOREIGN KEY (idrecibo) REFERENCES recibospagoscli (idrecibo) ON DELETE SET NULL ON UPDATE CASCADE</type>
     </constraint>
-    <constraint>
-        <name>ca_anticipos_users</name>
-        <type>FOREIGN KEY (user) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
-    </constraint>
 </table>

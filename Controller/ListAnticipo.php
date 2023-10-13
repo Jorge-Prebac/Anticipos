@@ -57,7 +57,7 @@ class ListAnticipo extends ListController
     protected function createViewsAnticipos(string $viewName = 'ListAnticipo')
     {
         $this->addView($viewName, 'Anticipo', 'advance-payments-c', 'fas fa-donate');
-        $this->addSearchFields($viewName, ['id', 'fecha', 'fase', 'nota']);
+        $this->addSearchFields($viewName, ['fase', 'fecha', 'id', 'nota', 'user']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
         $this->addOrderBy($viewName, ['fase'], 'phase');
         $this->addOrderBy($viewName, ['importe'], 'amount');

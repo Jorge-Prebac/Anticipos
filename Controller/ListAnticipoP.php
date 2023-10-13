@@ -57,7 +57,7 @@ class ListAnticipoP extends ListController
     protected function createViewsAnticiposP(string $viewName = 'ListAnticipoP')
     {
         $this->addView($viewName, 'AnticipoP', 'advance-payments-p', 'fas fa-donate');
-        $this->addSearchFields($viewName, ['id', 'fecha', 'fase', 'nota']);
+        $this->addSearchFields($viewName, ['fase', 'fecha', 'id', 'nota', 'user']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
         $this->addOrderBy($viewName, ['fase'], 'phase');
         $this->addOrderBy($viewName, ['importe'], 'amount');
