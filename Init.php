@@ -58,6 +58,9 @@ class Init extends InitClass
 
 		$this->loadExtension(new Extension\Lib\BusinessDocumentGenerator());
 		
+		$this->loadExtension(new Extension\Model\Base\SalesDocument());
+        $this->loadExtension(new Extension\Model\Base\PurchaseDocument());
+		
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
         }
