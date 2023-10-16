@@ -163,12 +163,12 @@ class Anticipo extends Base\ModelClass
             return false;
         }
 
-        // Save audit log
-        $this->saveAuditMessage('updated-model');
-
         if (false === parent::save()) {
             return false;
         }
+
+		// Save audit log
+		$this->saveAuditMessage('updated-model');
 
         return true;
     }
