@@ -34,7 +34,7 @@ use FacturaScripts\Dinamic\Model\PresupuestoProveedor;
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
  * @autor Juan José Prieto Dzul           <juanjoseprieto88@gmail.com>
  */
-class AnticipoP extends Base\ModelClass
+class AnticipoP extends Base\ModelOnChangeClass
 {
     use Base\ModelTrait;
 
@@ -156,6 +156,24 @@ class AnticipoP extends Base\ModelClass
         return 'anticiposp';
     }
 
+	protected function onInsert()
+    {
+		$this->saveAuditMessage('inserted-model');
+		parent::onInsert();
+	}
+
+    protected function onUpdate()
+    {
+		$this->saveAuditMessage('updated-model');
+		parent::onUpdate();
+	}		
+
+	protected function onDelete()
+    {
+		$this->saveAuditMessage('deleted-model');
+		parent::onDelete();
+	}
+
     public function save(): bool
     {
         // Comprobar que la Empresa y el Proveedor del anticipo son el mismo del documento
@@ -166,21 +184,6 @@ class AnticipoP extends Base\ModelClass
         if (false === parent::save()) {
             return false;
         }
-
-		// Save audit log
-		$this->saveAuditMessage('updated-model');
-
-        return true;
-    }
-
-    public function delete(): bool
-    {
-        if (false === parent::delete()) {
-            return false;
-        }
-
-        // Save audit log
-        $this->saveAuditMessage('deleted-model');
 
         return true;
     }
