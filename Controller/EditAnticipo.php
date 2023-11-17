@@ -107,6 +107,7 @@ class EditAnticipo extends EditController
                     $this->views[$viewName]->disableColumn('note', false, 'true');
                     $this->views[$viewName]->disableColumn('payment', false, 'true');
 					$this->views[$viewName]->disableColumn('phase', false, 'true');
+					$this->setSettings($viewName, 'btnDelete', false);
                 }
 
 				// mensaje si no está configurado el nivel mínimo para que un usuario pueda modificar anticipos 
