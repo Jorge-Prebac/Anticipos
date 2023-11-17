@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 
@@ -51,6 +52,25 @@ class EditAnticipoP extends EditController
         $data['title'] = 'advance-payment-p';
         $data['icon'] = 'fas fa-donate';
         return $data;
+    }
+
+    protected function createViews()
+    {
+        parent::createViews();
+        $this->createViewLogs();
+		$this->setTabsPosition('top');
+    }
+
+    public function createViewLogs(string $viewName = 'ListLogMessage'): void
+    {
+        $this->addListView($viewName, 'LogMessage', 'history', 'fas fa-history');
+        $this->views[$viewName]->addOrderBy(['time', 'id'], 'date', 2);
+        $this->views[$viewName]->addSearchFields(['context', 'message']);
+
+        // disable buttons
+        $this->setSettings($viewName, 'btnDelete', false);
+        $this->setSettings($viewName, 'btnNew', false);
+        $this->setSettings($viewName, 'checkBoxes', false);
     }
 
     /**
@@ -136,6 +156,14 @@ class EditAnticipoP extends EditController
                 }
 
                 break;
+
+			case 'ListLogMessage':
+				parent::loadData($viewName, $view);
+				$where = [
+					new DataBaseWhere('model', $this->getModelClassName()),
+					new DataBaseWhere('modelcode', $this->getModel()->primaryColumnValue())
+				];
+				$view->loadData('', $where);
 
             default:
                 parent::loadData($viewName, $view);
