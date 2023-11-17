@@ -27,6 +27,7 @@
     "estimation-total-amount": "Aurrekontuaren Totala",
     "estimation-total-amount-project": "Proiektuaren Aurrekontuen Totala",
     "indicate-minimun-level": "Gutxieneko maila adierazi",
+    "inserted-model": "Generado %model% (%key%) %desc%",
     "invoice-total-amount": "Fakturaren Totala",
     "invoice-total-amount-project": "Proiektuko Fakturen Totala",
     "level-not-configured": "Nibela ez dago konfiguratuta. Sistema-administratzaileak Admin, Kontrol-panela, aurrerapenak menutik konfiguratu dezake",

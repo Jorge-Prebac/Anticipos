@@ -27,6 +27,7 @@
     "estimation-total-amount": "Total del Pressupost",
     "estimation-total-amount-project": "Total d'Pressupostos en Projecte",
     "indicate-minimun-level": "Indicar el nivell mínim necessari",
+    "inserted-model": "Generat %model% (%key%) %desc%",
     "invoice-total-amount": "Total de la Factura",
     "invoice-total-amount-project": "Total d'Factures en Projecte",
     "level-not-configured": "Nivell no configurat. L'administrador del sistema el pot configurar des del menú Administrador, Panell de control, anticipos",
