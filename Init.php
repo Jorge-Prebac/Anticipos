@@ -19,8 +19,8 @@
 
 namespace FacturaScripts\Plugins\Anticipos;
 
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\InitClass;
-use FacturaScripts\Core\Base\ToolBox;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Model\EmailNotification;
 
@@ -58,9 +58,6 @@ class Init extends InitClass
 
 		$this->loadExtension(new Extension\Lib\BusinessDocumentGenerator());
 		
-		$this->loadExtension(new Extension\Model\Base\SalesDocument());
-        $this->loadExtension(new Extension\Model\Base\PurchaseDocument());
-		
         if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
             $this->loadExtension(new Extension\Controller\EditProyecto());
         }
@@ -76,21 +73,19 @@ class Init extends InitClass
         $this->updateEmailNotifications();
     }
 
-    private function setupSettings()
-    {
-        $appsettings = $this->toolBox()->appSettings();
-        if (empty($appsettings->get('anticipos', 'pdAnticipos'))) {
-            $appsettings->set('anticipos', 'pdAnticipos', false);
-        }
-        if (empty($appsettings->get('anticipos', 'level'))) {
-            $appsettings->set('anticipos', 'level', 20);
-        }
-        $appsettings->save();
-    }
+	private function setupSettings()
+		{
+			if (empty(Tools::settings('anticipos', 'pdAnticipos'))) {
+				Tools::settingsSet('anticipos', 'pdAnticipos', false);
+			}
+			if (empty(Tools::settings('anticipos', 'level'))) {
+				Tools::settingsSet('anticipos', 'level', 20);
+			}
+			Tools::settingsSave();
+		}
 
     private function updateEmailNotifications()
     {
-        $i18n = ToolBox::i18n();
         $notificationModel = new EmailNotification();
         $keys = [
             'sendmail-Anticipo'
@@ -101,8 +96,10 @@ class Init extends InitClass
             }
 
             $notificationModel->name = $key;
-            $notificationModel->body = $i18n->trans('sendmail-anticipo-body');
-            $notificationModel->subject = $i18n->trans('sendmail-anticipo-subject');
+
+			$notificationModel->body = Tools::lang()->trans('sendmail-anticipo-body');
+			$notificationModel->subject = Tools::lang()->trans('sendmail-anticipo-subject');
+			
             $notificationModel->enabled = true;
             $notificationModel->save();
         }

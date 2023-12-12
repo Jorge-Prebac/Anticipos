@@ -20,7 +20,11 @@
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
 use FacturaScripts\Core\App\AppSettings;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
+use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
+use FacturaScripts\Core\Model\Base\ModelTrait;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\AlbaranCliente;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
@@ -34,9 +38,9 @@ use FacturaScripts\Dinamic\Model\PresupuestoCliente;
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
  * @autor Juan José Prieto Dzul           <juanjoseprieto88@gmail.com>
  */
-class Anticipo extends Base\ModelOnChangeClass
+class Anticipo extends ModelOnChangeClass
 {
-    use Base\ModelTrait;
+    use ModelTrait;
 
     protected $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
 
@@ -129,14 +133,10 @@ class Anticipo extends Base\ModelOnChangeClass
     {
         parent::clear();
         $this->coddivisa = AppSettings::get('default', 'coddivisa');
-        $this->fecha = date(self::DATE_STYLE);
+		$this->fecha = Tools::date();
         $this->importe = 0;
     }
 
-    /**
-     *
-     * @return string
-     */
     public static function primaryColumn(): string
     {
         return 'id';
@@ -147,31 +147,108 @@ class Anticipo extends Base\ModelOnChangeClass
 		return '#' . $this->id . ', ' . $this->fecha;
 	}
 
-    /**
-     *
-     * @return string
-     */
     public static function tableName(): string
     {
         return 'anticipos';
     }
 
+	protected function setPreviousData(array $fields = [])
+    {
+        $docs = ['idpresupuesto', 'idpedido', 'idalbaran', 'idfactura'];
+		parent::setPreviousData(array_merge($docs, $fields));
+    }
+
 	protected function onInsert()
     {
+		$onDeleted = false;
+
+		// Save Total Advance Count
+		$this->AdvanceData($onDeleted);
+
+		// Save audit log
 		$this->saveAuditMessage('inserted-model');
-		parent::onInsert();
-	}
+
+        parent::onInsert();
+    }
 
     protected function onUpdate()
     {
+		$onDeleted = false;
+
+		//Save Total Advance Count
+		$this->AdvanceData($onDeleted);
+
+		// Save audit log
 		$this->saveAuditMessage('updated-model');
-		parent::onUpdate();
-	}		
+
+        parent::onUpdate();
+    }
 
 	protected function onDelete()
     {
+		$onDeleted = true;
+
+		// Save Total Advance Count
+		$this->AdvanceData($onDeleted,);
+
+		// Save audit log
 		$this->saveAuditMessage('deleted-model');
+
+		$onDeleted = false;
 		parent::onDelete();
+    }
+
+	protected function AdvanceData($onDeleted): void
+    {
+		$idDoc = 'idpresupuesto';
+		$idValuePrev = $this->previousData['idpresupuesto'];
+		$idValueNow = $this->idpresupuesto;
+		if ($onDeleted || $idValuePrev != $idValueNow) {	
+			$docModel = new PresupuestoCliente;
+			$this->TotalAdvanceDocs($idDoc, $idValuePrev, $idValueNow, $docModel);
+		}
+
+		$idDoc = 'idpedido';
+		$idValuePrev = $this->previousData['idpedido'];
+		$idValueNow = $this->idpedido;
+		if ($onDeleted || $idValuePrev != $idValueNow) {
+			$docModel = new PedidoCliente;
+			$this->TotalAdvanceDocs($idDoc, $idValuePrev, $idValueNow, $docModel);
+		}
+
+		$idDoc = 'idalbaran';
+		$idValuePrev = $this->previousData['idalbaran'];
+		$idValueNow = $this->idalbaran;
+		if ($onDeleted || $idValuePrev != $idValueNow) {
+			$docModel = new AlbaranCliente;
+			$this->TotalAdvanceDocs($idDoc, $idValuePrev, $idValueNow, $docModel);
+		}
+
+		$idDoc = 'idfactura';
+		$idValuePrev = $this->previousData['idfactura'];
+		$idValueNow = $this->idfactura;
+		if ($onDeleted || $idValuePrev != $idValueNow) {
+			$docModel = new FacturaCliente;
+			$this->TotalAdvanceDocs($idDoc, $idValuePrev, $idValueNow, $docModel);
+		}
+	}
+
+	protected function TotalAdvanceDocs($idDoc, $idValuePrev, $idValueNow, $docModel): void
+    {
+		// Save Total Advance Count
+		$anticipoModel = new Anticipo;
+			if (isset($idValuePrev) && !is_null($idValuePrev)) {
+				$totalAdvanceCountPrev = $anticipoModel->count([new DataBaseWhere($idDoc, $idValuePrev, '=')]);
+				$docModel ->loadFromCode($idValuePrev);
+				$docModel->advance = $totalAdvanceCountPrev;
+				$docModel->save();
+			}
+			if (isset($idValueNow) && !is_null($idValueNow)) {
+				$totalAdvanceCountNow = $anticipoModel->count([new DataBaseWhere($idDoc, $idValueNow, '=')]);
+				$docModel->loadFromCode($idValueNow);
+				$docModel->advance = $totalAdvanceCountNow;
+				$docModel->save();
+			}
 	}
 
     public function save(): bool
@@ -180,11 +257,9 @@ class Anticipo extends Base\ModelOnChangeClass
         if (false === $this->testAnticipoData()) {
             return false;
         }
-
         if (false === parent::save()) {
             return false;
         }
-
         return true;
     }
 

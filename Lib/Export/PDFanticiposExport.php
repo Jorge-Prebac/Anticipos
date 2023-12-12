@@ -4,6 +4,11 @@ namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
 class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 {
+	public function addListModelPage($model, $where, $order, $offset, $columns, $title = ''): bool
+    {
+		return false;
+	}
+
     public function addModelPage($model, $columns, $title = ''): bool
     {
         $this->newPage();

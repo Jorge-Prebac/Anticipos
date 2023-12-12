@@ -27,7 +27,7 @@
     "estimation-total-amount": "Total do Orzamento",
     "estimation-total-amount-project": "Total de Orzamentos en Proxecto",
     "indicate-minimun-level": "Indicar o nivel mínimo necesario",
-    "inserted-model": "Generado %model% (%key%) %desc%",
+    "inserted-model": "Xerado %model% (%key%) %desc%",
     "invoice-total-amount": "Total da Factura",
     "invoice-total-amount-project": "Total de Facturas en Proxecto",
     "level-not-configured": "Nivel non configurado. O administrador do sistema pode configuralo dende o menú Administrador, Panel de control, anticipos",

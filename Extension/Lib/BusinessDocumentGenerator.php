@@ -122,6 +122,11 @@ class BusinessDocumentGenerator
 				}
 			}
 
+			$where = [
+				new DataBaseWhere($newDoc->primaryColumn(), $newDoc->primaryColumnValue())
+			];
+			$newDoc->advance = count($anticipos->all($where, [], 0, 0));
+
 			return true;
 		};
 	}
