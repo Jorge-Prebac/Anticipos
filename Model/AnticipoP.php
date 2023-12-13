@@ -93,10 +93,14 @@ class AnticipoP extends ModelOnChangeClass
     {
         switch ($name) {
             case 'riesgomax':
-                return $this->getSubject()->riesgomax;
+				if (isset($this->getSubject()->riesgomax)) {
+					return $this->getSubject()->riesgomax;
+				}
 
             case 'totalrisk':
-                return $this->getSubject()->riesgoalcanzado;
+				if (isset($this->getSubject()->riesgoalcanzado)) {
+					return $this->getSubject()->riesgoalcanzado;
+				}
 
             case 'totaldelivery':
                 $delivery = new AlbaranProveedor();
