@@ -19,6 +19,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
@@ -34,11 +35,10 @@ class ListFacturaProveedor
 		return function() {
 			$viewName = 'ListFacturaProveedor';
 			
-			$i18n = $this->toolBox()->i18n();
 			$this->addFilterSelectWhere($viewName, 'advances-status', [
-				['label' => $i18n->trans('advance-payments'), 'where' => []],
-				['label' => $i18n->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
-				['label' => $i18n->trans('without-advances'), 'where' => [new DataBaseWhere('advance', 0, '=')]],
+				['label' => Tools::lang()->trans('advance-payments'), 'where' => []],
+				['label' => Tools::lang()->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
+				['label' => Tools::lang()->trans('without-advances'), 'where' => [new DataBaseWhere('advance', 0, '=')]],
 			]);
 		};
 	}

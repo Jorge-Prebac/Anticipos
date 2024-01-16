@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Empresas;
@@ -81,11 +82,10 @@ class ListAnticipo extends ListController
 		$users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
 		
-		$i18n = $this->toolBox()->i18n();
 		$this->addFilterSelectWhere($viewName, 'status', [
-            ['label' => $i18n->trans('invoiced'), 'where' => []],
-            ['label' => $i18n->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
-            ['label' => $i18n->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
+            ['label' => Tools::lang()->trans('invoiced'), 'where' => []],
+            ['label' => Tools::lang()->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
+            ['label' => Tools::lang()->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
         ]);
 
 		// si no está instalado el plugin Proyectos ocultamos sus columnas, filtros y ordenación

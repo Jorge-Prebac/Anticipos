@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
@@ -133,10 +134,10 @@ class EditAnticipoP extends EditController
 				// mensaje si no está configurado el nivel mínimo para que un usuario pueda modificar anticipos 
 				// mensaje si el usuario tiene un nivel de seguridad menor del configurado, no podrá modificar los datos de los anticipos
 				if (true === empty($this->toolBox()->appSettings()->get('anticipos', 'level'))) {
-					$this->toolBox()->i18nLog()->warning('level-not-configured');
+					Tools::Log()->warning('level-not-configured');
 					$this->views[$viewName]->setReadOnly(true);
 				}elseif (false === empty($model->importe) && ($this->user->level < ($this->toolBox()->appSettings()->get('anticipos', 'level')))) {
-					$this->toolBox()->i18nLog()->warning('not-allowed-modify');
+					Tools::Log()->warning('not-allowed-modify');
 					$this->views[$viewName]->setReadOnly(true);
 				}
 

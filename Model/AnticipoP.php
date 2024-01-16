@@ -19,12 +19,13 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
+use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
 use FacturaScripts\Core\Model\Base\ModelTrait;
-use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Model\AlbaranProveedor;
 use FacturaScripts\Dinamic\Model\Proveedor;
 use FacturaScripts\Dinamic\Model\FacturaProveedor;
@@ -326,13 +327,13 @@ class AnticipoP extends ModelOnChangeClass
 
         // Comprobar que la Empresa del anticipo es la misma que la empresa del documento
         if ($model->idempresa != $this->idempresa) {
-            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-company-' . $title);
+            Tools::Log()->warning('advance-payment-invalid-company-' . $title);
             return false;
         }
 
         // Comprobar que el Proveedor del anticipo es el mismo que el Proveedor del documento
         if (!empty($model->codproveedor) && $model->codproveedor != $this->codproveedor) {
-            $this->toolBox()->i18nLog()->warning('advance-payment-invalid-supplier-' . $title);
+            Tools::Log()->warning('advance-payment-invalid-supplier-' . $title);
             return false;
         }
 
@@ -341,7 +342,7 @@ class AnticipoP extends ModelOnChangeClass
 
     protected function saveAuditMessage(string $message)
     {
-        self::toolBox()::i18nLog(self::AUDIT_CHANNEL)->info($message, [
+        Tools::log(self::AUDIT_CHANNEL)->info($message, [
             '%model%' => $this->modelClassName(),
             '%key%' => $this->primaryColumnValue(),
             '%desc%' => $this->primaryDescription(),

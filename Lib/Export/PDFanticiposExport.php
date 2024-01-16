@@ -2,6 +2,8 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
+use FacturaScripts\Core\Tools;
+
 class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 {
 	public function addListModelPage($model, $where, $order, $offset, $columns, $title = ''): bool
@@ -32,37 +34,39 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 
 		foreach ($tableCols as $key => $colName) {
 			$value = $tableOptions['cols'][$key]['widget']->plainText($model);
-			
-			if (false !== strpos($colName, 'total')) {
+
+			if (false !== strpos($colName, 'codcliente')) {
+				$colName = Tools::lang()->trans('customer');
+			}elseif (false !== strpos($colName, 'codpago')) {
+				$colName = Tools::lang()->trans('method-payment');
+			}elseif (false !== strpos($colName, 'codproveedor')) {
+				$colName = Tools::lang()->trans('supplier');
+			}elseif (false !== strpos($colName, 'fase')) {
+				$colName = Tools::lang()->trans('advance-linked-to');
+			}elseif (false !== strpos($colName, 'fecha')) {
+				$colName = Tools::lang()->trans('date');
+			}elseif (false !== strpos($colName, 'idalbaran')) {
+				$colName = Tools::lang()->trans('delivery-note');
+			}elseif (false !== strpos($colName, 'idempresa')) {
+				continue;
+			}elseif (false !== strpos($colName, 'idfactura')) {
+				$colName = Tools::lang()->trans('invoice');
+			}elseif (false !== strpos($colName, 'idpedido')) {
+				$colName = Tools::lang()->trans('order');
+			}elseif (false !== strpos($colName, 'idpresupuesto')) {
+				$colName = Tools::lang()->trans('estimation');
+			}elseif (false !== strpos($colName, 'idproyecto')) {
+				$colName = Tools::lang()->trans('project');
+			}elseif (false !== strpos($colName, 'importe')) {
+				$colName = Tools::lang()->trans('amount');
+			}elseif (false !== strpos($colName, 'nota')) {
+				$colName = Tools::lang()->trans('note');
+			}elseif (false !== strpos($colName,'riesgomax')) {
+				continue;
+			}elseif (false !== strpos($colName, 'total')) {
 				continue;
 			}elseif (false !== strpos($colName, 'user')) {
 				continue;
-			}elseif (false !== strpos($colName,'idempresa')) {
-				continue;
-			}elseif (false !== strpos($colName,'riesgomax')) {
-				continue;
-			}elseif (false !== strpos($colName, 'importe')) {
-				$colName = $this->i18n->trans('amount');
-			}elseif (false !== strpos($colName, 'nota')) {
-				$colName = $this->i18n->trans('note');
-			}elseif (false !== strpos($colName, 'codpago')) {
-				$colName = $this->i18n->trans('method-payment');
-			}elseif (false !== strpos($colName, 'fecha')) {
-				$colName = $this->i18n->trans('date');
-			}elseif (false !== strpos($colName, 'fase')) {
-				$colName = $this->i18n->trans('advance-linked-to');
-			}elseif (false !== strpos($colName, 'codcliente')) {
-				$colName = $this->i18n->trans('customer');
-			}elseif (false !== strpos($colName, 'idpresupuesto')) {
-				$colName = $this->i18n->trans('estimation');
-			}elseif (false !== strpos($colName, 'idpedido')) {
-				$colName = $this->i18n->trans('order');
-			}elseif (false !== strpos($colName, 'idalbaran')) {
-				$colName = $this->i18n->trans('delivery-note');
-			}elseif (false !== strpos($colName, 'idfactura')) {
-				$colName = $this->i18n->trans('invoice');
-			}elseif (false !== strpos($colName, 'idproyecto')) {
-				$colName = $this->i18n->trans('project');
 			}
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];
 		}

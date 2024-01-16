@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos;
 
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\InitClass;
 use FacturaScripts\Dinamic\Lib\ExportManager;
@@ -58,13 +59,16 @@ class Init extends InitClass
 
 		$this->loadExtension(new Extension\Lib\BusinessDocumentGenerator());
 		
-        if (class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-            $this->loadExtension(new Extension\Controller\EditProyecto());
-        }
+		if (Plugins::isEnabled('Proyectos')) {
+			$this->loadExtension(new Extension\Controller\EditProyecto());
+		}
 
         // export manager
         ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'Anticipo');
         ExportManager::addOptionModel('MAILanticiposExport', 'MAIL', 'Anticipo');
+		
+		ExportManager::addOptionModel('PDFanticiposExport', 'PDF', 'AnticipoP');
+		ExportManager::addOptionModel('MAILanticiposExport', 'MAIL', 'AnticipoP');
     }
 
     public function update()
@@ -84,7 +88,7 @@ class Init extends InitClass
 			Tools::settingsSave();
 		}
 
-    private function updateEmailNotifications()
+    private function updateEmailNotifications() : void
     {
         $notificationModel = new EmailNotification();
         $keys = [
@@ -97,8 +101,8 @@ class Init extends InitClass
 
             $notificationModel->name = $key;
 
-			$notificationModel->body = Tools::lang()->trans('sendmail-anticipo-body');
-			$notificationModel->subject = Tools::lang()->trans('sendmail-anticipo-subject');
+			$notificationModel->body = Tools::lang()->trans($key . '-body');
+			$notificationModel->subject = Tools::lang()->trans($key);
 			
             $notificationModel->enabled = true;
             $notificationModel->save();
