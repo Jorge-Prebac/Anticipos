@@ -21,7 +21,9 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Model\AnticipoP;
 
 /**
  * Description of EditFacturaProveedor
@@ -65,7 +67,22 @@ class EditFacturaProveedor
 				$this->setSettings($viewName, 'btnDelete', false);
 				$this->setSettings($viewName, 'btnNew', false);
 				$this->setSettings($viewName, 'checkBoxes', false);
-            }
+
+				// Localizamos anticipos sin vincular
+				$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
+				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
+				$anticiposProv = new AnticipoP();
+				$where = [
+					new DataBaseWhere('codproveedor', $codproveedor, '='),
+					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
+				];
+				foreach($anticiposProv->all($where) as $anticipoProv) {
+					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
+						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
+						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+					}
+				}
+			}
         };
     }
 }

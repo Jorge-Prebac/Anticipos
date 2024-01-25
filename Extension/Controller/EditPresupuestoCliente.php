@@ -21,7 +21,9 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Model\Anticipo;
 
 /**
  * Description of EditPresupuestoCliente
@@ -74,16 +76,16 @@ class EditPresupuestoCliente
 						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
 					];
 					$view->loadData('', $where);
-                }
+				}
 
 				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
 				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 					if (empty ($this->views[$viewName]->model->idproyecto)) {
 						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
 						$where = [
-								new DataBaseWhere('idproyecto', null),
-								new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
-								new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
+							new DataBaseWhere('idproyecto', null),
+							new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
+							new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
 						];
 						$view->loadData('', $where);
 					}
@@ -93,6 +95,19 @@ class EditPresupuestoCliente
 					$this->setSettings($viewName, 'btnDelete', false);
 					$this->setSettings($viewName, 'btnNew', false);
 					$this->setSettings($viewName, 'checkBoxes', false);
+				}
+
+				// Localizamos anticipos sin vincular
+				$anticiposCli = new Anticipo();
+				$where = [
+					new DataBaseWhere('codcliente', $codcliente, '='),
+					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
+				];
+				foreach($anticiposCli->all($where) as $anticipoCli) {
+					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
+						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
+						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+					}
 				}
 			}
 		};
