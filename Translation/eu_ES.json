@@ -1,5 +1,6 @@
 {
     "advance-linked-to": "Aurrerapena honi lotuta",
+    "advance-not-linked": "Anticipo #%idAnticipo% pendiente de vincular con un Documento",
     "advance-payment": "Aurrerapena",
     "advance-payment-c": "Bezeroaren aurrerapena",
     "advance-payment-invalid-client-delivery-note": "Aurrerakinaren bezeroa ez da albaranaren bezero berdina",

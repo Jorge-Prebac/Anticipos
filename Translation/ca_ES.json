@@ -1,5 +1,6 @@
 {
     "advance-linked-to": "Bestreta vinculada a",
+    "advance-not-linked": "Bestreta #%idAnticipo% pendent de vincular amb un Document",
     "advance-payment": "Bestreta",
     "advance-payment-c": "Bestreta Cli",
     "advance-payment-invalid-client-delivery-note": "El client de la bestreta no coincideix amb el client de l'albarà",

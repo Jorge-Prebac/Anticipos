@@ -1,5 +1,6 @@
 {
     "advance-linked-to": "Andianto vinculado a",
+    "advance-not-linked": "Anticipo #%idAnticipo% pendiente de vincular con un Documento",
     "advance-payment": "Andianto",
     "advance-payment-c": "Andianto Cli",
     "advance-payment-invalid-client-delivery-note": "O cliente do anticipo non coincide co cliente do albará",
