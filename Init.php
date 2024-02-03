@@ -78,15 +78,15 @@ class Init extends InitClass
     }
 
 	private function setupSettings()
-		{
-			if (empty(Tools::settings('anticipos', 'pdAnticipos'))) {
-				Tools::settingsSet('anticipos', 'pdAnticipos', false);
-			}
-			if (empty(Tools::settings('anticipos', 'level'))) {
-				Tools::settingsSet('anticipos', 'level', 20);
-			}
-			Tools::settingsSave();
+	{
+		if (empty(Tools::settings('anticipos', 'pdAnticipos'))) {
+			Tools::settingsSet('anticipos', 'pdAnticipos', false);
 		}
+		if (empty(Tools::settings('anticipos', 'level'))) {
+			Tools::settingsSet('anticipos', 'level', 20);
+		}
+		Tools::settingsSave();
+	}
 
     private function updateEmailNotifications() : void
     {
