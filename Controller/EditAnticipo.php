@@ -64,14 +64,15 @@ class EditAnticipo extends EditController
 
     public function createViewLogs(string $viewName = 'ListLogMessage'): void
     {
-        $this->addListView($viewName, 'LogMessage', 'history', 'fas fa-history');
-		$this->views[$viewName]->addOrderBy(['time', 'id'], 'date', 2);
-        $this->views[$viewName]->addSearchFields(['context', 'message']);
+        $this->addListView($viewName, 'LogMessage', 'history', 'fas fa-history')
+			->addOrderBy(['time', 'id'], 'date', 2)
+			->addSearchFields(['context', 'message']);
 
         // disable buttons
-        $this->setSettings($viewName, 'btnDelete', false);
-        $this->setSettings($viewName, 'btnNew', false);
-        $this->setSettings($viewName, 'checkBoxes', false);
+		$this->tab($viewName)
+			->setSettings('btnDelete', false)
+			->setSettings('btnNew', false)
+			->setSettings('checkBoxes', false);
     }
 
     /**
@@ -133,10 +134,10 @@ class EditAnticipo extends EditController
 
 				// mensaje si no está configurado el nivel mínimo para que un usuario pueda modificar anticipos 
 				// mensaje si el usuario tiene un nivel de seguridad menor del configurado, no podrá modificar los datos de los anticipos
-				if (true === empty($this->toolBox()->appSettings()->get('anticipos', 'level'))) {
+				if (empty(Tools::settings('anticipos', 'level'))) {
 					Tools::Log()->warning('level-not-configured');
 					$this->views[$viewName]->setReadOnly(true);
-				}elseif (false === empty($model->importe) && ($this->user->level < ($this->toolBox()->appSettings()->get('anticipos', 'level')))) {
+				}elseif (false === empty($model->importe) && ($this->user->level < (Tools::settings('anticipos', 'level')))) {
 					Tools::Log()->warning('not-allowed-modify');
 					$this->views[$viewName]->setReadOnly(true);
 				}

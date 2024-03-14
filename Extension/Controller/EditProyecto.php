@@ -50,20 +50,20 @@ class EditProyecto
     protected function createViewsAnticiposCli(): Closure
     {
         return function($viewName = 'ListAnticipo') {
-            $this->addListView($viewName, 'Anticipo', 'customer-advance-payments', 'fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+            $this->addListView($viewName, 'Anticipo', 'customer-advance-payments', 'fas fa-donate')
+				->addOrderBy(['fecha'], 'date', 2)
+				->addOrderBy(['fase'], 'phase')
+				->addOrderBy(['importe'], 'amount');
         };
     }
 
     protected function createViewsAnticiposProv(): Closure
     {
         return function($viewName = 'ListAnticipoP') {
-            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
+				->addOrderBy(['fecha'], 'date', 2)
+				->addOrderBy(['fase'], 'phase')
+				->addOrderBy(['importe'], 'amount');
         };
     }
 

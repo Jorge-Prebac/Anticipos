@@ -21,7 +21,9 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Model\Anticipo;
 
 /**
  * Description of EditCliente
@@ -45,10 +47,10 @@ class EditCliente
 	{
 		return function() {
 			$viewName = 'ListAnticipo';
-			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+			$this->addListView($viewName, 'Anticipo', 'advance-payments', 'fas fa-donate')
+				->addOrderBy(['fecha'], 'date', 2)
+				->addOrderBy(['fase'], 'phase')
+				->addOrderBy(['importe'], 'amount');
 		};
 	}
 
@@ -59,6 +61,18 @@ class EditCliente
                 $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
                 $where = [new DataBaseWhere('codcliente', $codcliente)];
                 $view->loadData('', $where);
+
+				// Localizamos anticipos sin vincular
+				$anticiposCli = new Anticipo();
+				$where = [
+					new DataBaseWhere('codcliente', $codcliente, '='),
+				];
+				foreach($anticiposCli->all($where) as $anticipoCli) {
+					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
+						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
+						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+					}
+				}
             }
         };
     }

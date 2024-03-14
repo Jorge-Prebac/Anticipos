@@ -36,7 +36,7 @@ class ListAlbaranProveedor
 			$viewName = 'ListAlbaranProveedor';
 			
 			$this->addFilterSelectWhere($viewName, 'advances-status', [
-				['label' => Tools::lang()->trans('advance-payments'), 'where' => []],
+				['label' => Tools::lang()->trans('advances-status'), 'where' => []],
 				['label' => Tools::lang()->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
 				['label' => Tools::lang()->trans('without-advances'), 'where' => [new DataBaseWhere('advance', 0, '=')]],
 			]);

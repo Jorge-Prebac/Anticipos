@@ -49,10 +49,10 @@ class EditPedidoProveedor
 	{
 		return function() {
 			$viewName = 'ListAnticipoP';
-			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
+				->addOrderBy(['fecha'], 'date', 2)
+				->addOrderBy(['fase'], 'phase')
+				->addOrderBy(['importe'], 'amount');
 		};
 	}
 
@@ -107,6 +107,23 @@ class EditPedidoProveedor
 						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
 						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
 					}
+				}
+
+				// Total Pendiente por Liquidar del Documento
+				$where = [
+					new DataBaseWhere('idpedido', $codigo),
+				];
+				$totalAdvances = 0.00;
+				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
+				$totalPending = 0.00;
+				foreach($anticipoProv->all($where) as $anticipoProv) {
+					$totalAdvances = $totalAdvances +$anticipoProv->importe;
+				}
+				$totalPending = $this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances;
+				if ($totalAdvances != 0 &  $totalAdvances < $totalDoc) {
+					Tools::Log()->info('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
+				} elseif ($totalAdvances != 0 &  $totalAdvances > $totalDoc) {
+					Tools::Log()->error('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
 				}
 			}
 		};

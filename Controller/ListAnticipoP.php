@@ -77,15 +77,21 @@ class ListAnticipoP extends ListController
         $this->addFilterPeriod($viewName,  'period', 'date', 'fecha');
 		$this->addFilterAutocomplete($viewName, 'fase', 'phase', 'fase', 'anticiposp', 'fase', 'fase');
 		$this->addFilterAutocomplete($viewName, 'codpago', 'method-payment', 'codpago', 'formaspago', 'codpago', 'descripcion');	
-		$this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'proveedores', 'codproveedor', 'nombre');
+		$this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'Proveedor');
         
 		$users = $this->codeModel->all('users', 'nick', 'nick');
         $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
 		
-		$this->addFilterSelectWhere($viewName, 'status', [
-            ['label' => Tools::lang()->trans('invoiced'), 'where' => []],
+		$this->addFilterSelectWhere($viewName, 'advances-status-list', [
+            ['label' => Tools::lang()->trans('advances-status-list'), 'where' => []],
             ['label' => Tools::lang()->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
             ['label' => Tools::lang()->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
+			['label' => Tools::lang()->trans('advance-not-linked-list'), 'where' => [
+					new DataBaseWhere('idpresupuesto', null),
+					new DataBaseWhere('idpedido', null),
+					new DataBaseWhere('idalbaran', null),
+					new DataBaseWhere('idfactura', null),
+				]],
         ]);
 
 		// si no está instalado el plugin Proyectos ocultamos sus columnas, filtros y ordenación

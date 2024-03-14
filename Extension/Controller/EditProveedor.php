@@ -21,7 +21,9 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Dinamic\Model\AnticipoP;
 
 /**
  * Description of EditProveedor
@@ -45,10 +47,10 @@ class EditProveedor
 	{
 		return function() {
 			$viewName = 'ListAnticipoP';
-			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate');
-			$this->views[$viewName]->addOrderBy(['fecha'], 'date', 2);
-			$this->views[$viewName]->addOrderBy(['fase'], 'phase');
-			$this->views[$viewName]->addOrderBy(['importe'], 'amount');
+			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
+				->addOrderBy(['fecha'], 'date', 2)
+				->addOrderBy(['fase'], 'phase')
+				->addOrderBy(['importe'], 'amount');
 		};
 	}
 
@@ -59,6 +61,18 @@ class EditProveedor
                 $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
                 $where = [new DataBaseWhere('codproveedor', $codproveedor)];
                 $view->loadData('', $where);
+
+				// Localizamos anticipos sin vincular
+				$anticiposProv = new AnticipoP();
+				$where = [
+					new DataBaseWhere('codproveedor', $codproveedor, '='),
+				];
+				foreach($anticiposProv->all($where) as $anticipoProv) {
+					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
+						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
+						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+					}
+				}
             }
         };
     }
