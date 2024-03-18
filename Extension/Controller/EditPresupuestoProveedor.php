@@ -116,7 +116,7 @@ class EditPresupuestoProveedor
 				$totalAdvances = 0.00;
 				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
 				$totalPending = 0.00;
-				foreach($anticipoProv->all($where) as $anticipoProv) {
+				foreach($anticiposProv->all($where) as $anticipoProv) {
 					$totalAdvances = $totalAdvances +$anticipoProv->importe;
 				}
 				$totalPending = $this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances;
