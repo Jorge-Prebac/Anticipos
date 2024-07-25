@@ -4,7 +4,7 @@ namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\Email\NewMail;
-use FacturaScripts\Dinamic\Lib\Export\PDFExport as MailAnticipos;
+use FacturaScripts\Core\Lib\Export\PDFExport as MailAnticipos;
 use Symfony\Component\HttpFoundation\Response;
 
 class MAILanticiposExport extends MailAnticipos
