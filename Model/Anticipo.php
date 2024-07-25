@@ -338,7 +338,7 @@ class Anticipo extends ModelOnChangeClass
 
     protected function saveAuditMessage(string $message)
     {
-		Tools::log(self::AUDIT_CHANNEL)->info($message, [
+        Tools::log('anticipos')->info($message, [
             '%model%' => $this->modelClassName(),
             '%key%' => $this->primaryColumnValue(),
             '%desc%' => $this->primaryDescription(),
