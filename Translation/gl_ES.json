@@ -37,7 +37,7 @@
     "level-not-configured": "Nivel non configurado. O administrador do sistema pode configuralo dende o menú Administrador, Panel de control, anticipos",
     "missing-company-name": "Falta o nome da empresa",
     "missing-customer-name": "Falta o nome do cliente",
-    "missing-supplier-name": "Falta o nome do provedor",
+    "missing-supplier-name": "Falta o nome do Proveedor",
     "order-total-amount": "Total do Pedido",
     "order-total-amount-project": "Total de Pedidos en Proxecto",
     "pending-difference-advances": "Diferenza entre o Total do Documento e o Total de Anticipos = %pending%",

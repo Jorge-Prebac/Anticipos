@@ -27,7 +27,7 @@
     "customer-advance-payments": "Anticipos_Cli",
     "customer-advance-payments-data-on-receipts-payments-data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
     "delivery-note-total-amount": "Total del envío",
-    "delivery-note-total-amount-project": "Total de Envíos en Proyecto",
+    "delivery-note-total-amount-project": "Total de Albaranes en Proyecto",
     "estimation-total-amount": "Total del Presupuesto",
     "estimation-total-amount-project": "Total de Presupuestos en Proyecto",
     "indicate-minimun-level": "Indicar el nivel mínimo necesario",
