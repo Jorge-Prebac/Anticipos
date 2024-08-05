@@ -38,7 +38,10 @@ class ListPresupuestoCliente
 			$this->addFilterSelectWhere($viewName, 'advances-status', [
 				['label' => Tools::lang()->trans('advances-status'), 'where' => []],
 				['label' => Tools::lang()->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
-				['label' => Tools::lang()->trans('without-advances'), 'where' => [new DataBaseWhere('advance', 0, '=')]],
+				['label' => Tools::lang()->trans('without-advances'), 'where' => [
+							new DataBaseWhere('advance', 0),
+							new DataBaseWhere('advance', null, '=', 'OR'),
+					]],
 			]);
 		};
 	}
