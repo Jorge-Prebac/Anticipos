@@ -114,16 +114,21 @@ class EditAlbaranProveedor
 					new DataBaseWhere('idalbaran', $codigo),
 				];
 				$totalAdvances = 0.00;
-				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
+				$totalDoc = 0.00;
 				$totalPending = 0.00;
+				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
 				foreach($anticiposProv->all($where) as $anticipoProv) {
-					$totalAdvances = $totalAdvances +$anticipoProv->importe;
+					$totalAdvances = $totalAdvances + $anticipoProv->importe;
 				}
-				$totalPending = $this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances;
-				if ($totalAdvances != 0 &  $totalAdvances < $totalDoc) {
+				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances);
+				if ($totalAdvances === 0.00) {
+					Tools::Log()->info('without-advances');
+				} elseif ($totalAdvances != 0 & $totalPending > 0) {
 					Tools::Log()->info('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
-				} elseif ($totalAdvances != 0 &  $totalAdvances > $totalDoc) {
-					Tools::Log()->error('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
+				} elseif ($totalAdvances != 0 & $totalPending < 0) {
+					Tools::Log()->warning('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
+				} else {
+					Tools::Log()->notice('paid');
 				}
 			}
 		};
