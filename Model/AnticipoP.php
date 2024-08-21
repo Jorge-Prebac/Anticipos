@@ -342,6 +342,7 @@ class AnticipoP extends ModelOnChangeClass
 
     protected function saveAuditMessage(string $message)
     {
+		$this->fecha = Tools::date();
         Tools::log('anticipos')->info($message, [
             '%model%' => $this->modelClassName(),
             '%key%' => $this->primaryColumnValue(),
