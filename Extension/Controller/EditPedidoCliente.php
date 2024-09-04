@@ -121,7 +121,7 @@ class EditPedidoCliente
 				foreach($anticiposCli->all($where) as $anticipoCli) {
 					$totalAdvances = $totalAdvances + $anticipoCli->importe;
 				}
-				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances);
+				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances, 2);
 				if ($totalAdvances === 0.00) {
 					Tools::Log()->info('without-advances');
 				} elseif ($totalAdvances != 0 & $totalPending > 0) {
