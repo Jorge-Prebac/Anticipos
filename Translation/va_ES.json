@@ -30,9 +30,9 @@
     "delivery-note-total-amount-project": "Total d'Albarans en Projecte",
     "estimation-total-amount": "Total de l'Estimació",
     "estimation-total-amount-project": "Total d'Estimacions en Projecte",
-    "indicate-minimun-level": "Indicar el nivel mínimo necesario",
+    "indicate-minimun-level": "Indicar el nivell mínim necessari",
     "inserted-model": "Generat %model% (%key%) %desc%",
-    "invoice-total-amount": "Total de la Factura",
+    "invoice-total-amount": "Total de la factura",
     "invoice-total-amount-project": "T",
     "level-not-configured": "Nivell no configurat. L'administrador del sistema pot configurar-lo des del menú Administrador, Panell de control, anticipos",
     "missing-company-name": "Falta el nom de l'Empresa",
@@ -45,7 +45,7 @@
     "sendmail-anticipo-body": "Hola, us adjunto la vostra bestreta del dia {date}. Gràcies. Una salutació.",
     "sendmail-anticipo-subject": "El seu avançament del {date}",
     "supplier-advance-payments": "Anticips_Prov",
-    "user-level-edit": "Nivel mínimo del usuario para poder modificar un anticipo",
+    "user-level-edit": "Nivell mínim de l'usuari per poder modificar un avançament",
     "with-advances": "Amb Bestretes",
     "without-advances": "Sense Anticips"
 }

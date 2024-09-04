@@ -31,14 +31,14 @@
     "estimation-total-amount": "Totale preventivo",
     "estimation-total-amount-project": "Totale preventivi nel progetto",
     "indicate-minimun-level": "Indicare il livello minimo necessario",
-    "inserted-model": "Generado %model% (%key%) %desc%",
+    "inserted-model": "Generato %model% (%key%) %desc%",
     "invoice-total-amount": "Importo totale della fattura",
-    "invoice-total-amount-project": "Total de Facturas en Proyecto",
+    "invoice-total-amount-project": "Importo totale delle fatture in progetto",
     "level-not-configured": "Livello non configurato. L'amministratore di sistema può configurarlo dal menu Amministratore, Pannello di controllo, anticipi",
     "missing-company-name": "Manca il nome dell'azienda",
     "missing-customer-name": "Manca il nome del cliente",
     "missing-supplier-name": "Manca il nome del fornitore",
-    "order-total-amount": "Total del Pedido",
+    "order-total-amount": "Importo totale dell'ordine",
     "order-total-amount-project": "Totale Ordini Progetto",
     "pending-difference-advances": "Differenza tra il Totale del Documento e il Totale degli Anticipi = %pending%",
     "project-total-amount": "Importo totale del progetto",
@@ -47,5 +47,5 @@
     "supplier-advance-payments": "Pagamenti anticipati fornitore",
     "user-level-edit": "Livello minimo utente per modificare un anticipo",
     "with-advances": "Con Anticipi",
-    "without-advances": "Sin Anticipos"
+    "without-advances": "Senza Anticipi"
 }
