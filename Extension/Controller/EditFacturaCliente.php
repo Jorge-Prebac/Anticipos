@@ -71,12 +71,11 @@ class EditFacturaCliente
 				// Localizamos anticipos sin vincular
 				$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
 				$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$anticiposCli = new Anticipo();
 				$where = [
 					new DataBaseWhere('codcliente', $codcliente, '='),
 					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
 				];
-				foreach($anticiposCli->all($where) as $anticipoCli) {
+				foreach(Anticipo::all($where) as $anticipoCli) {
 					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
 						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
 						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);

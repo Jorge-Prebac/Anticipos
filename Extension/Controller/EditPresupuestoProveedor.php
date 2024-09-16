@@ -97,12 +97,11 @@ class EditPresupuestoProveedor
 				}
 
 				// Localizamos anticipos sin vincular
-				$anticiposProv = new AnticipoP();
 				$where = [
 					new DataBaseWhere('codproveedor', $codproveedor, '='),
 					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
 				];
-				foreach($anticiposProv->all($where) as $anticipoProv) {
+				foreach(AnticipoP::all($where) as $anticipoProv) {
 					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
 						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
 						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
@@ -117,7 +116,7 @@ class EditPresupuestoProveedor
 				$totalDoc = 0.00;
 				$totalPending = 0.00;
 				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
-				foreach($anticiposProv->all($where) as $anticipoProv) {
+				foreach(AnticipoP::all($where) as $anticipoProv) {
 					$totalAdvances = $totalAdvances +$anticipoProv->importe;
 				}
 				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances, 2);

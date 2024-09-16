@@ -98,12 +98,11 @@ class EditPedidoCliente
 				}
 
 				// Localizamos anticipos sin vincular
-				$anticiposCli = new Anticipo();
 				$where = [
 					new DataBaseWhere('codcliente', $codcliente, '='),
 					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
 				];
-				foreach($anticiposCli->all($where) as $anticipoCli) {
+				foreach(Anticipo::all($where) as $anticipoCli) {
 					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
 						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
 						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
@@ -118,7 +117,7 @@ class EditPedidoCliente
 				$totalDoc = 0.00;
 				$totalPending = 0.00;
 				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
-				foreach($anticiposCli->all($where) as $anticipoCli) {
+				foreach(Anticipo::all($where) as $anticipoCli) {
 					$totalAdvances = $totalAdvances + $anticipoCli->importe;
 				}
 				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances, 2);

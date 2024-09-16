@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the AdmReportico plugin, with the Reportico engine, for FacturaScripts
+ * This file is part of Anticipos plugin for FacturaScripts
  * Copyright (C) 2020 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,7 @@
  */
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
-use Closure;
-use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtension;
 
 /**
  * Description of ListAlbaranProveedor
@@ -30,19 +28,5 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
  
 class ListAlbaranProveedor
 {
-	public function createViews(): Closure
-	{
-		return function() {
-			$viewName = 'ListAlbaranProveedor';
-			
-			$this->addFilterSelectWhere($viewName, 'advances-status', [
-				['label' => Tools::lang()->trans('advances-status'), 'where' => []],
-				['label' => Tools::lang()->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
-				['label' => Tools::lang()->trans('without-advances'), 'where' => [
-							new DataBaseWhere('advance', 0),
-							new DataBaseWhere('advance', null, '=', 'OR'),
-					]],
-			]);
-		};
-	}
+    use AnticiposListExtension;
 }

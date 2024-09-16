@@ -16,17 +16,32 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
+namespace FacturaScripts\Plugins\Anticipos\Extension\Traits;;
 
-use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtension;
+use Closure;
+use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of ListPresupuestoProveedor
+ * Description of AnticiposListExtensionTrait
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
  
-class ListPresupuestoProveedor
+trait AnticiposListExtension
 {
-    use AnticiposListExtension;
+	public function createViews(): Closure
+	{
+		return function() {
+			$viewName = $this->getMainViewName();
+			$this->addFilterSelectWhere($viewName, 'advances-status', [
+				['label' => Tools::lang()->trans('advances-status'), 'where' => []],
+				['label' => Tools::lang()->trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
+				['label' => Tools::lang()->trans('without-advances'), 'where' => [
+							new DataBaseWhere('advance', 0),
+							new DataBaseWhere('advance', null, '=', 'OR'),
+					]],
+			]);
+		};
+	}
 }
