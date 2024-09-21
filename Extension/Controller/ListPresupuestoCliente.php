@@ -18,7 +18,7 @@
  */
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
-use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtension;
+use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtensionDocs;
 
 /**
  * Description of ListPresupuestoCliente
@@ -28,5 +28,5 @@ use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtension;
  
 class ListPresupuestoCliente
 {
-    use AnticiposListExtension;
+    use AnticiposListExtensionDocs;
 }

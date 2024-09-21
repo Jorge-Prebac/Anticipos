@@ -16,19 +16,20 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-namespace FacturaScripts\Plugins\Anticipos\Extension\Traits;;
+ 
+namespace FacturaScripts\Plugins\Anticipos\Extension\Traits;
 
 use Closure;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
- * Description of AnticiposListExtensionTrait
+ * Description of AnticiposListExtensionDocs
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
  
-trait AnticiposListExtension
+trait AnticiposListExtensionDocs
 {
 	public function createViews(): Closure
 	{

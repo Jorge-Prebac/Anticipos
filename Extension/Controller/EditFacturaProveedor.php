@@ -19,11 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
-use Closure;
-use FacturaScripts\Core\Session;
-use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Dinamic\Model\AnticipoP;
+use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposEditExtensionDocs;
 
 /**
  * Description of EditFacturaProveedor
@@ -33,55 +29,5 @@ use FacturaScripts\Dinamic\Model\AnticipoP;
  */
 class EditFacturaProveedor
 {
-	protected function createViews(): Closure
-	{
-		return function() {
-			$user = Session::get('user');
-			if (!false == $user->can('ListAnticipoP')) {
-				//el usuario tiene acceso
-				$this->createViewsListAnticipoP();
-			}
-		};
-	}
-	
-	protected function createViewsListAnticipoP($viewName = 'ListAnticipoP')
-	{
-		return function() {
-			$viewName = 'ListAnticipoP';
-			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
-				->addOrderBy(['fecha'], 'date', 2)
-				->addOrderBy(['fase'], 'phase')
-				->addOrderBy(['importe'], 'amount');
-		};
-	}
-
-    public function loadData(): Closure
-	{
-        return function($viewName, $view) {
-            if ($viewName === 'ListAnticipoP') {
-				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idfactura');
-				$where = [new DataBaseWhere('idfactura', $codigo)];
-                $view->loadData('', $where);
-
-				// Ocultamos botones de acción para que solo permita visualizar los anticipos, ya que están relacionados con los recibos de la factura.
-				$this->setSettings($viewName, 'btnDelete', false);
-				$this->setSettings($viewName, 'btnNew', false);
-				$this->setSettings($viewName, 'checkBoxes', false);
-
-				// Localizamos anticipos sin vincular
-				$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
-				$where = [
-					new DataBaseWhere('codproveedor', $codproveedor, '='),
-					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
-				];
-				foreach(AnticipoP::all($where) as $anticipoProv) {
-					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
-						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
-					}
-				}
-			}
-        };
-    }
+	use AnticiposEditExtensionDocs;
 }

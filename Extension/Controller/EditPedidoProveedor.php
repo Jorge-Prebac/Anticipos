@@ -19,11 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
-use Closure;
-use FacturaScripts\Core\Session;
-use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Dinamic\Model\AnticipoP;
+use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposEditExtensionDocs;
 
 /**
  * Description of EditPedidoProveedor
@@ -34,102 +30,5 @@ use FacturaScripts\Dinamic\Model\AnticipoP;
 
 class EditPedidoProveedor
 {
-	protected function createViews(): Closure
-	{
-		return function() {
-			$user = Session::get('user');
-			if (!false == $user->can('ListAnticipoP')) {
-				//el usuario tiene acceso
-				$this->createViewsListAnticipoP();
-			}
-		};
-	}
-	
-	protected function createViewsListAnticipoP($viewName = 'ListAnticipoP')
-	{
-		return function() {
-			$viewName = 'ListAnticipoP';
-			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
-				->addOrderBy(['fecha'], 'date', 2)
-				->addOrderBy(['fase'], 'phase')
-				->addOrderBy(['importe'], 'amount');
-		};
-	}
-
-    public function loadData(): Closure
-	{
-        return function($viewName, $view) {
-            if ($viewName === 'ListAnticipoP') {
-				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idpedido');
-				$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
-                $where = [
-					new DataBaseWhere('idpedido', $codigo),
-					new DataBaseWhere('codproveedor', $codproveedor, '=', 'AND'),
-				];
-                $view->loadData('', $where);
-
-				if (empty ($this->views[$viewName]->model->idempresa)) {
-					$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-					$where = [
-						new DataBaseWhere('idempresa', null),
-						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
-					];
-					$view->loadData('', $where);
-				}
-
-				// si está instalado el plugin Proyectos añadimos el idproyecto del documento
-				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-					if (empty ($this->views[$viewName]->model->idproyecto)) {
-						$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-						$where = [
-							new DataBaseWhere('idproyecto', null),
-							new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
-							new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
-						];
-						$view->loadData('', $where);
-					}
-				}
-
-				if (!$this->getViewModelValue($this->getMainViewName(), 'editable')) {
-					$this->setSettings($viewName, 'btnDelete', false);
-					$this->setSettings($viewName, 'btnNew', false);
-					$this->setSettings($viewName, 'checkBoxes', false);
-				}
-
-				// Localizamos anticipos sin vincular
-				$where = [
-					new DataBaseWhere('codproveedor', $codproveedor, '='),
-					new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
-				];
-				foreach(AnticipoP::all($where) as $anticipoProv) {
-					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
-						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
-					}
-				}
-
-				// Total Pendiente por Liquidar del Documento
-				$where = [
-					new DataBaseWhere('idpedido', $codigo),
-				];
-				$totalAdvances = 0.00;
-				$totalDoc = 0.00;
-				$totalPending = 0.00;
-				$totalDoc = $this->getViewModelValue($this->getMainViewName(), 'total');
-				foreach(AnticipoP::all($where) as $anticipoProv) {
-					$totalAdvances = $totalAdvances +$anticipoProv->importe;
-				}
-				$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances, 2);
-				if ($totalAdvances === 0.00) {
-					Tools::Log()->info('without-advances');
-				} elseif ($totalAdvances != 0 & $totalPending > 0) {
-					Tools::Log()->info('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
-				} elseif ($totalAdvances != 0 & $totalPending < 0) {
-					Tools::Log()->warning('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
-				} else {
-					Tools::Log()->notice('paid');
-				}
-			}
-		};
-    }
+	use AnticiposEditExtensionDocs;
 }
