@@ -40,9 +40,9 @@ trait AnticiposEditExtensionDocs
 		return function() {
 			$model = $this->getModel();
 			if ($model->subjectColumn() === 'codproveedor') {
-			  $this->createViewsListAnticipo($viewName =  'ListAnticipoP', $mdlAnticipo = 'AnticipoP');
+				$this->createViewsListAnticipo('ListAnticipoP', 'AnticipoP');
 			} else {
-				$this->createViewsListAnticipo($viewName =  'ListAnticipo', $mdlAnticipo = 'Anticipo');
+				$this->createViewsListAnticipo('ListAnticipo', 'Anticipo');
 			}
 		};
 	}
