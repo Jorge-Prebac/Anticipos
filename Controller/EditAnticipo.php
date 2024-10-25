@@ -93,6 +93,11 @@ class EditAnticipo extends EditController
                     $model->user = $this->user->nick;
                 }
 
+		if($model->importe == null){
+                    $albaran = new AlbaranCliente();
+                    $model->importe = $albaran->get($model->idalbaran)->totaleuros;
+                }
+
                 // valores para el select de la fase
                 $customValues = [
 					['value' => 'Albaran', 'title' => 'delivery-note'],
