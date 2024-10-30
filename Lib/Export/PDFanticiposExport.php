@@ -65,7 +65,7 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 				continue;
 			}elseif (false !== strpos($colName, 'total')) {
 				continue;
-			}elseif (false !== strpos($colName, 'user')) {
+			}elseif (false !== strpos($colName, 'nick')) {
 				continue;
 			}
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];

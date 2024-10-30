@@ -75,7 +75,7 @@
         <type>character varying(200)</type>
     </column>
     <column>
-        <name>user</name>
+        <name>nick</name>
         <type>character varying(50)</type>
     </column>
     <constraint>

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,6 +22,7 @@ namespace FacturaScripts\Plugins\Anticipos;
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\InitClass;
+use FacturaScripts\Core\Base\DataBase;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Model\EmailNotification;
 
@@ -73,6 +74,10 @@ class Init extends InitClass
 
     public function update()
     {
+		$Tables = array("anticiposp", "anticipos");
+		foreach ($Tables as $Table) {
+			$this->updateUserToNick($Table);
+		}
         $this->setupSettings();
         $this->updateEmailNotifications();
     }
@@ -103,9 +108,41 @@ class Init extends InitClass
 
 			$notificationModel->body = Tools::lang()->trans($key . '-body');
 			$notificationModel->subject = Tools::lang()->trans($key);
-			
+
             $notificationModel->enabled = true;
             $notificationModel->save();
         }
     }
+
+	protected function updateUserToNick($Table)
+	{
+		$dataBase = new DataBase();
+
+		// Comprobamos si se ha encontrado la columna "user" en la tabla
+		$sql = "SELECT column_name 
+				FROM information_schema.columns 
+				WHERE table_name = '" . $Table . "' 
+				AND column_name = 'user';";
+
+		$resultado = $dataBase->select($sql);
+
+		/*	Cuando NO está vacío el Array $resultado, realiza el proceso de
+		cambiar el nombre de la columna USER por NICK */
+		if (!empty($resultado) && isset($resultado[0]['column_name'])) {
+			Tools::Log()->info('La columna USER existe en la tabla ' . $Table . '. Procediendo a renombrar.');
+
+			// Cambiamos el nombre de la columna USER por el de NICK
+			$sql = FS_DB_TYPE == 'postgresql'
+            ? "ALTER TABLE \" . $Table .  \" RENAME COLUMN \"user\" TO \"nick\";"
+            : "ALTER TABLE `" . $Table . "` CHANGE `user` `nick` VARCHAR(50);";
+
+			if (false === ($dataBase->exec($sql))) {
+				Tools::Log()->warning('Error al cambiar la columna USER por NICK en la tabla ' . $Table);
+			} else {
+				Tools::Log()->info('Se ha cambiado el nombre de la columna USER por el de NICK con éxito en la tabla ' . $Table);
+			}
+		} else {
+			Tools::Log()->info('No existe la columna USER en la tabla ' . $Table .  '!!!, contacte con el desarrollador del plugin');
+		}
+	}
 }
