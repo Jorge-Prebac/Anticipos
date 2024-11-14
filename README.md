@@ -1,5 +1,5 @@
 # Anticipos
-Plugin que permite crear cobros a cuenta de proyectos, clientes y sus documentos.
+Plugin que permite crear cobros a cuenta de Proyectos, Proveedores, Clientes y sus documentos de Compra y Venta.
 - https://facturascripts.com/plugins/anticipos
 
 ## Issues / Feedback
