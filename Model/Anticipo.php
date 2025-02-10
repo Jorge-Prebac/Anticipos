@@ -21,7 +21,6 @@ namespace FacturaScripts\Plugins\Anticipos\Model;
 
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
@@ -133,7 +132,7 @@ class Anticipo extends ModelOnChangeClass
     public function clear()
     {
         parent::clear();
-        $this->coddivisa = AppSettings::get('default', 'coddivisa');
+        $this->coddivisa = Tools::settings('default', 'coddivisa');
 		$this->fecha = Tools::date();
         $this->importe = 0;
     }

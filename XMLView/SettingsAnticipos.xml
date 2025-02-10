@@ -20,7 +20,7 @@
 -->
 <view>
     <columns>
-        <group name="anticipos" title="customer-advance-payments" icon="fas fa-donate" numcolumns="12" valign="center">
+        <group name="anticipos" title="advance-payments" icon="fas fa-donate" numcolumns="12" valign="center">
             <column name="name" display="none" order="0">
                 <widget type="text" fieldname="name" readonly="true"/>
             </column>

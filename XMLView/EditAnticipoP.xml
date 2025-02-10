@@ -54,7 +54,7 @@
         <group name="supplier" numcolumns="2">
             <column name="supplier" order="100" numcolumns="12">
                 <widget type="autocomplete" fieldname="codproveedor" onclick="EditProveedor">
-                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="nombre"/>
+                    <values source="proveedores" fieldcode="codproveedor" fieldtitle="razonsocial"/>
                 </widget>
             </column>
 			<column name="max-risk" display="right" order="110" numcolumns="6">

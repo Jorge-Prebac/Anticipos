@@ -54,7 +54,7 @@
         <group name="customer" numcolumns="2">
             <column name="customer" order="100" numcolumns="12">
                 <widget type="autocomplete" fieldname="codcliente" onclick="EditCliente">
-                    <values source="clientes" fieldcode="codcliente" fieldtitle="nombre"/>
+                    <values source="clientes" fieldcode="codcliente" fieldtitle="razonsocial"/>
                 </widget>
             </column>
 			<column name="max-risk" display="right" order="110" numcolumns="6">

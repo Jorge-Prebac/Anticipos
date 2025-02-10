@@ -20,9 +20,9 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Lib;
 
 use Closure;
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\ReceiptGenerator;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
@@ -109,7 +109,7 @@ class BusinessDocumentGenerator
 						$recibo->pagado = 1;
 						$recibo->vencimiento = $newDoc->fecha;
 
-						if (true === AppSettings::get('anticipos', 'pdAnticipos')) {
+						if (true === (bool)Tools::settings('anticipos', 'pdAnticipos', true)) {
 							$recibo->fechapago = $anticipoFac->fecha;
 							$recibo->vencimiento = $anticipoFac->fecha;
 						}

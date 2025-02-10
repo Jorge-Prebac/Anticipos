@@ -52,6 +52,7 @@ class EditAnticipo extends EditController
         $data['menu'] = 'sales';
         $data['title'] = 'advance-payment-c';
         $data['icon'] = 'fas fa-donate';
+		$data['showonmenu'] = false;
         return $data;
     }
 
