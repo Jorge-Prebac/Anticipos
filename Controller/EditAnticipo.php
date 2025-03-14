@@ -23,6 +23,7 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Model\AlbaranCliente;
 
 /**
  * Description of EditAnticipo
@@ -93,12 +94,12 @@ class EditAnticipo extends EditController
                 if (false === $model->exists()) {
 					$model->nick = $this->user->nick;
                 }
-
-		if($model->importe == null){
-                    $albaran = new AlbaranCliente();
-                    $model->importe = $albaran->get($model->idalbaran)->totaleuros;
+		// asigna total de albaran al importe de anticipo
+                if (!empty($model->idalbaran)) {
+                        $delivery = new AlbaranCliente();
+                        $delivery->loadFromCode($model->idalbaran); 
+                        $model->importe = $delivery->total;
                 }
-
                 // valores para el select de la fase
                 $customValues = [
 					['value' => 'Albaran', 'title' => 'delivery-note'],
