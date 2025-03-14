@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -58,7 +58,7 @@ class ListAnticipoP extends ListController
     protected function createViewsAnticiposP(string $viewName = 'ListAnticipoP')
     {
         $this->addView($viewName, 'AnticipoP', 'advance-payments-p', 'fas fa-donate');
-        $this->addSearchFields($viewName, ['fase', 'fecha', 'id', 'nota', 'user']);
+        $this->addSearchFields($viewName, ['fase', 'fecha', 'id', 'nota', 'nick']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
         $this->addOrderBy($viewName, ['fase'], 'phase');
         $this->addOrderBy($viewName, ['importe'], 'amount');
@@ -80,7 +80,7 @@ class ListAnticipoP extends ListController
 		$this->addFilterAutocomplete($viewName, 'codproveedor', 'supplier', 'codproveedor', 'Proveedor');
         
 		$users = $this->codeModel->all('users', 'nick', 'nick');
-        $this->addFilterSelect($viewName, 'user', 'user', 'user', $users);
+        $this->addFilterSelect($viewName, 'nick', 'user', 'nick', $users);
 		
 		$this->addFilterSelectWhere($viewName, 'advances-status-list', [
             ['label' => Tools::lang()->trans('advances-status-list'), 'where' => []],

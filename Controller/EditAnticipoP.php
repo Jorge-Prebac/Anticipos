@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -52,6 +52,7 @@ class EditAnticipoP extends EditController
         $data['menu'] = 'purchases';
         $data['title'] = 'advance-payment-p';
         $data['icon'] = 'fas fa-donate';
+		$data['showonmenu'] = false;
         return $data;
     }
 
@@ -90,7 +91,7 @@ class EditAnticipoP extends EditController
 
                 // si es un anticipo nuevo, se le asigna el usuario que lo creó
                 if (false === $model->exists()) {
-                    $model->user = $this->user->nick;
+					$model->nick = $this->user->nick;
                 }
 
                 // valores para el select de la fase
@@ -166,6 +167,7 @@ class EditAnticipoP extends EditController
 					new DataBaseWhere('modelcode', $this->getModel()->primaryColumnValue())
 				];
 				$view->loadData('', $where);
+				break;
 
             default:
                 parent::loadData($viewName, $view);

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2022 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,8 @@ namespace FacturaScripts\Plugins\Anticipos;
 
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\InitClass;
+use FacturaScripts\Core\Base\DataBase;
+use FacturaScripts\Core\Template\InitClass;
 use FacturaScripts\Dinamic\Lib\ExportManager;
 use FacturaScripts\Dinamic\Model\EmailNotification;
 
@@ -30,10 +31,10 @@ use FacturaScripts\Dinamic\Model\EmailNotification;
  *
  * @author Jorge-Prebac <info@prebac.com>
  */
-class Init extends InitClass
+final class Init extends InitClass
 {
 
-    public function init()
+    public function init(): void
     {
         $this->loadExtension(new Extension\Controller\EditCliente());
         $this->loadExtension(new Extension\Controller\EditPresupuestoCliente());
@@ -71,16 +72,20 @@ class Init extends InitClass
 		ExportManager::addOptionModel('MAILanticiposExport', 'MAIL', 'AnticipoP');
     }
 
-    public function update()
+    public function uninstall(): void
+    {
+    }
+
+    public function update(): void
     {
         $this->setupSettings();
         $this->updateEmailNotifications();
     }
 
-	private function setupSettings()
+	private function setupSettings(): void
 	{
 		if (empty(Tools::settings('anticipos', 'pdAnticipos'))) {
-			Tools::settingsSet('anticipos', 'pdAnticipos', false);
+			Tools::settingsSet('anticipos', 'pdAnticipos', true);
 		}
 		if (empty(Tools::settings('anticipos', 'level'))) {
 			Tools::settingsSet('anticipos', 'level', 20);
@@ -88,7 +93,7 @@ class Init extends InitClass
 		Tools::settingsSave();
 	}
 
-    private function updateEmailNotifications() : void
+    private function updateEmailNotifications(): void
     {
         $notificationModel = new EmailNotification();
         $keys = [
@@ -103,7 +108,7 @@ class Init extends InitClass
 
 			$notificationModel->body = Tools::lang()->trans($key . '-body');
 			$notificationModel->subject = Tools::lang()->trans($key);
-			
+
             $notificationModel->enabled = true;
             $notificationModel->save();
         }

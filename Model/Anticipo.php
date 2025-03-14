@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,7 +21,6 @@ namespace FacturaScripts\Plugins\Anticipos\Model;
 
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base;
 use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
@@ -88,7 +87,7 @@ class Anticipo extends ModelOnChangeClass
     public $nota;
 
     /** @return string */
-    public $user;
+	public $nick;
 
     public function __get(string $name)
     {
@@ -133,7 +132,7 @@ class Anticipo extends ModelOnChangeClass
     public function clear()
     {
         parent::clear();
-        $this->coddivisa = AppSettings::get('default', 'coddivisa');
+        $this->coddivisa = Tools::settings('default', 'coddivisa');
 		$this->fecha = Tools::date();
         $this->importe = 0;
     }

@@ -40,42 +40,36 @@ class MAILanticiposExport extends MailAnticipos
 
         $tableDataAux = [];
 
+		$DatosTrans=array(
+			"customer"=>"codcliente",
+			"method-payment"=>"codpago",
+			"supplier"=>"codproveedor",
+			"advance-linked-to"=>"fase",
+			"date"=>"fecha",
+			"delivery-note"=>"idalbaran",
+			"invoice"=>"idfactura",
+			"order"=>"idpedido",
+			"estimation"=>"idpresupuesto",
+			"project"=>"idproyecto",
+			"amount"=>"importe",
+			"note"=>"nota"
+		);
+
 		foreach ($tableCols as $key => $colName) {
 			$value = $tableOptions['cols'][$key]['widget']->plainText($model);
 
-			if (false !== strpos($colName, 'codcliente')) {
-				$colName = Tools::lang()->trans('customer');
-			}elseif (false !== strpos($colName, 'codpago')) {
-				$colName = Tools::lang()->trans('method-payment');
-			}elseif (false !== strpos($colName, 'codproveedor')) {
-				$colName = Tools::lang()->trans('supplier');
-			}elseif (false !== strpos($colName, 'fase')) {
-				$colName = Tools::lang()->trans('advance-linked-to');
-			}elseif (false !== strpos($colName, 'fecha')) {
-				$colName = Tools::lang()->trans('date');
-			}elseif (false !== strpos($colName, 'idalbaran')) {
-				$colName = Tools::lang()->trans('delivery-note');
-			}elseif (false !== strpos($colName, 'idempresa')) {
+			if (false !== strpos($colName, 'idempresa')) {
 				continue;
-			}elseif (false !== strpos($colName, 'idfactura')) {
-				$colName = Tools::lang()->trans('invoice');
-			}elseif (false !== strpos($colName, 'idpedido')) {
-				$colName = Tools::lang()->trans('order');
-			}elseif (false !== strpos($colName, 'idpresupuesto')) {
-				$colName = Tools::lang()->trans('estimation');
-			}elseif (false !== strpos($colName, 'idproyecto')) {
-				$colName = Tools::lang()->trans('project');
-			}elseif (false !== strpos($colName, 'importe')) {
-				$colName = Tools::lang()->trans('amount');
-			}elseif (false !== strpos($colName, 'nota')) {
-				$colName = Tools::lang()->trans('note');
 			}elseif (false !== strpos($colName,'riesgomax')) {
 				continue;
 			}elseif (false !== strpos($colName, 'total')) {
 				continue;
-			}elseif (false !== strpos($colName, 'user')) {
+			}elseif (false !== strpos($colName, 'nick')) {
 				continue;
 			}
+			
+			$colName = Tools::lang()->trans(array_search($colName,$DatosTrans));
+
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];
 		}
 

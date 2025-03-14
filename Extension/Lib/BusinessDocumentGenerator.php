@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2018-2023 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -20,9 +20,9 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Lib;
 
 use Closure;
-use FacturaScripts\Core\App\AppSettings;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Dinamic\Lib\ReceiptGenerator;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
@@ -101,7 +101,7 @@ class BusinessDocumentGenerator
 						$recibo->idempresa = $anticipoFac->idempresa;
 						$recibo->idfactura = $anticipoFac->idfactura;
 						$recibo->importe = $anticipoFac->importe;
-						$recibo->nick = $anticipoFac->user;
+						$recibo->nick = $anticipoFac->nick ? $anticipoFac->nick : $newDoc->nick;
 						$recibo->numero = $numero++;
 						$recibo->fecha = $anticipoFac->fecha;
 						$recibo->codpago = $anticipoFac->codpago;
@@ -109,7 +109,7 @@ class BusinessDocumentGenerator
 						$recibo->pagado = 1;
 						$recibo->vencimiento = $newDoc->fecha;
 
-						if (true === AppSettings::get('anticipos', 'pdAnticipos')) {
+						if (true === (bool)Tools::settings('anticipos', 'pdAnticipos', true)) {
 							$recibo->fechapago = $anticipoFac->fecha;
 							$recibo->vencimiento = $anticipoFac->fecha;
 						}
