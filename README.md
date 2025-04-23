@@ -4,7 +4,7 @@ Plugin que permite crear cobros a cuenta de Proyectos, Proveedores, Clientes y s
 
 ## Issues / Feedback
 - https://facturascripts.com/contacto
-asd sadasda
+
 ## Links
 - [Curso de FacturaScripts 2021](https://youtube.com/playlist?list=PLNxcJ5CWZ8V6nfeVu6vieKI_d8a_ObLfY)
 - [Programa de contabilidad gratis para autónomos](https://facturascripts.com/software-contabilidad)
