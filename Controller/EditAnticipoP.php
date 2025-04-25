@@ -23,6 +23,8 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Model\AlbaranProveedor;
+
 
 /**
  * Description of EditAnticipoP
@@ -92,6 +94,27 @@ class EditAnticipoP extends EditController
                 // si es un anticipo nuevo, se le asigna el usuario que lo creó
                 if (false === $model->exists()) {
 					$model->nick = $this->user->nick;
+
+                    // si viene de un albarán, asignar importe
+                    if (!empty($model->idalbaran)) {
+                        $delivery = new AlbaranProveedor();
+                        $delivery->loadFromCode($model->idalbaran);
+                        $model->importe = $delivery->total;
+                    }
+                    // se aplica la fase correspondiente al origen del anticipo
+                    if (false === empty($model->idalbaran)) {
+                        $model->fase = "Albaran";
+                    } elseif (false === empty($model->idpedido)) {
+                        $model->fase = "Pedido";
+                    } elseif (false === empty($model->idpresupuesto)) {
+                        $model->fase = "Presupuesto";
+                    } elseif (false === empty($model->idproyecto)) {
+                        $model->fase = "Proyecto";
+                    } elseif (false === empty($model->codproveedor)) {
+                        $model->fase = "Proveedor";
+                    } elseif (false === empty($model->user)) {
+                        $model->fase = "Usuario";
+                    }
                 }
 
                 // valores para el select de la fase
@@ -142,21 +165,6 @@ class EditAnticipoP extends EditController
 					Tools::Log()->warning('not-allowed-modify');
 					$this->views[$viewName]->setReadOnly(true);
 				}
-
-				// se aplica la fase correspondiente al origen del anticipo
-				if (false === empty($model->idalbaran) && false === $model->exists()) {
-                    $model->fase = "Albaran";
-				} elseif (false === empty($model->idpedido) && false === $model->exists()) {
-                    $model->fase = "Pedido";
-                } elseif (false === empty($model->idpresupuesto) && false === $model->exists()) {
-                    $model->fase = "Presupuesto";
-				} elseif (false === empty($model->idproyecto) && false === $model->exists()) {
-                    $model->fase = "Proyecto";
-				} elseif (false === empty($model->codproveedor) && false === $model->exists()) {
-                    $model->fase = "Proveedor";
-                } elseif (false === empty($model->user) && false === $model->exists()) {
-                    $model->fase = "Usuario";
-                }
 
                 break;
 
