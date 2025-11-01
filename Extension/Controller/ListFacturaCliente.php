@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -23,7 +23,7 @@ use FacturaScripts\Plugins\Anticipos\Extension\Traits\AnticiposListExtensionDocs
 /**
  * Description of ListFacturaCliente
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
  
 class ListFacturaCliente

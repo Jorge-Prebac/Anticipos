@@ -3,8 +3,9 @@
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Lib\Export\PDFExport as PdfAnticipos;
 
-class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
+class PDFanticiposExport extends PdfAnticipos
 {
 	public function addListModelPage($model, $where, $order, $offset, $columns, $title = ''): bool
     {
@@ -60,7 +61,7 @@ class PDFanticiposExport extends \FacturaScripts\Core\Lib\Export\PDFExport
 				continue;
 			}
 
-			$colName = Tools::lang()->trans(array_search($colName,$DatosTrans));
+			$colName = Tools::trans(array_search($colName,$DatosTrans));
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];
 		}
 

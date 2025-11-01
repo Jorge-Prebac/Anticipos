@@ -2,10 +2,10 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Lib\Export;
 
+use FacturaScripts\Core\Response;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\Email\NewMail;
 use FacturaScripts\Core\Lib\Export\PDFExport as MailAnticipos;
-use Symfony\Component\HttpFoundation\Response;
 
 class MAILanticiposExport extends MailAnticipos
 {
@@ -19,7 +19,7 @@ class MAILanticiposExport extends MailAnticipos
     public function addModelPage($model, $columns, $title = ''): bool
     {
 		$this->sendParams['modelClassName'] = $model->modelClassName();
-        $this->sendParams['modelCode'] = $model->primaryColumnValue();
+        $this->sendParams['modelCode'] = $model->id();
 		
         $this->newPage();
         $idempresa = $model->idempresa ?? null;
@@ -68,7 +68,7 @@ class MAILanticiposExport extends MailAnticipos
 				continue;
 			}
 			
-			$colName = Tools::lang()->trans(array_search($colName,$DatosTrans));
+			$colName = Tools::trans(array_search($colName,$DatosTrans));
 
 			$tableDataAux[] = ['key' => $colName, 'value' => $this->fixValue($value)];
 		}

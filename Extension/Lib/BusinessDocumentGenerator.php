@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -35,7 +35,7 @@ use FacturaScripts\Dinamic\Model\ReciboProveedor;
  * @author Carlos García Gómez		<carlos@facturascripts.com>
  * @author Rafael San José Tovar		<rafael.sanjose@x-netdigital.com>
  * @author Raúl Jiménez						<raljopa@gmail.com>
- * @author Jorge-Prebac						<info@prebac.com>
+ * @author Jorge-Prebac						<info@smartcuines.com>
  * @author Juan José Prieto Dzul		<juanjoseprieto88@gmail.com>
  */
 
@@ -60,7 +60,7 @@ class BusinessDocumentGenerator
 			}
 			foreach ($newDoc->parentDocuments() as $parent) {
 				$where = [
-					new DataBaseWhere($parent->primaryColumn(), $parent->primaryColumnValue()),
+					new DataBaseWhere($parent->primaryColumn(), $parent->id()),
 					new DataBaseWhere($newDoc->primaryColumn(), NULL)
 				];
 
@@ -69,7 +69,7 @@ class BusinessDocumentGenerator
 				foreach ($anticipos->all($where, $order) as $anticipo) {
 					// Comprobamos que el anticipo no esté vinculado con una factura, ni con un documento del mismo tipo que el que estamos generando
 					if ($anticipo->idfactura === null && $anticipo->{$newDoc->primaryColumn()} === null) {
-						$anticipo->{$newDoc->primaryColumn()} = $newDoc->primaryColumnValue();
+						$anticipo->{$newDoc->primaryColumn()} = $newDoc->id();
 						if (false === $anticipo->save()) {
 							return false;
 						}
@@ -83,7 +83,7 @@ class BusinessDocumentGenerator
 					}
 
 					$invoiceWhere = [
-						new DataBaseWhere($newDoc->primaryColumn(), $newDoc->primaryColumnValue())
+						new DataBaseWhere($newDoc->primaryColumn(), $newDoc->id())
 					];
 
 					//Generamos los nuevos recibos en base a los anticipos.
@@ -123,7 +123,7 @@ class BusinessDocumentGenerator
 			}
 
 			$where = [
-				new DataBaseWhere($newDoc->primaryColumn(), $newDoc->primaryColumnValue())
+				new DataBaseWhere($newDoc->primaryColumn(), $newDoc->id())
 			];
 			$newDoc->advance = count($anticipos->all($where, [], 0, 0));
 

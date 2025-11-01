@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,7 +27,7 @@ use FacturaScripts\Core\DataSrc\Empresas;
 /**
  * Description of ListAnticipo
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
 class ListAnticipo extends ListController
 {
@@ -42,7 +42,7 @@ class ListAnticipo extends ListController
         $data = parent::getPageData();
         $data['menu'] = 'sales';
         $data['title'] = 'advance-payments-c';
-        $data['icon'] = 'fas fa-donate';
+        $data['icon'] = 'fa-solid fa-donate';
         return $data;
     }
 
@@ -57,7 +57,7 @@ class ListAnticipo extends ListController
      */
     protected function createViewsAnticipos(string $viewName = 'ListAnticipo')
     {
-        $this->addView($viewName, 'Anticipo', 'advance-payments-c', 'fas fa-donate');
+        $this->addView($viewName, 'Anticipo', 'advance-payments-c', 'fa-solid fa-donate');
         $this->addSearchFields($viewName, ['fase', 'fecha', 'id', 'nota', 'nick']);
         $this->addOrderBy($viewName, ['fecha'], 'date', 2);
         $this->addOrderBy($viewName, ['fase'], 'phase');
@@ -83,10 +83,10 @@ class ListAnticipo extends ListController
         $this->addFilterSelect($viewName, 'nick', 'user', 'nick', $users);
 		
 		$this->addFilterSelectWhere($viewName, 'advances-status-list', [
-            ['label' => Tools::lang()->trans('advances-status-list'), 'where' => []],
-            ['label' => Tools::lang()->trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
-            ['label' => Tools::lang()->trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
-			['label' => Tools::lang()->trans('advance-not-linked-list'), 'where' => [
+            ['label' => Tools::trans('advances-status-list'), 'where' => []],
+            ['label' => Tools::trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
+            ['label' => Tools::trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
+			['label' => Tools::trans('advance-not-linked-list'), 'where' => [
 					new DataBaseWhere('idpresupuesto', null),
 					new DataBaseWhere('idpedido', null),
 					new DataBaseWhere('idalbaran', null),
@@ -94,7 +94,7 @@ class ListAnticipo extends ListController
 				]],
         ]);
 
-		// si no está instalado el plugin Proyectos ocultamos sus columnas, filtros y ordenación
+		// si no está activado el plugin Proyectos ocultamos sus columnas, filtros y ordenación
 		if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 			$this->views[$viewName]->disableColumn('project');
 		} else {

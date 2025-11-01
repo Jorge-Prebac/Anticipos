@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
 -->
 <view>
     <columns>
@@ -71,7 +71,7 @@
 	<rows>
         <row type="status">
             <option color="success" title="generated-invoice" fieldname="idfactura">notnull:</option>
-			<option color="dark" title="no-invoice" fieldname="idfactura">null:</option>
+			<option color="secondary" title="no-invoice" fieldname="idfactura">null:</option>
         </row>
     </rows>
 </view>

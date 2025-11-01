@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -28,7 +28,7 @@ use FacturaScripts\Dinamic\Model\AnticipoP;
 /**
  * Description of EditProveedor
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
 class EditProveedor
 {
@@ -47,10 +47,16 @@ class EditProveedor
 	{
 		return function() {
 			$viewName = 'ListAnticipoP';
-			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
+			$this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fa-solid fa-donate')
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
+
+			// si NO está activado el plugin Proyectos, desactivamos sus columnas
+			if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+				$this->views[$viewName]->disableColumn('project');
+				$this->views[$viewName]->disableColumn('project-total-amount');
+			}
 		};
 	}
 
@@ -69,8 +75,8 @@ class EditProveedor
 				];
 				foreach($anticiposProv->all($where) as $anticipoProv) {
 					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
-						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
+						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
 					}
 				}
             }

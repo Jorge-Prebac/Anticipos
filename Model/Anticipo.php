@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -22,9 +22,8 @@ namespace FacturaScripts\Plugins\Anticipos\Model;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
-use FacturaScripts\Core\Model\Base;
-use FacturaScripts\Core\Model\Base\ModelOnChangeClass;
-use FacturaScripts\Core\Model\Base\ModelTrait;
+use FacturaScripts\Core\Template\ModelClass;
+use FacturaScripts\Core\Template\ModelTrait;
 use FacturaScripts\Dinamic\Model\AlbaranCliente;
 use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
@@ -34,11 +33,11 @@ use FacturaScripts\Dinamic\Model\PresupuestoCliente;
 /**
  * Description of Anticipo
  *
- * @autor Jorge-Prebac                         <info@prebac.com>
+ * @autor Jorge-Prebac                         <info@smartcuines.com>
  * @autor Daniel Fernández Giménez <hola@danielfg.es>
  * @autor Juan José Prieto Dzul           <juanjoseprieto88@gmail.com>
  */
-class Anticipo extends ModelOnChangeClass
+class Anticipo extends ModelClass
 {
     use ModelTrait;
 
@@ -50,14 +49,17 @@ class Anticipo extends ModelOnChangeClass
     /** @return string */
     public $coddivisa;
 
-    /** @var integer */
-    public $id;
+    /** @return string */
+	public $codpago;
 
     /** @return string */
     public $fase;
 
     /** @return string */
     public $fecha;
+
+    /** @var integer */
+    public $id;
 
     /** @var integer */
     public $idalbaran;
@@ -84,52 +86,67 @@ class Anticipo extends ModelOnChangeClass
     public $importe;
 
     /** @return string */
-    public $nota;
-
-    /** @return string */
 	public $nick;
 
-    public function __get(string $name)
+    /** @return string */
+    public $nota;
+
+    public function __get(string $key)
     {
-        switch ($name) {
-            case 'riesgomax':
-                return $this->getSubject()->riesgomax;
-
-            case 'totalrisk':
-                return $this->getSubject()->riesgoalcanzado;
-
+		if (isset($this->attributes[$key])) {
+			return $this->attributes[$key];
+        }
+        switch ($key) {
             case 'totaldelivery':
                 $delivery = new AlbaranCliente();
-                $delivery->loadFromCode($this->idalbaran);
+                $delivery->load($this->idalbaran);
                 return $delivery->total;
-
             case 'totalestimation':
                 $estimation = new PresupuestoCliente();
-                $estimation->loadFromCode($this->idpresupuesto);
+                $estimation->load($this->idpresupuesto);
                 return $estimation->total;
-
             case 'totalinvoice':
                 $invoice = new FacturaCliente();
-                $invoice->loadFromCode($this->idfactura);
+                $invoice->load($this->idfactura);
                 return $invoice->total;
-
             case 'totalorder':
                 $order = new PedidoCliente();
-                $order->loadFromCode($this->idpedido);
+                $order->load($this->idpedido);
                 return $order->total;
-
             case 'totalproject':
                 if (class_exists($this->projectClass)) {
                     $project = new $this->projectClass();
-                    $project->loadFromCode($this->idproyecto);
+                    $project->load($this->idproyecto);
                     return $project->totalventas;
                 }
                 return 0;
+			case 'riesgomax':
+				return $this->getSubject()->riesgomax;
+			case 'totalrisk':
+				return $this->getSubject()->riesgoalcanzado;
+		}
+		return null;
+	}
+
+    public function __isset(string $key): bool
+    {
+        if (isset($this->attributes[$key])) {
+            return true;
         }
-        return null;
+		switch ($key) {
+			case 'totaldelivery':
+			case 'totalestimation':
+			case 'totalinvoice':
+			case 'totalorder':
+			case 'totalproject':
+			case 'riesgomax':
+			case 'totalrisk':
+				return true;
+		}
+        return false;
     }
 
-    public function clear()
+    public function clear(): void
     {
         parent::clear();
         $this->coddivisa = Tools::settings('default', 'coddivisa');
@@ -158,7 +175,7 @@ class Anticipo extends ModelOnChangeClass
 		parent::setPreviousData(array_merge($docs, $fields));
     }
 
-	protected function onInsert()
+	protected function onInsert(): void
     {
 		$onDeleted = false;
 
@@ -171,7 +188,7 @@ class Anticipo extends ModelOnChangeClass
         parent::onInsert();
     }
 
-    protected function onUpdate()
+    protected function onUpdate(): void
     {
 		$onDeleted = false;
 
@@ -184,7 +201,7 @@ class Anticipo extends ModelOnChangeClass
         parent::onUpdate();
     }
 
-	protected function onDelete()
+	protected function onDelete(): void
     {
 		$onDeleted = true;
 
@@ -201,7 +218,7 @@ class Anticipo extends ModelOnChangeClass
 	protected function AdvanceData($onDeleted): void
     {
 		$idDoc = 'idpresupuesto';
-		$idValuePrev = $this->previousData['idpresupuesto'];
+		$idValuePrev = $this->getOriginal('idpresupuesto');
 		$idValueNow = $this->idpresupuesto;
 		if ($onDeleted || $idValuePrev != $idValueNow) {	
 			$docModel = new PresupuestoCliente;
@@ -209,7 +226,7 @@ class Anticipo extends ModelOnChangeClass
 		}
 
 		$idDoc = 'idpedido';
-		$idValuePrev = $this->previousData['idpedido'];
+		$idValuePrev = $this->getOriginal('idpedido');
 		$idValueNow = $this->idpedido;
 		if ($onDeleted || $idValuePrev != $idValueNow) {
 			$docModel = new PedidoCliente;
@@ -217,7 +234,7 @@ class Anticipo extends ModelOnChangeClass
 		}
 
 		$idDoc = 'idalbaran';
-		$idValuePrev = $this->previousData['idalbaran'];
+		$idValuePrev = $this->getOriginal('idalbaran');
 		$idValueNow = $this->idalbaran;
 		if ($onDeleted || $idValuePrev != $idValueNow) {
 			$docModel = new AlbaranCliente;
@@ -225,7 +242,7 @@ class Anticipo extends ModelOnChangeClass
 		}
 
 		$idDoc = 'idfactura';
-		$idValuePrev = $this->previousData['idfactura'];
+		$idValuePrev = $this->getOriginal('idfactura');
 		$idValueNow = $this->idfactura;
 		if ($onDeleted || $idValuePrev != $idValueNow) {
 			$docModel = new FacturaCliente;
@@ -239,13 +256,13 @@ class Anticipo extends ModelOnChangeClass
 		$anticipoModel = new Anticipo;
 			if (isset($idValuePrev) && !is_null($idValuePrev)) {
 				$totalAdvanceCountPrev = $anticipoModel->count([new DataBaseWhere($idDoc, $idValuePrev, '=')]);
-				$docModel ->loadFromCode($idValuePrev);
+				$docModel ->load($idValuePrev);
 				$docModel->advance = $totalAdvanceCountPrev;
 				$docModel->save();
 			}
 			if (isset($idValueNow) && !is_null($idValueNow)) {
 				$totalAdvanceCountNow = $anticipoModel->count([new DataBaseWhere($idDoc, $idValueNow, '=')]);
-				$docModel->loadFromCode($idValueNow);
+				$docModel->load($idValueNow);
 				$docModel->advance = $totalAdvanceCountNow;
 				$docModel->save();
 			}
@@ -266,7 +283,7 @@ class Anticipo extends ModelOnChangeClass
     public function getSubject(): Cliente
     {
         $cliente = new Cliente();
-        $cliente->loadFromCode($this->codcliente);
+        $cliente->load($this->codcliente);
         return $cliente;
     }
 
@@ -308,7 +325,7 @@ class Anticipo extends ModelOnChangeClass
 
     protected function checkAnticipoRelation($model, string $code, string $title = ''): bool
     {
-        $model->loadFromCode($code);
+        $model->load($code);
 
         // Cuando el anticipo no tiene asignado la Empresa, se le asigna la del documento
         if (empty($this->idempresa)) {
@@ -340,10 +357,10 @@ class Anticipo extends ModelOnChangeClass
 		$this->fecha = Tools::date();
         Tools::log('anticipos')->info($message, [
             '%model%' => $this->modelClassName(),
-            '%key%' => $this->primaryColumnValue(),
+            '%key%' => $this->id(),
             '%desc%' => $this->primaryDescription(),
             'model-class' => $this->modelClassName(),
-            'model-code' => $this->primaryColumnValue(),
+            'model-code' => $this->id(),
             'model-data' => $this->toArray()
         ]);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -27,7 +27,7 @@ use FacturaScripts\Core\Lib\ExtendedController\EditController;
 /**
  * Description of EditAnticipoP
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
 class EditAnticipoP extends EditController
 {
@@ -51,7 +51,7 @@ class EditAnticipoP extends EditController
         $data = parent::getPageData();
         $data['menu'] = 'purchases';
         $data['title'] = 'advance-payment-p';
-        $data['icon'] = 'fas fa-donate';
+        $data['icon'] = 'fa-solid fa-donate';
 		$data['showonmenu'] = false;
         return $data;
     }
@@ -65,7 +65,7 @@ class EditAnticipoP extends EditController
 
     public function createViewLogs(string $viewName = 'ListLogMessage'): void
     {
-        $this->addListView($viewName, 'LogMessage', 'history', 'fas fa-history')
+        $this->addListView($viewName, 'LogMessage', 'history', 'fa-solid fa-history')
 			->addOrderBy(['time', 'id'], 'date', 2)
 			->addSearchFields(['context', 'message']);
 
@@ -103,9 +103,13 @@ class EditAnticipoP extends EditController
 					['value' => 'Usuario', 'title' => 'user'],
                 ];
 				
-				// si está instalado el plugin Proyectos añadimos el valor para el select de la fase
+				// si está activado el plugin Proyectos añadimos el valor para el select de la fase
 				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 					$customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
+				}else{
+					// si NO está activado el plugin Proyectos, desactivamos sus columnas
+                    $this->views[$viewName]->disableColumn('project');
+                    $this->views[$viewName]->disableColumn('project-total-amount');
 				}
 
 				// rellenamos el select de la fase
@@ -113,12 +117,6 @@ class EditAnticipoP extends EditController
                 if ($column && $column->widget->getType() === 'select') {
                     $column->widget->setValuesFromArray($customValues, true);
                 }
-
-                // si no está instalado el plugin Proyectos ocultamos sus columnas
-                if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-                    $this->views[$viewName]->disableColumn('project');
-                    $this->views[$viewName]->disableColumn('project-total-amount');
-				}
 
 				// no se puede editar el campo idfactura
 				$this->views[$viewName]->disableColumn('invoice', false, 'true');
@@ -164,7 +162,7 @@ class EditAnticipoP extends EditController
 				parent::loadData($viewName, $view);
 				$where = [
 					new DataBaseWhere('model', $this->getModelClassName()),
-					new DataBaseWhere('modelcode', $this->getModel()->primaryColumnValue())
+					new DataBaseWhere('modelcode', $this->getModel()->id())
 				];
 				$view->loadData('', $where);
 				break;

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -29,7 +29,7 @@ use FacturaScripts\Dinamic\Model\AnticipoP;
 /**
  * Description of AnticiposEditExtensionDocs
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  * @author Daniel Fernández Giménez <hola@danielfg.es>
  */
  
@@ -56,10 +56,16 @@ trait AnticiposEditExtensionDocs
 				return;
 			}
 
-			$this->addListView($viewName, $mdlAnticipo, 'advance-payments', 'fas fa-donate')
+			$this->addListView($viewName, $mdlAnticipo, 'advance-payments', 'fa-solid fa-donate')
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
+
+				// si NO está activado el plugin Proyectos, desactivamos sus columnas
+				if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+                    $this->views[$viewName]->disableColumn('project');
+                    $this->views[$viewName]->disableColumn('project-total-amount');
+				}
 		};
 	}
 
@@ -75,8 +81,8 @@ trait AnticiposEditExtensionDocs
 					$model = $this->getModel();
 					$modelName = $model->modelClassName();
 					$modelpc = $model->primaryColumn();
-					$codigo = $model->primaryColumnValue();
-
+					$codigo = $model->id();
+					
 					if ($model->subjectColumn() === 'codproveedor') {
 						$subject = 'codproveedor';
 						$idSubject = $model->codproveedor;
@@ -99,7 +105,7 @@ trait AnticiposEditExtensionDocs
 						$view->loadData('', $where);
 					}
 
-					// si está instalado el plugin Proyectos añadimos el idproyecto del documento
+					// si está activado el plugin Proyectos añadimos el idproyecto del documento
 					if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
 						if (empty ($this->views[$viewName]->model->idproyecto)) {
 							$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
@@ -143,16 +149,16 @@ trait AnticiposEditExtensionDocs
 			if ($viewName === 'ListAnticipoP') {
 				foreach(AnticipoP::all($where) as $anticipoSbj) {
 					if (false === ($anticipoSbj->idpresupuesto || $anticipoSbj->idpedido || $anticipoSbj->idalbaran || $anticipoSbj->idfactura)) {
-						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoSbj->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
+						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoSbj->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
 					}
 				}
 			}
 			if ($viewName === 'ListAnticipo') {
 				foreach(Anticipo::all($where) as $anticipoSbj) {
 					if (false === ($anticipoSbj->idpresupuesto || $anticipoSbj->idpedido || $anticipoSbj->idalbaran || $anticipoSbj->idfactura)) {
-						$itemAdv = Tools::lang()->trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
-						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoSbj->id' target='_blank'><i class='fas fa-external-link-alt'></i> </a>" .  $itemAdv);
+						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
+						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoSbj->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
 					}
 				}
 			}

@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -29,7 +29,7 @@ use FacturaScripts\Dinamic\Model\EmailNotification;
 /**
  * Description of Init
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
 final class Init extends InitClass
 {
@@ -100,14 +100,14 @@ final class Init extends InitClass
             'sendmail-Anticipo'
         ];
         foreach ($keys as $key) {
-            if ($notificationModel->loadFromCode($key)) {
+            if ($notificationModel->load($key)) {
                 continue;
             }
 
             $notificationModel->name = $key;
 
-			$notificationModel->body = Tools::lang()->trans($key . '-body');
-			$notificationModel->subject = Tools::lang()->trans($key);
+			$notificationModel->body = Tools::trans('sendmail-anticipo-body');
+			$notificationModel->subject = Tools::trans('sendmail-anticipo-subject');
 
             $notificationModel->enabled = true;
             $notificationModel->save();

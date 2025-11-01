@@ -1,7 +1,7 @@
 <?php
 /**
  * This file is part of Anticipos plugin for FacturaScripts
- * Copyright (C) 2024 Carlos Garcia Gomez <carlos@facturascripts.com>
+ * Copyright (C) 2025 Carlos Garcia Gomez <carlos@facturascripts.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -21,12 +21,13 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
 use FacturaScripts\Core\Session;
+use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 
 /**
  * Description of EditProyecto
  *
- * @author Jorge-Prebac <info@prebac.com>
+ * @author Jorge-Prebac <info@smartcuines.com>
  */
 class EditProyecto
 {
@@ -50,7 +51,7 @@ class EditProyecto
     protected function createViewsAnticiposCli(): Closure
     {
         return function($viewName = 'ListAnticipo') {
-            $this->addListView($viewName, 'Anticipo', 'customer-advance-payments', 'fas fa-donate')
+            $this->addListView($viewName, 'Anticipo', 'customer-advance-payments', 'fa-solid fa-donate')
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
@@ -60,7 +61,7 @@ class EditProyecto
     protected function createViewsAnticiposProv(): Closure
     {
         return function($viewName = 'ListAnticipoP') {
-            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fas fa-donate')
+            $this->addListView($viewName, 'AnticipoP', 'supplier-advance-payments', 'fa-solid fa-donate')
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
