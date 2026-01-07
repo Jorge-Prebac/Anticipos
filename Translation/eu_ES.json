@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Erabili aurrerapenaren data fakturen-ordainagirien ordainketa-datarako",
     "delivery-note-total-amount": "Entrega-agiriaren totala",
     "delivery-note-total-amount-project": "Proiektuko Entrega-agirien Totala",
+    "disable-message-without-advance-payment": "Do not display the message **Without Advances** when editing a document",
     "estimation-total-amount": "Aurrekontuaren Totala",
     "estimation-total-amount-project": "Proiektuaren Aurrekontuen Totala",
     "indicate-minimun-level": "Gutxieneko maila adierazi",

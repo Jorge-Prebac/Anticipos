@@ -20,6 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 
 use Closure;
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
@@ -52,10 +53,9 @@ class EditProveedor
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
 
-			// si NO está activado el plugin Proyectos, desactivamos sus columnas
-			if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+			// si NO está activado el plugin Proyectos, desactivamos su columna
+			if (false === Plugins::isEnabled('Proyectos')) {
 				$this->views[$viewName]->disableColumn('project');
-				$this->views[$viewName]->disableColumn('project-total-amount');
 			}
 		};
 	}

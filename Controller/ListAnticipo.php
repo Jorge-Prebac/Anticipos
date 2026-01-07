@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
@@ -94,12 +95,13 @@ class ListAnticipo extends ListController
 				]],
         ]);
 
-		// si no está activado el plugin Proyectos ocultamos sus columnas, filtros y ordenación
-		if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-			$this->views[$viewName]->disableColumn('project');
-		} else {
+		// si está activado el plugin Proyectos incluimos filtros y ordenación.
+		if (Plugins::isEnabled('Proyectos')) {
 			$this->addFilterCheckbox($viewName, 'project', 'project', 'idproyecto', 'IS NOT', null);
-			$this->addOrderBy($viewName, ['idproyecto'], 'project');
-		}		
+			$this->addOrderBy($viewName, ['idproyecto'], 'project');			
+		} else {
+			// si NO está activado el plugin Proyectos, desactivamos su columna
+			$this->views[$viewName]->disableColumn('project');
+		}
     }
 }

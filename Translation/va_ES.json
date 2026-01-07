@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Utilitzar la data de l'anticip com a data de pagament en els rebuts de les factures",
     "delivery-note-total-amount": "Total de l'Albarà",
     "delivery-note-total-amount-project": "Total d'Albarans en Projecte",
+    "disable-message-without-advance-payment": "Do not display the message **Without Advances** when editing a document",
     "estimation-total-amount": "Total de l'Estimació",
     "estimation-total-amount-project": "Total d'Estimacions en Projecte",
     "indicate-minimun-level": "Indicar el nivell mínim necessari",

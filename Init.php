@@ -90,6 +90,9 @@ final class Init extends InitClass
 		if (empty(Tools::settings('anticipos', 'level'))) {
 			Tools::settingsSet('anticipos', 'level', 20);
 		}
+		if (empty(Tools::settings('anticipos', 'msjWa'))) {
+			Tools::settingsSet('anticipos', 'msjWa', false);
+		}
 		Tools::settingsSave();
 	}
 

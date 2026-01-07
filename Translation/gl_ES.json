@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Usar la fecha del anticipo como fecha de pago en los recibos de las facturas",
     "delivery-note-total-amount": "Total do Albarán",
     "delivery-note-total-amount-project": "Total de Albaráns en Proxecto",
+    "disable-message-without-advance-payment": "Non mostrar a mensaxe **Sen anticipos** ao editar un documento",
     "estimation-total-amount": "Total do Orzamento",
     "estimation-total-amount-project": "Total de Orzamentos en Proxecto",
     "indicate-minimun-level": "Indicar o nivel mínimo necesario",

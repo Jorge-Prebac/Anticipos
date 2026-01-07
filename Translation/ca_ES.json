@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Fer servir la data de la bestreta com a data de pagament als rebuts de les factures",
     "delivery-note-total-amount": "Total del Albarà",
     "delivery-note-total-amount-project": "Total d'Albarans en Projecte",
+    "disable-message-without-advance-payment": "No mostrar el missatge **Sense Bestretes** en editar un document",
     "estimation-total-amount": "Total del Pressupost",
     "estimation-total-amount-project": "Total d'Pressupostos en Projecte",
     "indicate-minimun-level": "Indicar el nivell mínim necessari",

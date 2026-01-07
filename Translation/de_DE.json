@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Das Datum des Vorschusses als Zahlungsdatum auf den Rechnungen verwenden",
     "delivery-note-total-amount": "Gesamtbetrag der Lieferung",
     "delivery-note-total-amount-project": "Gesamtlieferscheine im Projekt",
+    "disable-message-without-advance-payment": "Die Meldung **Ohne Anzahlungen** beim Bearbeiten eines Dokuments nicht anzeigen",
     "estimation-total-amount": "Gesamtbetrag des Angebots",
     "estimation-total-amount-project": "Gesamtsumme der Kostenvoranschläge im Projekt",
     "indicate-minimun-level": "Mindestniveau anzeigen",

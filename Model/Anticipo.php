@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Model;
 
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
@@ -29,6 +30,7 @@ use FacturaScripts\Dinamic\Model\Cliente;
 use FacturaScripts\Dinamic\Model\FacturaCliente;
 use FacturaScripts\Dinamic\Model\PedidoCliente;
 use FacturaScripts\Dinamic\Model\PresupuestoCliente;
+use FacturaScripts\Dinamic\Model\Proyecto;
 
 /**
  * Description of Anticipo
@@ -40,8 +42,6 @@ use FacturaScripts\Dinamic\Model\PresupuestoCliente;
 class Anticipo extends ModelClass
 {
     use ModelTrait;
-
-    protected $projectClass = '\\FacturaScripts\\Dinamic\\Model\\Proyecto';
 
     /** @return string */
     public $codcliente;
@@ -114,8 +114,8 @@ class Anticipo extends ModelClass
                 $order->load($this->idpedido);
                 return $order->total;
             case 'totalproject':
-                if (class_exists($this->projectClass)) {
-                    $project = new $this->projectClass();
+				if (Plugins::isEnabled('Proyectos')) {
+                    $project = new Proyecto();
                     $project->load($this->idproyecto);
                     return $project->totalventas;
                 }
@@ -314,8 +314,8 @@ class Anticipo extends ModelClass
             }
         }
 
-        if (class_exists($this->projectClass) && $this->idproyecto) {
-            if (false === $this->checkAnticipoRelation(new $this->projectClass(), $this->idproyecto, 'project')) {
+        if (Plugins::isEnabled('Proyectos') && $this->idproyecto) {
+            if (false === $this->checkAnticipoRelation(new Proyecto(), $this->idproyecto, 'project')) {
                 return false;
             }
         }
@@ -361,7 +361,7 @@ class Anticipo extends ModelClass
             '%desc%' => $this->primaryDescription(),
             'model-class' => $this->modelClassName(),
             'model-code' => $this->id(),
-            'model-data' => $this->toArray()
+            'model-data' => $this->getDirty()
         ]);
     }
 }

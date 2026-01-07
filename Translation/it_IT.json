@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Usare la data dell'anticipo come data di pagamento nelle ricevute delle fatture",
     "delivery-note-total-amount": "Importo totale della Bolla di Consegna",
     "delivery-note-total-amount-project": "Importo totale delle Bolle di Consegna nel Progetto",
+    "disable-message-without-advance-payment": "Non mostrare il messaggio **Senza Anticipi** durante la modifica di un documento",
     "estimation-total-amount": "Totale preventivo",
     "estimation-total-amount-project": "Totale preventivi nel progetto",
     "indicate-minimun-level": "Indicare il livello minimo necessario",

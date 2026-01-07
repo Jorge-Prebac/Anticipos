@@ -19,6 +19,7 @@
 
 namespace FacturaScripts\Plugins\Anticipos\Controller;
 
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
@@ -104,7 +105,7 @@ class EditAnticipoP extends EditController
                 ];
 				
 				// si está activado el plugin Proyectos añadimos el valor para el select de la fase
-				if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+				if (Plugins::isEnabled('Proyectos')) {
 					$customValues[] = ['value' => 'Proyecto', 'title' => 'project'];
 				}else{
 					// si NO está activado el plugin Proyectos, desactivamos sus columnas

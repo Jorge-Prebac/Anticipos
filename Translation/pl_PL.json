@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Użyć daty zaliczki jako daty płatności na paragonach z fakturami",
     "delivery-note-total-amount": "Łączna kwota dokumentu dostawy",
     "delivery-note-total-amount-project": "Suma faktur z projektu",
+    "disable-message-without-advance-payment": "Do not display the message **Without Advances** when editing a document",
     "estimation-total-amount": "Całkowity budżet",
     "estimation-total-amount-project": "Łączna kwota szacunków w projekcie",
     "indicate-minimun-level": "Wskazać wymagany minimalny poziom",

@@ -20,6 +20,7 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Traits;
 
 use Closure;
+use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
@@ -61,10 +62,10 @@ trait AnticiposEditExtensionDocs
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
 
-				// si NO está activado el plugin Proyectos, desactivamos sus columnas
-				if (false === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
-                    $this->views[$viewName]->disableColumn('project');
-                    $this->views[$viewName]->disableColumn('project-total-amount');
+				// si NO está activado el plugin Proyectos, desactivamos su columna
+				if (false === Plugins::isEnabled('Proyectos')) {
+					$this->views[$viewName]->disableColumn('project');
+					$this->views[$viewName]->disableColumn('project-total-amount');
 				}
 		};
 	}
@@ -106,7 +107,7 @@ trait AnticiposEditExtensionDocs
 					}
 
 					// si está activado el plugin Proyectos añadimos el idproyecto del documento
-					if (true === class_exists('\\FacturaScripts\\Dinamic\\Model\\Proyecto')) {
+					if (Plugins::isEnabled('Proyectos')) {
 						if (empty ($this->views[$viewName]->model->idproyecto)) {
 							$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
 							$where = [
@@ -123,6 +124,11 @@ trait AnticiposEditExtensionDocs
 						$this->setSettings($viewName, 'btnDelete', false);
 						$this->setSettings($viewName, 'btnNew', false);
 						$this->setSettings($viewName, 'checkBoxes', false);
+					}
+
+					if ($this->getViewModelValue($this->getMainViewName(), 'idfactura')
+					&& $this->getViewModelValue($this->getMainViewName(), 'pagada')) {
+						return;
 					}
 
 					// Localizamos anticipos sin vincular
@@ -188,7 +194,9 @@ trait AnticiposEditExtensionDocs
 			}
 			$totalPending = round($this->getViewModelValue($this->getMainViewName(), 'total') - $totalAdvances, 2);
 			if ($totalAdvances === 0.00) {
-				Tools::Log()->info('without-advances');
+				if (false === (bool)Tools::settings('anticipos', 'msjWa', true)) {
+					Tools::Log()->info('without-advances');
+				}
 			} elseif ($totalAdvances != 0 & $totalPending > 0) {
 				Tools::Log()->info('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
 			} elseif ($totalAdvances != 0 & $totalPending < 0) {

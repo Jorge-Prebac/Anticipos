@@ -30,6 +30,9 @@
 			<column name="user-level-edit" description="indicate-minimun-level" numcolumns="4" display="right" order="105">
                 <widget type="number" step="1" min="20" max="99" fieldname="level" required="true"/>
             </column>
+            <column name="disable-message-without-advance-payment" numcolumns="12" order="110">
+                <widget type="checkbox" fieldname="msjWa"/>
+            </column>
         </group>
     </columns>
 </view>

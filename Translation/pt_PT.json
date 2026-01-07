@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Usar a data do adiantamento como data de pagamento nos recibos das faturas",
     "delivery-note-total-amount": "Valor total da nota de entrega",
     "delivery-note-total-amount-project": "Total de Albaranes em Projeto",
+    "disable-message-without-advance-payment": "Não mostrar a mensagem **Sem Adiantamentos** ao editar um documento",
     "estimation-total-amount": "Total do Orçamento",
     "estimation-total-amount-project": "Total de Orçamentos em Projeto",
     "indicate-minimun-level": "Indicar o nível mínimo necessário",

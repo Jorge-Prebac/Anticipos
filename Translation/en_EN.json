@@ -28,6 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Use the advance date as the payment date on invoice receipts",
     "delivery-note-total-amount": "Delivery Note Total Amount",
     "delivery-note-total-amount-project": "Total Amount of Project Delivery Notes",
+    "disable-message-without-advance-payment": "Do not display the message **Without Advances** when editing a document",
     "estimation-total-amount": "Estimation Total Amount",
     "estimation-total-amount-project": "Total Amount of Project Estimations",
     "indicate-minimun-level": "Indicate the minimum level required",
