@@ -114,6 +114,8 @@ class BusinessDocumentGenerator
 							$recibo->vencimiento = $anticipoFac->fecha;
 						}
 						$recibo->save();
+						$anticipoFac->idrecibo = $recibo->idrecibo;
+						$anticipoFac->save();
 					}
 
 					//Generamos el recibo por el saldo pendiente si ubiese y actualizamos la factura.

@@ -27,6 +27,8 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
 
+///use FacturaScripts\Core\Lib\ExtendedController\EditController;
+
 /**
  * Description of AnticiposEditExtensionDocs
  *
@@ -156,7 +158,7 @@ trait AnticiposEditExtensionDocs
 				foreach(AnticipoP::all($where) as $anticipoSbj) {
 					if (false === ($anticipoSbj->idpresupuesto || $anticipoSbj->idpedido || $anticipoSbj->idalbaran || $anticipoSbj->idfactura)) {
 						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoSbj->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						Tools::log()->warning($itemAdv);
 					}
 				}
 			}
@@ -164,7 +166,7 @@ trait AnticiposEditExtensionDocs
 				foreach(Anticipo::all($where) as $anticipoSbj) {
 					if (false === ($anticipoSbj->idpresupuesto || $anticipoSbj->idpedido || $anticipoSbj->idalbaran || $anticipoSbj->idfactura)) {
 						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoSbj->id]);
-						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoSbj->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						Tools::log()->warning($itemAdv);
 					}
 				}
 			}

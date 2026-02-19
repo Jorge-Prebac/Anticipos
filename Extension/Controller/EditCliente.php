@@ -76,7 +76,8 @@ class EditCliente
 				foreach($anticiposCli->all($where) as $anticipoCli) {
 					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
 						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
-						Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						//Tools::log()->warning("<a href='EditAnticipo?code=$anticipoCli->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						Tools::log()->warning($itemAdv);
 					}
 				}
             }

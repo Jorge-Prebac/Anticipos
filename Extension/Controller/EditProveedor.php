@@ -76,7 +76,8 @@ class EditProveedor
 				foreach($anticiposProv->all($where) as $anticipoProv) {
 					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
 						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
-						Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						//Tools::log()->warning("<a href='EditAnticipoP?code=$anticipoProv->id' target='_blank'><i class='fa-solid fa-external-link-alt'></i> </a>" .  $itemAdv);
+						Tools::log()->warning($itemAdv);
 					}
 				}
             }
