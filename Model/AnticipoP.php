@@ -315,7 +315,7 @@ class AnticipoP extends ModelClass
         }
 
         if (Plugins::isEnabled('Proyectos') && $this->idproyecto) {
-            if (false === $this->checkAnticipoRelation(new $this->Proyecto(), $this->idproyecto, 'project')) {
+            if (false === $this->checkAnticipoRelation(new Proyecto(), $this->idproyecto, 'project')) {
                 return false;
             }
         }

@@ -199,9 +199,9 @@ trait AnticiposEditExtensionDocs
 				if (false === (bool)Tools::settings('anticipos', 'msjWa', true)) {
 					Tools::Log()->info('without-advances');
 				}
-			} elseif ($totalAdvances != 0 & $totalPending > 0) {
+			} elseif ($totalAdvances != 0 && $totalPending > 0) {
 				Tools::Log()->info('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
-			} elseif ($totalAdvances != 0 & $totalPending < 0) {
+			} elseif ($totalAdvances != 0 && $totalPending < 0) {
 				Tools::Log()->warning('pending-difference-advances', ['%pending%' => Tools::money($totalPending)]);
 			} else {
 				Tools::Log()->notice('paid');
