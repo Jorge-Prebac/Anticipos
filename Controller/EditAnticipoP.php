@@ -153,7 +153,7 @@ class EditAnticipoP extends EditController
                     $model->fase = "Proyecto";
 				} elseif (false === empty($model->codproveedor) && false === $model->exists()) {
                     $model->fase = "Proveedor";
-                } elseif (false === empty($model->user) && false === $model->exists()) {
+                } elseif (false === empty($model->nick) && false === $model->exists()) {
                     $model->fase = "Usuario";
                 }
 
