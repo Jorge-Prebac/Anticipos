@@ -24,6 +24,7 @@ use FacturaScripts\Core\Tools;
 use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
+use FacturaScripts\Core\Model\AlbaranProveedor;
 
 /**
  * Description of EditAnticipoP
@@ -92,7 +93,14 @@ class EditAnticipoP extends EditController
 
                 // si es un anticipo nuevo, se le asigna el usuario que lo creó
                 if (false === $model->exists()) {
-					$model->nick = $this->user->nick;
+                  $model->nick = $this->user->nick;
+
+                    // si viene de un albarán, asignar importe
+                    if (!empty($model->idalbaran)) {
+                        $delivery = new AlbaranProveedor();
+                        $delivery->loadFromCode($model->idalbaran);
+                        $model->importe = $delivery->total;
+                    }
                 }
 
                 // valores para el select de la fase
