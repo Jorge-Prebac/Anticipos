@@ -28,7 +28,7 @@
     "customer-advance-payments-data-on-receipts-payments-data": "Ödeme makbuzlarında, peşinat tarihini fatura ödeme tarihi olarak kullanın.",
     "delivery-note-total-amount": "İrsaliye toplamı",
     "delivery-note-total-amount-project": "Projedeki Toplam İrsaliyeler",
-    "disable-message-without-advance-payment": "Do not display the message **Without Advances** when editing a document",
+    "disable-message-without-advance-payment": "Belge düzenlerken **Avans Yok** mesajını gösterme",
     "estimation-total-amount": "Tahminin Toplam Tutarı",
     "estimation-total-amount-project": "Proje için Tahminlerin Toplamı",
     "indicate-minimun-level": "Gerekli minimum seviyeyi belirtin",

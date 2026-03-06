@@ -91,7 +91,8 @@ class EditAnticipoP extends EditController
                 $model = $this->views[$viewName]->model;
 
                 // si es un anticipo nuevo, se le asigna el usuario que lo creó
-                if (false === $model->exists()) {
+                $modelExists = $model->exists();
+                if (false === $modelExists) {
 					$model->nick = $this->user->nick;
                 }
 
@@ -143,17 +144,17 @@ class EditAnticipoP extends EditController
 				}
 
 				// se aplica la fase correspondiente al origen del anticipo
-				if (false === empty($model->idalbaran) && false === $model->exists()) {
+				if (false === empty($model->idalbaran) && false === $modelExists) {
                     $model->fase = "Albaran";
-				} elseif (false === empty($model->idpedido) && false === $model->exists()) {
+				} elseif (false === empty($model->idpedido) && false === $modelExists) {
                     $model->fase = "Pedido";
-                } elseif (false === empty($model->idpresupuesto) && false === $model->exists()) {
+                } elseif (false === empty($model->idpresupuesto) && false === $modelExists) {
                     $model->fase = "Presupuesto";
-				} elseif (false === empty($model->idproyecto) && false === $model->exists()) {
+				} elseif (false === empty($model->idproyecto) && false === $modelExists) {
                     $model->fase = "Proyecto";
-				} elseif (false === empty($model->codproveedor) && false === $model->exists()) {
+				} elseif (false === empty($model->codproveedor) && false === $modelExists) {
                     $model->fase = "Proveedor";
-                } elseif (false === empty($model->nick) && false === $model->exists()) {
+                } elseif (false === empty($model->nick) && false === $modelExists) {
                     $model->fase = "Usuario";
                 }
 
