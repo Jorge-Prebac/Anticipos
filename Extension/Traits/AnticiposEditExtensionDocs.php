@@ -27,8 +27,6 @@ use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
 
-///use FacturaScripts\Core\Lib\ExtendedController\EditController;
-
 /**
  * Description of AnticiposEditExtensionDocs
  *
@@ -53,7 +51,6 @@ trait AnticiposEditExtensionDocs
 	protected function createViewsListAnticipo($viewName = 'string', $mdlAnticipo = 'string')
 	{
 		return function($viewName, $mdlAnticipo) {
-
 			$user = Session::get('user');
 			if (false == $user->can($viewName)) {
 				return;
@@ -64,11 +61,30 @@ trait AnticiposEditExtensionDocs
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
 
-				// si NO está activado el plugin Proyectos, desactivamos su columna
-				if (false === Plugins::isEnabled('Proyectos')) {
-					$this->views[$viewName]->disableColumn('project');
-					$this->views[$viewName]->disableColumn('project-total-amount');
+			// si NO está activado el plugin Proyectos, desactivamos su columna
+			if (false === Plugins::isEnabled('Proyectos')) {
+				$this->views[$viewName]->disableColumn('project');
+				$this->views[$viewName]->disableColumn('project-total-amount');
+			}
+
+			//ver si hay Herencia sobre el archivo PDFDocument()
+			if (Plugins::isEnabled('AnticiposPDFCoreDoc')) {
+				$archivo = 'PDFDocument.php';
+				$filePath = FS_FOLDER . '//Dinamic//Lib//PDF/' . $archivo;
+				$busqueda = 'AnticiposPDFCoreDoc';
+				
+				if (file_exists($filePath)) {
+					$contenido = file_get_contents($filePath);
+
+					if (strpos($contenido, $busqueda) !== false) {
+						//El plugin AnticiposPDFCoreDoc ha personalizado el archivo del CORE PDFDocument.php
+					} else {
+						Tools::log()->warning('No funciona el plugin AnticiposPDFCoreDoc. Otro plugin ha personalizado el archivo del CORE: ' . $archivo);
+					}
+				} else {
+					Tools::log()->warning('El archivo no existe: ' . $filePath);
 				}
+			}
 		};
 	}
 
@@ -77,10 +93,8 @@ trait AnticiposEditExtensionDocs
         return function($viewName, $view) {
 
 			switch ($viewName) {
-
 				case 'ListAnticipoP':
 				case 'ListAnticipo':
-
 					$model = $this->getModel();
 					$modelName = $model->modelClassName();
 					$modelpc = $model->primaryColumn();
