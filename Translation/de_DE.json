@@ -41,7 +41,7 @@
     "missing-supplier-name": "Der Name des Lieferanten fehlt",
     "order-total-amount": "Gesamtbetrag der Bestellung",
     "order-total-amount-project": "Gesamtsumme der Aufträge im Projekt",
-    "pending-difference-advances": "Differenz zwischen dem Gesamtdokumentbetrag und dem Vorschussbetrag = %ausstehend%",
+    "pending-difference-advances": "Differenz zwischen dem Gesamtdokumentbetrag und dem Vorschussbetrag = %pending%",
     "project-total-amount": "Gesamtbetrag des Projekts",
     "sendmail-anticipo-body": "Hallo, ich sende Ihnen Ihre Vorauszahlung vom {date}. Vielen Dank. Mit freundlichen Grüßen.",
     "sendmail-anticipo-subject": "Ihre Anzahlung vom {date}",
