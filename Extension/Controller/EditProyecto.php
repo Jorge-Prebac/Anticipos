@@ -55,6 +55,7 @@ class EditProyecto
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
+			$this->views[$viewName]->disableColumn('project');
         };
     }
 
@@ -65,6 +66,7 @@ class EditProyecto
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
+			$this->views[$viewName]->disableColumn('project');
         };
     }
 

@@ -52,6 +52,7 @@ class EditProveedor
 				->addOrderBy(['fecha'], 'date', 2)
 				->addOrderBy(['fase'], 'phase')
 				->addOrderBy(['importe'], 'amount');
+			$this->views[$viewName]->disableColumn('supplier');
 
 			// si NO está activado el plugin Proyectos, desactivamos su columna
 			if (false === Plugins::isEnabled('Proyectos')) {
