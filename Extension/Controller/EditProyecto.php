@@ -22,7 +22,7 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Controller;
 use Closure;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 
 /**
  * Description of EditProyecto
@@ -75,40 +75,33 @@ class EditProyecto
         return function($viewName, $view) {
             if ($viewName === 'ListAnticipo') {
                 $codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-                $where = [new DataBaseWhere('idproyecto', $codigo)];
+				$where = [Where::eq('idproyecto', $codigo)];
                 $view->loadData('', $where);
 
                 if (empty ($this->views[$viewName]->model->codcliente)) {
                     $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
 					$where = [
-						new DataBaseWhere('codcliente', null),
-						new DataBaseWhere('codcliente', $codcliente, '=', 'OR'),
+						Where::eq('codcliente', $codcliente)
 					];
 					$view->loadData('', $where);
                 }
 
 				if (empty ($this->views[$viewName]->model->idempresa)) {
                     $idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-					$where = [
-						new DataBaseWhere('idempresa', null),
-						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
-					];
+					$where = [Where::eq('idempresa', $idempresa)];
 					$view->loadData('', $where);
                 }
 				
             }elseif ($viewName === 'ListAnticipoP') {
 				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-                $where = [new DataBaseWhere('idproyecto', $codigo)];
+				$where = [Where::eq('idproyecto', $codigo)];
                 $view->loadData('', $where);
 				
 				if (empty ($this->views[$viewName]->model->idempresa)) {
-					$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-					$where = [
-						new DataBaseWhere('idempresa', null),
-						new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
-					];
+                    $idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
+					$where = [Where::eq('idempresa', $idempresa)];
 					$view->loadData('', $where);
-				}
+                }
 			}
         };
     }

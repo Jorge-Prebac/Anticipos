@@ -23,7 +23,7 @@ use Closure;
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Dinamic\Model\AnticipoP;
 
 /**
@@ -66,14 +66,11 @@ class EditProveedor
         return function($viewName, $view) {
             if ($viewName === 'ListAnticipoP') {
                 $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
-                $where = [new DataBaseWhere('codproveedor', $codproveedor)];
+				$where = [Where::eq('codproveedor', $codproveedor)];
                 $view->loadData('', $where);
 
 				// Localizamos anticipos sin vincular
 				$anticiposProv = new AnticipoP();
-				$where = [
-					new DataBaseWhere('codproveedor', $codproveedor, '='),
-				];
 				foreach($anticiposProv->all($where) as $anticipoProv) {
 					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
 						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);

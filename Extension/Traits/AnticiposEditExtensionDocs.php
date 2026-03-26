@@ -23,7 +23,7 @@ use Closure;
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Session;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
 
@@ -108,17 +108,14 @@ trait AnticiposEditExtensionDocs
 						$idSubject = $model->codcliente;
 					}
 					$where = [
-						new DataBaseWhere($modelpc, $codigo),
-						new DataBaseWhere($subject, $idSubject, '=', 'AND'),
+						Where::eq($modelpc, $codigo),
+						Where::eq($subject, $idSubject),
 					];
 					$view->loadData('', $where);
 
 					if (empty ($this->views[$viewName]->model->idempresa)) {
 						$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-						$where = [
-							new DataBaseWhere('idempresa', null),
-							new DataBaseWhere('idempresa', $idempresa, '=', 'OR'),
-						];
+						$where = [Where::eq('idempresa', $idempresa)];
 						$view->loadData('', $where);
 					}
 
@@ -126,11 +123,7 @@ trait AnticiposEditExtensionDocs
 					if (Plugins::isEnabled('Proyectos')) {
 						if (empty ($this->views[$viewName]->model->idproyecto)) {
 							$idproyecto = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-							$where = [
-								new DataBaseWhere('idproyecto', null),
-								new DataBaseWhere('idproyecto', null, 'IS NOT', 'OR'),
-								new DataBaseWhere('idproyecto', $idproyecto, '=', 'OR'),
-							];
+							$where = [Where::eq('idproyecto', $idproyecto)];
 							$view->loadData('', $where);
 						}
 					}
@@ -165,8 +158,8 @@ trait AnticiposEditExtensionDocs
 		return function($viewName, $subject, $idSubject) {
 			$idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
 			$where = [
-				new DataBaseWhere($subject, $idSubject, '='),
-				new DataBaseWhere('idempresa', $idempresa, '=', 'AND'),
+				Where::eq($subject, $idSubject),
+				Where::eq('idempresa', $idempresa),
 			];
 			if ($viewName === 'ListAnticipoP') {
 				foreach(AnticipoP::all($where) as $anticipoSbj) {
@@ -191,9 +184,7 @@ trait AnticiposEditExtensionDocs
 	protected function advanceTotalPending($viewName  = 'string', $modelpc  = 'string', $codigo  = 'string')
 	{
 		return function($viewName, $modelpc, $codigo) {
-			$where = [
-				new DataBaseWhere($modelpc, $codigo),
-			];
+			$where = [Where::eq($modelpc, $codigo)];
 			$totalAdvances = 0.00;
 			$totalDoc = 0.00;
 			$totalPending = 0.00;

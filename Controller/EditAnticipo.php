@@ -21,7 +21,7 @@ namespace FacturaScripts\Plugins\Anticipos\Controller;
 
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\BaseView;
 use FacturaScripts\Core\Lib\ExtendedController\EditController;
 
@@ -163,8 +163,8 @@ class EditAnticipo extends EditController
 			case 'ListLogMessage':
 				parent::loadData($viewName, $view);
 				$where = [
-					new DataBaseWhere('model', $this->getModelClassName()),
-					new DataBaseWhere('modelcode', $this->getModel()->id())
+					Where::eq('model', $this->getModelClassName()),
+					Where::eq('modelcode', $this->getModel()->id())
 				];
 				$view->loadData('', $where);
 				break;

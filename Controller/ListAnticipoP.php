@@ -21,8 +21,8 @@ namespace FacturaScripts\Plugins\Anticipos\Controller;
 
 use FacturaScripts\Core\Plugins;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Core\Lib\ExtendedController\ListController;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\DataSrc\Empresas;
 
 /**
@@ -85,13 +85,13 @@ class ListAnticipoP extends ListController
 		
 		$this->addFilterSelectWhere($viewName, 'advances-status-list', [
             ['label' => Tools::trans('advances-status-list'), 'where' => []],
-            ['label' => Tools::trans('generated-invoice'), 'where' => [new DataBaseWhere('idfactura', null, 'IS NOT')]],
-            ['label' => Tools::trans('no-invoice'), 'where' => [new DataBaseWhere('idfactura', null)]],
+            ['label' => Tools::trans('generated-invoice'), 'where' => [Where::isNotNull('idfactura')]],
+			['label' => Tools::trans('no-invoice'), 'where' => [Where::isNull('idfactura')]],
 			['label' => Tools::trans('advance-not-linked-list'), 'where' => [
-					new DataBaseWhere('idpresupuesto', null),
-					new DataBaseWhere('idpedido', null),
-					new DataBaseWhere('idalbaran', null),
-					new DataBaseWhere('idfactura', null),
+					Where::isNull('idpresupuesto'),
+					Where::isNull('idpedido'),
+					Where::isNull('idalbaran'),
+					Where::isNull('idfactura')
 				]],
         ]);
 

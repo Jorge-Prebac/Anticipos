@@ -20,9 +20,9 @@
 namespace FacturaScripts\Plugins\Anticipos\Extension\Lib;
 
 use Closure;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
 use FacturaScripts\Core\Model\Base\TransformerDocument;
 use FacturaScripts\Core\Tools;
+use FacturaScripts\Core\Where;
 use FacturaScripts\Dinamic\Lib\ReceiptGenerator;
 use FacturaScripts\Dinamic\Model\Anticipo;
 use FacturaScripts\Dinamic\Model\AnticipoP;
@@ -60,8 +60,8 @@ class BusinessDocumentGenerator
 			}
 			foreach ($newDoc->parentDocuments() as $parent) {
 				$where = [
-					new DataBaseWhere($parent->primaryColumn(), $parent->id()),
-					new DataBaseWhere($newDoc->primaryColumn(), NULL)
+					Where::eq($parent->primaryColumn(), $parent->id()),
+					Where::isNull($newDoc->primaryColumn())
 				];
 
 				$order = ['id' => 'ASC'];
@@ -82,9 +82,7 @@ class BusinessDocumentGenerator
 						$recibo->delete();
 					}
 
-					$invoiceWhere = [
-						new DataBaseWhere($newDoc->primaryColumn(), $newDoc->id())
-					];
+					$invoiceWhere = [Where::eq($newDoc->primaryColumn(), $newDoc->id())];
 
 					//Generamos los nuevos recibos en base a los anticipos.
 					$numero = 1;
@@ -124,9 +122,7 @@ class BusinessDocumentGenerator
 				}
 			}
 
-			$where = [
-				new DataBaseWhere($newDoc->primaryColumn(), $newDoc->id())
-			];
+			$where = [Where::eq($newDoc->primaryColumn(), $newDoc->id())];
 			$newDoc->advance = count($anticipos->all($where, [], 0, 0));
 
 			return true;

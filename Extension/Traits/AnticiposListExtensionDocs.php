@@ -21,7 +21,7 @@ namespace FacturaScripts\Plugins\Anticipos\Extension\Traits;
 
 use Closure;
 use FacturaScripts\Core\Tools;
-use FacturaScripts\Core\Base\DataBase\DataBaseWhere;
+use FacturaScripts\Core\Where;
 
 /**
  * Description of AnticiposListExtensionDocs
@@ -37,10 +37,10 @@ trait AnticiposListExtensionDocs
 			$viewName = $this->getMainViewName();
 			$this->addFilterSelectWhere($viewName, 'advances-status', [
 				['label' => Tools::trans('advances-status'), 'where' => []],
-				['label' => Tools::trans('with-advances'), 'where' => [new DataBaseWhere('advance', 0, '>')]],
+				['label' => Tools::trans('with-advances'), 'where' => [Where::gt('advance', 0)]],
 				['label' => Tools::trans('without-advances'), 'where' => [
-							new DataBaseWhere('advance', 0),
-							new DataBaseWhere('advance', null, '=', 'OR'),
+							Where::isNull('advance'),
+							Where::orEq('advance', 0),
 					]],
 			]);
 		};
