@@ -81,7 +81,8 @@ class EditProyecto
                 if (empty ($this->views[$viewName]->model->codcliente)) {
                     $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
 					$where = [
-						Where::eq('codcliente', $codcliente)
+						Where::eq('idproyecto', $codigo),
+						Where::orEq('codcliente', $codcliente)
 					];
 					$view->loadData('', $where);
                 }
