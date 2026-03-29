@@ -64,20 +64,21 @@ class EditProveedor
     public function loadData(): Closure
     {
         return function($viewName, $view) {
-            if ($viewName === 'ListAnticipoP') {
-                $codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
-				$where = [Where::eq('codproveedor', $codproveedor)];
-                $view->loadData('', $where);
+			if ($viewName !== 'ListAnticipoP') return;
 
-				// Localizamos anticipos sin vincular
-				$anticiposProv = new AnticipoP();
-				foreach($anticiposProv->all($where) as $anticipoProv) {
-					if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
-						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
-						Tools::log()->warning($itemAdv);
-					}
+			// Listamos los anticipos del proveedor
+			$codproveedor = $this->getViewModelValue($this->getMainViewName(), 'codproveedor');
+			$where = [Where::eq('codproveedor', $codproveedor)];
+			$view->loadData('', $where);
+
+			// Informamos de los anticipos del proveedor sin vincular con documentos
+			$anticiposProv = new AnticipoP();
+			foreach($anticiposProv->all($where) as $anticipoProv) {
+				if (false === ($anticipoProv->idpresupuesto || $anticipoProv->idpedido || $anticipoProv->idalbaran || $anticipoProv->idfactura)) {
+					$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoProv->id]);
+					Tools::log()->warning($itemAdv);
 				}
-            }
+			}
         };
     }
 }

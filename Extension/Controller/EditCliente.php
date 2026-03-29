@@ -64,20 +64,21 @@ class EditCliente
     public function loadData(): Closure
     {
         return function($viewName, $view) {
-            if ($viewName === 'ListAnticipo') {
-                $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-				$where = [Where::eq('codcliente', $codcliente)];
-                $view->loadData('', $where);
+            if ($viewName !== 'ListAnticipo') return;
 
-				// Localizamos anticipos sin vincular
-				$anticiposCli = new Anticipo();
-				foreach($anticiposCli->all($where) as $anticipoCli) {
-					if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
-						$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
-						Tools::log()->warning($itemAdv);
-					}
+			// Listamos los anticipos del cliente
+			$codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
+			$where = [Where::eq('codcliente', $codcliente)];
+			$view->loadData('', $where);
+
+			// Informamos de los anticipos del cliente sin vincular con documentos
+			$anticiposCli = new Anticipo();
+			foreach($anticiposCli->all($where) as $anticipoCli) {
+				if (false === ($anticipoCli->idpresupuesto || $anticipoCli->idpedido || $anticipoCli->idalbaran || $anticipoCli->idfactura)) {
+					$itemAdv = Tools::trans('advance-not-linked', ['%idAnticipo%' =>$anticipoCli->id]);
+					Tools::log()->warning($itemAdv);
 				}
-            }
+			}
         };
     }
 }

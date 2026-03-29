@@ -77,15 +77,19 @@ class EditProyecto
 
 			$mainView = $this->getMainViewName();
 			$codCliente = $this->getViewModelValue($mainView, 'codcliente');
+			$idproyecto = $this->getViewModelValue($mainView, 'idproyecto');
+			$idempresa = $this->getViewModelValue($mainView, 'idempresa');
 			
-			// 1. Filtros base: Siempre por Proyecto y Empresa
+			// Filtros comunes para las $viewName
 			$where = [
-				Where::eq('idproyecto', $this->getViewModelValue($mainView, 'idproyecto')),
-				Where::eq('idempresa', $this->getViewModelValue($mainView, 'idempresa'))
+				Where::eq('idproyecto', $idproyecto),
+				Where::eq('idempresa', $idempresa)
 			];
 
-			// 2. Solo para ListAnticipo: Si el proyecto TIENE un cliente, filtramos por él
-			// Si el proyecto NO tiene cliente, no añadimos este filtro (así salen todos)
+			/* Filtros solo para ListAnticipo:
+			*  Si el proyecto TIENE un cliente, filtramos por él
+			*  Si el proyecto NO tiene cliente, no añadimos este filtro (así salen todos)
+			*/
 			if ($viewName === 'ListAnticipo' && !empty($codCliente)) {
 				$where[] = Where::eq('codcliente', $codCliente);
 			}
