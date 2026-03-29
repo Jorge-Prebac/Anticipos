@@ -70,40 +70,27 @@ class EditProyecto
         };
     }
 
-    public function loadData(): Closure
-    {
-        return function($viewName, $view) {
-            if ($viewName === 'ListAnticipo') {
-                $codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-				$where = [Where::eq('idproyecto', $codigo)];
-                $view->loadData('', $where);
+	public function loadData(): Closure
+	{
+		return function($viewName, $view) {
+			if (!in_array($viewName, ['ListAnticipo', 'ListAnticipoP'])) return;
 
-                if (empty ($this->views[$viewName]->model->codcliente)) {
-                    $codcliente = $this->getViewModelValue($this->getMainViewName(), 'codcliente');
-					$where = [
-						Where::eq('idproyecto', $codigo),
-						Where::orEq('codcliente', $codcliente)
-					];
-					$view->loadData('', $where);
-                }
+			$mainView = $this->getMainViewName();
+			$codCliente = $this->getViewModelValue($mainView, 'codcliente');
+			
+			// 1. Filtros base: Siempre por Proyecto y Empresa
+			$where = [
+				Where::eq('idproyecto', $this->getViewModelValue($mainView, 'idproyecto')),
+				Where::eq('idempresa', $this->getViewModelValue($mainView, 'idempresa'))
+			];
 
-				if (empty ($this->views[$viewName]->model->idempresa)) {
-                    $idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-					$where = [Where::eq('idempresa', $idempresa)];
-					$view->loadData('', $where);
-                }
-				
-            }elseif ($viewName === 'ListAnticipoP') {
-				$codigo = $this->getViewModelValue($this->getMainViewName(), 'idproyecto');
-				$where = [Where::eq('idproyecto', $codigo)];
-                $view->loadData('', $where);
-				
-				if (empty ($this->views[$viewName]->model->idempresa)) {
-                    $idempresa = $this->getViewModelValue($this->getMainViewName(), 'idempresa');
-					$where = [Where::eq('idempresa', $idempresa)];
-					$view->loadData('', $where);
-                }
+			// 2. Solo para ListAnticipo: Si el proyecto TIENE un cliente, filtramos por él
+			// Si el proyecto NO tiene cliente, no añadimos este filtro (así salen todos)
+			if ($viewName === 'ListAnticipo' && !empty($codCliente)) {
+				$where[] = Where::eq('codcliente', $codCliente);
 			}
-        };
-    }
+
+			$view->loadData('', $where);
+		};
+}
 }
