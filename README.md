@@ -11,7 +11,7 @@ Plugin gratuito para FacturaScripts y la gestión de cobros y pagos a cuenta de 
 - [Registra tu primer anticipo de compras](https://facturascripts.com/publicaciones/como-se-registra-un-nuevo-anticipo-de-proveedores)
 
 ## Otros plugins del autor
-- [AnticiposPDFCoreDoc.- Complemento  del plugin Anticipos, para mostrar los anticipos recibidos en el PDF de un documento de compra o venta](https://facturascripts.com/plugins/anticipospdfcoredoc)
+- [AnticiposPDFCoreDoc](https://facturascripts.com/plugins/anticipospdfcoredoc)
 Plugin gratuito para FacturaScripts, que da soporte para incluir el detalle de los anticipos recibidos, al generar el PDF del documento de venta mediante el CORE.
 
 - [Textos](https://facturascripts.com/plugins/textos)
