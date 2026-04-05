@@ -6,15 +6,15 @@ Plugin gratuito para FacturaScripts y la gestión de cobros y pagos a cuenta de 
 - https://facturascripts.com/crear-issue?action=project-issue&idproject=110
 
 ## Links del plugin Anticipos
-- https://facturascripts.com/publicaciones/configuracion-disponible-para-el-plugin-anticipos
-- https://facturascripts.com/publicaciones/como-se-registra-un-nuevo-anticipo-de-ventas
-- https://facturascripts.com/publicaciones/como-se-registra-un-nuevo-anticipo-de-proveedores
+- [Configuración del plugin Anticipos](https://facturascripts.com/publicaciones/configuracion-disponible-para-el-plugin-anticipos)
+- [Registra tu primer anticipo de ventas](https://facturascripts.com/publicaciones/como-se-registra-un-nuevo-anticipo-de-ventas)
+- [Registra tu primer anticipo de compras](https://facturascripts.com/publicaciones/como-se-registra-un-nuevo-anticipo-de-proveedores)
 
 ## Otros plugins del autor
-- https://facturascripts.com/plugins/anticipospdfcoredoc
+- [AnticiposPDFCoreDoc.- Complemento  del plugin Anticipos, para mostrar los anticipos recibidos en el PDF de un documento de compra o venta](https://facturascripts.com/plugins/anticipospdfcoredoc)
 Plugin gratuito para FacturaScripts, que da soporte para incluir el detalle de los anticipos recibidos, al generar el PDF del documento de venta mediante el CORE.
 
-- https://facturascripts.com/plugins/textos
+- [Textos](https://facturascripts.com/plugins/textos)
 Plugin gratuito para FacturaScripts, que permite administrar los Textos que generemos para su uso cotidiano, organizados por Grupos de Textos.
 
 ## Issues / Feedback FacturaScripts
